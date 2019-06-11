@@ -1,0 +1,445 @@
+paths:
+  /products:
+    get:
+      tags:
+      - "Products"
+      summary: "Get all products"
+      operationId: "listProducts"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "brand"
+        in: "query"
+        description: "Query for Products with same BrandId"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      - name: "size"
+        in: "query"
+        description: "Query for Products with same SizeId"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of returned results"
+        type: "integer"
+        format: "int32"
+        default: 50
+        minimum: 1
+      - name: "offset"
+        in: "query"
+        description: "Offset the number of returned result from an index of 0"
+        type: "integer"
+        format: "int64"
+        default: 0
+        minimum: 0
+      responses:
+        200:
+          description: "Successfully Retrieved Products"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Product"
+              message:
+                type: "string"
+                description: |
+                  "If empty result, it shall state 'No results were found'. If results found,
+                  it shall state 'Found X result(s)"
+              total:
+                type: "integer"
+                description: "The actual number of results found"
+              offset:
+                type: "integer"
+                description: "The returned offset from an index of 0"
+              limit:
+                type: "integer"
+                description: "Limit of the number of results returned"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "products"
+    post:
+      tags:
+      - "Products"
+      summary: "Create a product"
+      operationId: "createProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Product object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/ProductCreateModify"
+      responses:
+        201:
+          description: "Successfully Created Product"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Product"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "products"
+  /products/{productId}:
+    parameters:
+    - name: "productId"
+      in: "path"
+      required: true
+      type: "integer"
+      description: "The Id of the product"
+    get:
+      tags:
+      - "Products"
+      summary: "Get a Product's metadata"
+      operationId: "getProduct"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successfully Retrieved Product"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Product"
+              message:
+                type: "string"
+        404:
+          description: "Product does not exist"
+      x-swagger-router-controller: 'products'
+    put:
+      tags:
+      - "Products"
+      summary: "Modify a Product"
+      operationId: "modifyProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Product object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/ProductCreateModify"
+      responses:
+        200:
+          description: "Successfully Modified Product"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Product"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+        404:
+          description: "Product not found"
+      x-swagger-router-controller: "products"
+    delete:
+      tags:
+      - "Products"
+      summary: "Delete a Product"
+      operationId: "deleteProduct"
+      responses:
+        200:
+          description: "Successfully Deleted Product"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Product"
+              message:
+                type: "string"
+        400:
+          description: 'Cannot be deleted'
+          schema:
+            type: 'object'
+            properties:
+              status:
+                type: 'integer'
+                description: 'The http status code'
+              code:
+                type: 'integer'
+                description: 'The error code'
+              errors:
+                type: 'array'
+                items:
+                  type: 'string'
+                  description: 'The error messages'
+        404:
+          description: "Product does not exist"
+      x-swagger-router-controller: 'products'
+definitions:
+  Product:
+    type: "object"
+    description: "Product object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Product"
+      newCar:
+        type: "boolean"
+        description: "Boolean Value to classify new cars and used cars"
+      brand:
+        type: "string"
+        description: "the Id of Product Brand"
+      model:
+        type: "string"
+        description: "The model name of Product"
+      oVariant:
+        type: "string"
+        description: "The oVariant name of Product"
+      variant:
+        type: "string"
+        description: "The Variant name of Product"
+      year:
+        type: "string"
+        description: "The Year value of Product"
+      primaryImage:
+        type: "string"
+        description: "The Default Image url of Product"
+      thumbnail1:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      thumbnail2:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      thumbnail3:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      thumbnail4:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      shortDescription:
+        type: "string"
+        description: "The short Description of Product"
+      longDescription:
+        type: "string"
+        description: "The long Description of Product"
+      acquisitionCost:
+        type: "integer"
+        description: "The AcquisitionCost value of Product"
+      monthlyPrice:
+        type: "integer"
+        description: "The Monthly Price value of Product"
+      startKilometer:
+        type: "integer"
+        description: "The Start Kilometer of Product"
+      endKilometer:
+        type: "integer"
+        description: "The End Kilometer of Product"
+      intervalKilometer:
+        type: "integer"
+        description: "The Interval Kilometer of Product"
+      intervalPrice:
+        type: "integer"
+        description: "The Interval Price of Product"
+      size:
+        type: "string"
+        description: "the Id of Product Size"
+      scrapValues:
+        description: "The Scrap values of Product"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      leasingPeriods:
+        description: "Product Leading Periods"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      professions:
+        description: "Array of Product Professions"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "object"
+      colors:
+        description: "Product Colors"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "object"
+      categories:
+        description: "Product Categories"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "object"
+      equipments:
+        description: "Product Equipments"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "object"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Product was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Product was last updated"
+  ProductCreateModify:
+    type: "object"
+    description: "The model to create a product object"
+    required:
+    - "brand"
+    - "model"
+    - "oVariant"
+    - "variant"
+    - "year"
+    - "primaryImage"
+    - "acquisitionCost"
+    - "leasingPeriods"
+    - "scrapValues"
+    - "startKilometer"
+    - "endKilometer"
+    - "intervalKilometer"
+    - "intervalPrice"
+    - "size"
+    - "colors"
+    properties:
+      brand:
+        type: "integer"
+        description: "the Id of Product Brand"
+      model:
+        type: "string"
+        description: "The model name of Product"
+      oVariant:
+        type: "string"
+        description: "The oVariant name of Product"
+      variant:
+        type: "string"
+        description: "The Variant name of Product"
+      year:
+        type: "string"
+        description: "The Year value of Product"
+      primaryImage:
+        type: "string"
+        description: "The Default Image url of Product"
+      thumbnail1:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      thumbnail2:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      thumbnail3:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      thumbnail4:
+        type: "string"
+        description: "The Thumbnail Image url of Product"
+      shortDescription:
+        type: "string"
+        description: "The short Description of Product"
+      longDescription:
+        type: "string"
+        description: "The long Description of Product"
+      acquisitionCost:
+        type: "integer"
+        description: "The AcquisitionCost value of Product"
+      startKilometer:
+        type: "integer"
+        description: "The Start Kilometer of Product"
+      endKilometer:
+        type: "integer"
+        description: "The End Kilometer of Product"
+      intervalKilometer:
+        type: "integer"
+        description: "The Interval Kilometer of Product"
+      intervalPrice:
+        type: "integer"
+        description: "The Interval Price of Product"
+      size:
+        type: "integer"
+        description: "the Id of Product Size"
+      scrapValues:
+        description: "The Scrap values of Product"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      leasingPeriods:
+        description: "Product Leading Periods"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      professions:
+        description: "Array of Product Professions"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      colors:
+        description: "Product Colors"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      categories:
+        description: "Product Categories"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      equipments:
+        description: "Product Equipments"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"

@@ -1,0 +1,178 @@
+swagger: "2.0"
+info:
+  description: "Swagger Doc for Leasing Customer App"
+  version: "0.0.1"
+  title: "Leasing Customer Swagger Doc"
+host: "localhost:3000"
+basePath: "/api/v1"
+
+definitions:
+  Finance:
+    type: "object"
+    description: "Finance object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Finance"
+      name:
+        type: "string"
+        description: "The name of the Finance"
+      rate:
+        type: "string"
+        description: "the Percentage Number of the Finance"
+      downPayment1:
+        type: "integer"
+        description: "The DownPayment value of Finance"
+      downPayment2:
+        type: "integer"
+        description: "The DownPayment value of Finance"
+      downPayment3:
+        type: "integer"
+        description: "The DownPayment value of Finance"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Finance was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Finance was last updated"
+  Brand:
+    type: "object"
+    description: "Brand object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Brand"
+      name:
+        type: "string"
+        description: "The name of the Brand"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Brand was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Brand was last updated"
+  Profession:
+    type: "object"
+    description: "Profession object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Profession"
+      name:
+        type: "string"
+        description: "The name of the Profession"
+      price:
+        type: "integer"
+        description: "The DownPayment value of Finance"
+      icon:
+        type: "string"
+        description: "The Icon url of the Profession"
+      shortDescription:
+        type: "string"
+        description: "The Short Description of the Profession"
+      link:
+        type: "string"
+        description: "The Link of the Profession"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Profession was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Profession was last updated"
+  Size:
+    type: "object"
+    description: "Size object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Size"
+      name:
+        type: "string"
+        description: "The name of the Size"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Size was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Size was last updated"
+  Color:
+    type: "object"
+    description: "Color object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Color"
+      name:
+        type: "string"
+        description: "The name of the Color"
+      hexColor:
+        type: "integer"
+        description: "The Hex value of the Color"
+      price:
+        type: "integer"
+        description: "The Price value of the Color"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Color was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Color was last updated"
+  Category:
+    type: "object"
+    description: "Category object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Category"
+      name:
+        type: "string"
+        description: "The name of the Category"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Category was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Category was last updated"
+  Equipment:
+    type: "object"
+    description: "Equipment object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Equipment"
+      name:
+        type: "string"
+        description: "The name of the Equipment"
+      price:
+        type: "integer"
+        description: "The Price value of the Equipment"
+      icon:
+        type: "string"
+        description: "The Icon url of the Equipment"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Equipment was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Equipment was last updated"
