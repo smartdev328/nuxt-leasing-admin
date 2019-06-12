@@ -60,7 +60,7 @@ async function start() {
       }
       // Give nuxt middleware to express
       app.use(nuxt.render)
-      const port = process.env.PORT || 3000
+      const port = process.env.PORT || 3001
       app.listen(port)
       consola.info('API listening on port', port)
     }
