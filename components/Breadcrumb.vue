@@ -21,7 +21,7 @@ export default {
       return index === this.list.length - 1
     },
     link (item, index) {
-      const arr = this.list.slice(0, index);
+      const arr = this.list.slice(0, index + 1);
       const path = arr.join('/');
       if (index === 0)
         return '/'

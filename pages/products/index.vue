@@ -1,5 +1,10 @@
 <template>
   <div class="products">
+    <b-row class="justify-content-end" style="padding: 15px;">
+      <router-link :to="`/products/new`">
+        <b-button variant="success">Add New Product</b-button>
+      </router-link>
+    </b-row>
     <b-row>
       <b-col lg="12">
         <b-card :header="header">
