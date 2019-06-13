@@ -390,19 +390,19 @@ definitions:
         type: "string"
         description: "The long Description of Product"
       acquisitionCost:
-        type: "integer"
+        type: "string"
         description: "The AcquisitionCost value of Product"
       startKilometer:
-        type: "integer"
+        type: "string"
         description: "The Start Kilometer of Product"
       endKilometer:
-        type: "integer"
+        type: "string"
         description: "The End Kilometer of Product"
       intervalKilometer:
-        type: "integer"
+        type: "string"
         description: "The Interval Kilometer of Product"
       intervalPrice:
-        type: "integer"
+        type: "string"
         description: "The Interval Price of Product"
       size:
         type: "integer"
@@ -412,34 +412,34 @@ definitions:
         type: "array"
         uniqueItems: true
         items:
-          type: "integer"
+          type: "string"
       leasingPeriods:
         description: "Product Leading Periods"
         type: "array"
         uniqueItems: true
         items:
-          type: "integer"
+          type: "string"
       professions:
         description: "Array of Product Professions"
         type: "array"
         uniqueItems: true
         items:
-          type: "integer"
+          type: "string"
       colors:
         description: "Product Colors"
         type: "array"
         uniqueItems: true
         items:
-          type: "integer"
+          type: "string"
       categories:
         description: "Product Categories"
         type: "array"
         uniqueItems: true
         items:
-          type: "integer"
+          type: "string"
       equipments:
         description: "Product Equipments"
         type: "array"
         uniqueItems: true
         items:
-          type: "integer"
+          type: "string"

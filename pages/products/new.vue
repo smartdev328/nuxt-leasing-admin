@@ -9,18 +9,37 @@
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" for="brand">Brand *</label>
-              <b-form-select id="brand"
+              <b-form-select
+                id="brand"
                 :plain="true"
                 class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.brand,
+                  'is-invalid': isValidated && !validated.brand
+                }"
                 :options="brandOptions"
-                :value="null">
+                @change="updateFormData($event, 'brand')"
+                :value="formData.brand || null">
               </b-form-select>
+              <b-form-invalid-feedback>
+                * Required Field
+              </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
           <b-col cols="4">
             <b-form-group>
               <label class="col-form-label" >Model *</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.model,
+                  'is-invalid': isValidated && !validated.model
+                }"
+                id="model"
+                @change="updateFormData($event)"
+                :value="formData.model"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -31,7 +50,17 @@
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" >oVariant *</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.oVariant,
+                  'is-invalid': isValidated && !validated.oVariant,
+                }"
+                id="oVariant"
+                @change="updateFormData($event)"
+                :value="formData.oVariant"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -40,7 +69,17 @@
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" >Variant *</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.variant,
+                  'is-invalid': isValidated && !validated.variant,
+                }"
+                id="variant"
+                @change="updateFormData($event)"
+                :value="formData.variant"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -49,7 +88,17 @@
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" >Year *</label>
-              <input type="number" class="form-control" id="inputIsValid">
+              <input
+                type="number"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.year,
+                  'is-invalid': isValidated && !validated.year,
+                }"
+                id="year"
+                @change="updateFormData($event)"
+                :value="formData.year"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -60,7 +109,17 @@
           <b-col lg="6">
             <b-form-group>
               <label class="col-form-label" >Primary Image *</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.primaryImage,
+                  'is-invalid': isValidated && !validated.primaryImage,
+                }"
+                id="primaryImage"
+                @change="updateFormData($event)"
+                :value="formData.primaryImage"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -70,25 +129,49 @@
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" >Thumbnail1</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                id="thumbnail1"
+                @change="updateFormData($event)"
+                :value="formData.thumbnail1"
+              />
             </b-form-group>
           </b-col>
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" >Thumbnail2</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                id="thumbnail2"
+                @change="updateFormData($event)"
+                :value="formData.thumbnail2"
+              />
             </b-form-group>
           </b-col>
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" >Thumbnail3</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                id="thumbnail3"
+                @change="updateFormData($event)"
+                :value="formData.thumbnail3"
+              />
             </b-form-group>
           </b-col>
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label" >Thumbnail4</label>
-              <input type="text" class="form-control" id="inputIsValid">
+              <input
+                type="text"
+                class="form-control"
+                id="thumbnail4"
+                @change="updateFormData($event)"
+                :value="formData.thumbnail4"
+              />
             </b-form-group>
           </b-col>
         </b-row>
@@ -97,8 +180,9 @@
             <b-form-group>
               <label class="col-form-label" >Short Description of Product</label>
               <b-form-textarea
-                id="textarea"
-                v-model="text"
+                :value="formData.shortDescription"
+                id="shortDescription"
+                @change="updateFormData($event, 'shortDescription')"
                 placeholder="Enter something..."
                 rows="6"
                 max-rows="9"
@@ -109,8 +193,9 @@
             <b-form-group>
               <label class="col-form-label" >Long Description of Product</label>
               <b-form-textarea
-                id="textarea"
-                v-model="text"
+                id="longDescription"
+                @change="updateFormData($event, 'longDescription')"
+                :value="formData.longDescription"
                 placeholder="Enter something..."
                 rows="6"
                 max-rows="9"
@@ -126,43 +211,38 @@
                 <b-input-group-prepend>
                   <b-input-group-text>$</b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input id="elementsPrependAppend" type="number"></b-form-input>
+                <b-form-input
+                  type="number"
+                  id="acquisitionCost"
+                  :class="{
+                    'is-valid': isValidated && validated.acquisitionCost,
+                    'is-invalid': isValidated && !validated.acquisitionCost
+                  }"
+                  @change="updateFormData($event, 'acquisitionCost')"
+                  :value="formData.acquisitionCost"
+                ></b-form-input>
               </b-input-group>
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
             </b-form-group>
-
           </b-col>
         </b-row>
         <b-row class="form-group">
           <b-col lg="12">
             <b-form-group>
               <label class="col-form-label" for="leasingperiods-checkboxes">Leasing Periods *</label>
-              <b-form-checkbox-group id="leasingperiods-checkboxes">
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="leasingperiods1" value="1">
-                  <label class="custom-control-label" for="leasingperiods1">12 months</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="leasingperiods2" value="2" checked>
-                  <label class="custom-control-label" for="leasingperiods2">24 months</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="leasingperiods3" value="3">
-                  <label class="custom-control-label" for="leasingperiods3">36 months</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="leasingperiods4" value="4">
-                  <label class="custom-control-label" for="leasingperiods4">48 months</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="leasingperiods5" value="5">
-                  <label class="custom-control-label" for="leasingperiods5">60 months</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="leasingperiods6" value="6">
-                  <label class="custom-control-label" for="leasingperiods6">72 months</label>
+              <b-form-checkbox-group
+                id="leasingperiods-checkboxes"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.leasingPeriods,
+                  'is-invalid': isValidated && !validated.leasingPeriods,
+                }"
+              >
+                <div v-for="index in 6" :key="index" class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" :id="`leasingperiods${index}`" name="leasingPeriods" :value="index * 12" @change="updateMultiCheckFormData" >
+                  <label class="custom-control-label" :for="`leasingperiods${index}`">{{ 12 * index }} months</label>
                 </div>
               </b-form-checkbox-group>
               <b-form-invalid-feedback>
@@ -173,20 +253,12 @@
           <b-col lg="12">
             <label class="col-form-label">Scrap values *</label>
           </b-col>
-          <b-col lg="3">
+          <b-col v-for="(item, index) in formData.leasingPeriods" :key="index" lg="3">
             <b-input-group>
               <b-input-group-prepend>
-                <b-input-group-text>12 Months</b-input-group-text>
+                <b-input-group-text>{{ item }} months</b-input-group-text>
               </b-input-group-prepend>
-              <b-form-input id="elementsPrependAppend" type="number"></b-form-input>
-            </b-input-group>
-          </b-col>
-          <b-col lg="3">
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-input-group-text>24 Months</b-input-group-text>
-              </b-input-group-prepend>
-              <b-form-input id="elementsPrependAppend" type="number"></b-form-input>
+              <b-form-input id="elementsPrependAppend" type="number" name="scrapValues" :value="formData.scrapValues[index]" @change="updateArrayFormData('scrapValues', $event, index)"  ></b-form-input>
             </b-input-group>
           </b-col>
         </b-row>
@@ -194,7 +266,17 @@
           <b-col lg="3">
             <b-form-group>
               <label class="col-form-label" >Start Kilometer *</label>
-              <input type="number" class="form-control" id="inputIsValid">
+              <input
+                type="number"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.startKilometer,
+                  'is-invalid': isValidated && !validated.startKilometer,
+                }"
+                id="startKilometer"
+                @change="updateFormData($event)"
+                :value="formData.startKilometer"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -203,7 +285,17 @@
           <b-col lg="3">
             <b-form-group>
               <label class="col-form-label" >End Kilometer *</label>
-              <input type="number" class="form-control" id="inputIsValid">
+              <input
+                type="number"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.endKilometer,
+                  'is-invalid': isValidated && !validated.endKilometer,
+                }"
+                id="endKilometer"
+                @change="updateFormData($event)"
+                :value="formData.endKilometer"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -212,7 +304,17 @@
           <b-col lg="3">
             <b-form-group>
               <label class="col-form-label" >Interval Kilometer *</label>
-              <input type="number" class="form-control" id="inputIsValid">
+              <input
+                type="number"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.intervalKilometer,
+                  'is-invalid': isValidated && !validated.intervalKilometer,
+                }"
+                id="intervalKilometer"
+                @change="updateFormData($event)"
+                :value="formData.intervalKilometer"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -225,7 +327,15 @@
                 <b-input-group-prepend>
                   <b-input-group-text>$</b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input id="inputIsValid" type="number"></b-form-input>
+                <b-form-input
+                  type="number"
+                  id="intervalPrice"
+                  :class="{
+                    'is-valid': isValidated && validated.intervalPrice,
+                    'is-invalid': isValidated && !validated.intervalPrice,
+                  }"
+                  @change="updateFormData($event, 'intervalPrice')" :value="formData.intervalPrice"
+                ></b-form-input>
               </b-input-group>
               <b-form-invalid-feedback>
                 * Required Field
@@ -234,15 +344,24 @@
           </b-col>
         </b-row>
         <b-row class="form-group">
-          <!-- Size -->
           <b-col lg="4">
             <b-form-group>
-              <label class="col-form-label" >Size</label>
-              <b-form-select id="basicSelectLg"
+              <label class="col-form-label" >Size *</label>
+              <b-form-select
                 :plain="true"
                 :options="sizeOptions"
-                :value="null">
+                id="size"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.size,
+                  'is-invalid': isValidated && !validated.size,
+                }"
+                @change="updateFormData($event, 'size')"
+                :value="formData.size || null">
               </b-form-select>
+              <b-form-invalid-feedback>
+                * Required Field
+              </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
         </b-row>
@@ -252,17 +371,9 @@
             <b-form-group>
               <label class="col-form-label" >Product Professions</label>
               <b-form-checkbox-group stacked id="professions-checkboxes">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="professions1" value="1" checked>
-                  <label class="custom-control-label" for="professions1">Plumber</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="professions2" value="2">
-                  <label class="custom-control-label" for="professions2">Carpenter</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="professions3" value="3">
-                  <label class="custom-control-label" for="professions3">Electrician</label>
+                <div v-for="(item, index) in professionsArr" :key="index" class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" :id="`professions${index}`" name="professions" :value="item.id" @change="updateMultiCheckFormData" >
+                  <label class="custom-control-label" :for="`professions${index}`">{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
             </b-form-group>
@@ -270,21 +381,24 @@
           <!-- Colors -->
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label" >Colors</label>
-              <b-form-checkbox-group stacked id="colors-checkboxes">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="colors1" value="1" checked>
-                  <label class="custom-control-label" for="colors1">White</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="colors2" value="2">
-                  <label class="custom-control-label" for="colors2">Black</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="colors3" value="3">
-                  <label class="custom-control-label" for="colors3">Red</label>
+              <label class="col-form-label" >Colors *</label>
+              <b-form-checkbox-group
+                stacked
+                id="colors-checkboxes"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.colors,
+                  'is-invalid': isValidated && !validated.colors,
+                }"
+              >
+                <div v-for="(item, index) in colorsArr" :key="index" class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" :id="`colors${index}`" name="colors" :value="item.id" @change="updateMultiCheckFormData">
+                  <label class="custom-control-label" :for="`colors${index}`" >{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
+              <b-form-invalid-feedback>
+                * Required Field
+              </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
           <!-- Categories -->
@@ -292,17 +406,9 @@
             <b-form-group>
               <label class="col-form-label" >Categories</label>
               <b-form-checkbox-group stacked id="categories-checkboxes">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="categories1" value="1" checked>
-                  <label class="custom-control-label" for="categories1">A Smiths Choice</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="categories2" value="2">
-                  <label class="custom-control-label" for="categories2">A Plumbers Favorite</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="categories3" value="3">
-                  <label class="custom-control-label" for="categories3">Easy and Handy</label>
+                <div v-for="(item, index) in categoriesArr" :key="index" class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" :id="`categories${index}`" name="categories" :value="item.id" @change="updateMultiCheckFormData">
+                  <label class="custom-control-label" :for="`categories${index}`">{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
             </b-form-group>
@@ -312,17 +418,9 @@
             <b-form-group>
               <label class="col-form-label" >Equipments</label>
               <b-form-checkbox-group stacked id="equipments-checkboxes">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="equipments1" value="1" checked>
-                  <label class="custom-control-label" for="equipments1">Snow Tires</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="equipments2" value="2">
-                  <label class="custom-control-label" for="equipments2">Tow</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="equipments3" value="3">
-                  <label class="custom-control-label" for="equipments3">Seat Warmer</label>
+                <div v-for="(item, index) in equipmentsArr" :key="index" class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" :id="`equipments${index}`" name="equipments" :value="item.id" @change="updateMultiCheckFormData">
+                  <label class="custom-control-label" :for="`equipments${index}`">{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
             </b-form-group>
@@ -332,12 +430,12 @@
     </b-row>
     <b-row class="justify-content-between align-items-center actions-group">
       <div>
-        <b-button type="button" variant="success"><i class="fa fa-ban"></i> Reset</b-button>
+        <b-button type="button" variant="success" @click="reset()"><i class="fa fa-ban"></i> Reset</b-button>
       </div>
       <div>
-        <b-button type="submit" variant="primary"><i class="fa fa-dot-circle-o"></i> Create</b-button>
+        <b-button type="submit" variant="primary" @click="createProduct()"><i class="fa fa-dot-circle-o"></i> Create</b-button>
         &nbsp;&nbsp;
-        <b-button type="button" variant="danger"><i class="fa fa-trash"></i> Cancel</b-button>
+        <b-button type="button" variant="danger" @click="cancel()"><i class="fa fa-trash"></i> Cancel</b-button>
       </div>
     </b-row>
   </div>
@@ -345,10 +443,12 @@
 
 <script>
 import axios from 'axios'
+import * as _ from 'lodash';
 
 export default {
   name: 'products',
   data: () => ({
+    formData: {},
     brandOptions: [
       {
         text: 'Select a brand',
@@ -402,28 +502,166 @@ export default {
         text: 'Large',
         value: 3
       },
-    ]
+    ],
+    professionsArr: [
+      {
+        id: 1,
+        name: 'Plumber'
+      },
+      {
+        id: 2,
+        name: 'Carpenter'
+      },
+      {
+        id: 3,
+        name: 'Electrician'
+      }
+    ],
+    colorsArr: [
+      {
+        id: 1,
+        name: 'White'
+      },
+      {
+        id: 2,
+        name: 'Black'
+      },
+      {
+        id: 3,
+        name: 'Red'
+      }
+    ],
+    categoriesArr: [
+      {
+        id: 1,
+        name: 'A Smiths Choice',
+      },
+      {
+        id: 2,
+        name: 'A Plumbers Favorite',
+      },
+      {
+        id: 3,
+        name: 'Easy and Handy',
+      },
+    ],
+    equipmentsArr: [
+      {
+        id: 1,
+        name: 'Snow Tires',
+      },
+      {
+        id: 2,
+        name: 'Tow',
+      },
+      {
+        id: 3,
+        name: 'Seat Warmer'
+      }
+    ],
+    validated: {
+      brand: null,
+      model: null,
+      oVariant: null,
+      variant: null,
+      year: null,
+      primaryImage: null,
+      acquisitionCost: null,
+      leasingPeriods: null,
+      startKilometer: null,
+      endKilometer: null,
+      intervalKilometer: null,
+      intervalPrice: null,
+      size: null,
+      colors: null,
+    },
+    isValidated: false,
   }),
   mounted() {
-    this.getProducts(1)
+    this.formData['scrapValues'] = [];
   },
   methods: {
-    getProducts(pageNum) {
-      this.currentPage = pageNum
-      this.loading = true
-      axios.get('/api/v1/products/', {
-        params: {
-          limit: this.perPage,
-          offset: (this.currentPage - 1) * this.perPage + 0,
+    createProduct() {
+      const valid = this.validateData();
+      if (valid) {
+        this.resetValidate();
+        axios.post('/api/v1/products/', {
+          ...this.formData,
+        }).then(response => {
+          this.$router.push('/products');
+        });
+      }
+    },
+    reset() {
+      this.formData = {};
+      resetValidate();
+    },
+    cancel() {
+      this.$router.push('/products');
+    },
+    updateFormData(e, property = undefined) {
+      this.resetValidate();
+      const name = property ? property : e.target.id;
+      const value = _.isObject(e) ? e.target.value : e;
+      this.formData = _.cloneDeep(this.formData);
+      this.formData[name] = value;
+    },
+    updateArrayFormData(name, value, index) {
+      console.log('----------- ara:', index)
+      this.resetValidate();
+      this.formData = _.cloneDeep(this.formData);
+      this.formData[name][index] = value;
+    },
+    updateMultiCheckFormData(e) {
+      this.resetValidate();
+      const name = e.target.name;
+      const checked = e.target.checked;
+      const value = e.target.value;
+      this.formData = _.cloneDeep(this.formData);
+      if (checked) {
+        if (!this.formData[name]) {
+          this.formData[name] = [];
         }
-      }).then(response => {
-        this.products = response.data.results
-        this.totalRows = response.data.total
-        this.loading = false
-        const startIndex = (this.currentPage - 1) * this.perPage + 1
-        const endIndex = this.currentPage * this.perPage > this.totalRows ? this.totalRows : this.currentPage * this.perPage
-        this.header = `List of All Products (${startIndex} - ${endIndex} / ${this.totalRows})`
-      })
+        this.formData[name].push(value);
+        if (name === 'leasingPeriods') {
+          this.formData['scrapValues'].push(0);
+        }
+      } else {
+        const removeItemIndex = this.formData[name].indexOf(value);
+        if (removeItemIndex > -1) {
+          this.formData[name].splice(removeItemIndex, 1);
+          if (name === 'leasingPeriods') {
+            this.formData['scrapValues'].splice(removeItemIndex, 1);
+          }
+        }
+      }
+    },
+    resetValidate() {
+      this.isValidated = false;
+      _.map(this.validated, (value, key) => {
+        this.validated[key] = null;
+      });
+    },
+    validateData() {
+      let valid = true;
+      this.isValidated = true;
+      _.map(this.formData, (value, key) => {
+        this.validated[key] = false;
+        if (key === 'leasingPeriods' || key === 'colors') {
+          if (value && value.length > 0) {
+            this.validated[key] = true;
+          }
+        }
+        if (value) {
+          this.validated[key] = true;
+        }
+      });
+      _.map(this.validated, (value, key) => {
+        if (!value) {
+          valid = false;
+        }
+      });
+      return valid;
     }
   }
 }
@@ -454,5 +692,12 @@ select {
 }
 #leasingperiods-checkboxes {
   margin: 0 -15px;
+  background: transparent;
+  border: none;
+}
+#colors-checkboxes {
+  background: transparent;
+  border: none;
+  height: auto;
 }
 </style>
