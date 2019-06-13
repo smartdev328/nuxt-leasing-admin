@@ -218,7 +218,7 @@
                     'is-valid': isValidated && validated.acquisitionCost,
                     'is-invalid': isValidated && !validated.acquisitionCost
                   }"
-                  @change="updateFormData($event, 'acquisitionCost')"
+                  @change="updateFormData(parseInt($event, 10), 'acquisitionCost')"
                   :value="formData.acquisitionCost"
                 ></b-form-input>
               </b-input-group>
@@ -266,7 +266,7 @@
           <b-col lg="3">
             <b-form-group>
               <label class="col-form-label" >Start Kilometer *</label>
-              <input
+              <b-form-input
                 type="number"
                 class="form-control"
                 :class="{
@@ -274,7 +274,7 @@
                   'is-invalid': isValidated && !validated.startKilometer,
                 }"
                 id="startKilometer"
-                @change="updateFormData($event)"
+                @change="updateFormData(parseInt($event, 10), 'startKilometer')"
                 :value="formData.startKilometer"
               />
               <b-form-invalid-feedback>
@@ -285,7 +285,7 @@
           <b-col lg="3">
             <b-form-group>
               <label class="col-form-label" >End Kilometer *</label>
-              <input
+              <b-form-input
                 type="number"
                 class="form-control"
                 :class="{
@@ -293,7 +293,7 @@
                   'is-invalid': isValidated && !validated.endKilometer,
                 }"
                 id="endKilometer"
-                @change="updateFormData($event)"
+                @change="updateFormData(parseInt($event, 10), 'endKilometer')"
                 :value="formData.endKilometer"
               />
               <b-form-invalid-feedback>
@@ -304,7 +304,7 @@
           <b-col lg="3">
             <b-form-group>
               <label class="col-form-label" >Interval Kilometer *</label>
-              <input
+              <b-form-input
                 type="number"
                 class="form-control"
                 :class="{
@@ -312,7 +312,7 @@
                   'is-invalid': isValidated && !validated.intervalKilometer,
                 }"
                 id="intervalKilometer"
-                @change="updateFormData($event)"
+                @change="updateFormData(parseInt($event, 10), 'intervalKilometer')"
                 :value="formData.intervalKilometer"
               />
               <b-form-invalid-feedback>
@@ -334,7 +334,8 @@
                     'is-valid': isValidated && validated.intervalPrice,
                     'is-invalid': isValidated && !validated.intervalPrice,
                   }"
-                  @change="updateFormData($event, 'intervalPrice')" :value="formData.intervalPrice"
+                  @change="updateFormData(parseInt($event, 10), 'intervalPrice')"
+                  :value="formData.intervalPrice"
                 ></b-form-input>
               </b-input-group>
               <b-form-invalid-feedback>
@@ -607,16 +608,15 @@ export default {
       this.formData[name] = value;
     },
     updateArrayFormData(name, value, index) {
-      console.log('----------- ara:', index)
       this.resetValidate();
       this.formData = _.cloneDeep(this.formData);
-      this.formData[name][index] = value;
+      this.formData[name][index] = parseInt(value, 10);
     },
     updateMultiCheckFormData(e) {
       this.resetValidate();
       const name = e.target.name;
       const checked = e.target.checked;
-      const value = e.target.value;
+      const value = parseInt(e.target.value, 10);
       this.formData = _.cloneDeep(this.formData);
       if (checked) {
         if (!this.formData[name]) {
