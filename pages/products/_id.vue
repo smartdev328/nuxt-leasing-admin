@@ -380,7 +380,15 @@
               <label class="col-form-label" >Product Professions</label>
               <b-form-checkbox-group stacked id="professions-checkboxes">
                 <div v-for="(item, index) in professionsArr" :key="index" class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" :id="`professions${index}`" name="professions" :value="item.id" @change="updateMultiCheckFormData" >
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    :id="`professions${index}`"
+                    name="professions"
+                    :checked="formData.professions && formData.professions.indexOf(item.id) > -1"
+                    :value="item.id"
+                    @change="updateMultiCheckFormData"
+                  >
                   <label class="custom-control-label" :for="`professions${index}`">{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
@@ -400,7 +408,15 @@
                 }"
               >
                 <div v-for="(item, index) in colorsArr" :key="index" class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" :id="`colors${index}`" name="colors" :value="item.id" @change="updateMultiCheckFormData">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    :id="`colors${index}`"
+                    name="colors"
+                    :value="item.id"
+                    :checked="formData.colors && formData.colors.indexOf(item.id) > -1"
+                    @change="updateMultiCheckFormData"
+                  />
                   <label class="custom-control-label" :for="`colors${index}`" >{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
@@ -415,7 +431,15 @@
               <label class="col-form-label" >Categories</label>
               <b-form-checkbox-group stacked id="categories-checkboxes">
                 <div v-for="(item, index) in categoriesArr" :key="index" class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" :id="`categories${index}`" name="categories" :value="item.id" @change="updateMultiCheckFormData">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    :id="`categories${index}`"
+                    name="categories"
+                    :value="item.id"
+                    :checked="formData.categories && formData.categories.indexOf(item.id) > -1"
+                    @change="updateMultiCheckFormData"
+                  />
                   <label class="custom-control-label" :for="`categories${index}`">{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
@@ -427,7 +451,15 @@
               <label class="col-form-label" >Equipments</label>
               <b-form-checkbox-group stacked id="equipments-checkboxes">
                 <div v-for="(item, index) in equipmentsArr" :key="index" class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" :id="`equipments${index}`" name="equipments" :value="item.id" @change="updateMultiCheckFormData">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    :id="`equipments${index}`"
+                    name="equipments"
+                    :value="item.id"
+                    :checked="formData.equipments && formData.equipments.indexOf(item.id) > -1"
+                    @change="updateMultiCheckFormData"
+                  />
                   <label class="custom-control-label" :for="`equipments${index}`">{{ item.name }}</label>
                 </div>
               </b-form-checkbox-group>
@@ -592,6 +624,19 @@ export default {
     this.productId = this.$route.params.id;
     axios.get(`/api/v1/products/${this.productId}`).then(response => {
       this.formData = response.data.data;
+      if (this.formData.colors) {
+        this.formData.colors = this.formData.colors.map(color => color.id);
+      }
+      if (this.formData.professions) {
+        this.formData.professions = this.formData.professions.map(color => color.id);
+      }
+      if (this.formData.categories) {
+        this.formData.categories = this.formData.categories.map(color => color.id);
+      }
+      if (this.formData.equipments) {
+        this.formData.equipments = this.formData.equipments.map(color => color.id);
+      }
+      console.log('----------- form data:', this.formData)
     });
   },
   methods: {
@@ -628,13 +673,13 @@ export default {
     updateArrayFormData(name, value, index) {
       this.resetValidate();
       this.formData = _.cloneDeep(this.formData);
-      this.formData[name][index] = value;
+      this.formData[name][index] = parseInt(value, 10);
     },
     updateMultiCheckFormData(e) {
       this.resetValidate();
       const name = e.target.name;
       const checked = e.target.checked;
-      const value = e.target.value;
+      const value = parseInt(e.target.value, 10);
       this.formData = _.cloneDeep(this.formData);
       if (checked) {
         if (!this.formData[name]) {
