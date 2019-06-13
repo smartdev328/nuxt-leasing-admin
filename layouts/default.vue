@@ -34,7 +34,7 @@ export default {
       return this.$route.name
     },
     list () {
-      return this.$route.matched
+      return this.$route.fullPath.split('/')
     }
   }
 }
