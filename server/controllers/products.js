@@ -27,8 +27,7 @@ module.exports = {
     const offset = req.swagger.params.offset.value
 
     const options = {
-      brand: req.swagger.params.brand.value,
-      size: req.swagger.params.size.value,
+      model: req.swagger.params.model.value,
       limit: req.swagger.params.limit.value,
       offset: req.swagger.params.offset.value
     }

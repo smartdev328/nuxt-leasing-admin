@@ -23,20 +23,25 @@ async function start() {
     await nuxt.ready()
   }
 
+  const allowFeedData = true
   // Listen the server
   async.series(
     [
       cb => {
         consola.info('Initializing Sequelize and connecting to database')
         models.sequelize.sync().then(() => {
-          consola.info('Feeding Data')
-          require('./feeds/brand').run()
-          require('./feeds/size').run()
-          require('./feeds/color').run()
-          require('./feeds/category').run()
-          require('./feeds/equipment').run()
-          require('./feeds/profession').run()
-          require('./feeds/finance').run()
+          if (allowFeedData) {
+            consola.info('Feeding Data')
+            require('./feeds/brand').run()
+            require('./feeds/size').run()
+            require('./feeds/color').run()
+            require('./feeds/category').run()
+            require('./feeds/equipment').run()
+            require('./feeds/profession').run()
+            require('./feeds/finance').run()
+            require('./feeds/model').run()
+            require('./feeds/product').run()
+          }
           return cb()
         })
       },
@@ -60,7 +65,7 @@ async function start() {
       }
       // Give nuxt middleware to express
       app.use(nuxt.render)
-      const port = process.env.PORT || 3001
+      const port = process.env.PORT || 5000
       app.listen(port)
       consola.info('API listening on port', port)
     }

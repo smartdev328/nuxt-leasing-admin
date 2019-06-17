@@ -1,0 +1,133 @@
+paths:
+  /models:
+    get:
+      tags:
+      - "Models"
+      summary: "Get all models"
+      operationId: "listModels"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "brand"
+        in: "query"
+        description: "Query for Models with same BrandId"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of returned results"
+        type: "integer"
+        format: "int32"
+        default: 50
+        minimum: 1
+      - name: "offset"
+        in: "query"
+        description: "Offset the number of returned result from an index of 0"
+        type: "integer"
+        format: "int64"
+        default: 0
+        minimum: 0
+      responses:
+        200:
+          description: "Successfully Retrieved Models"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Model"
+              message:
+                type: "string"
+                description: |
+                  "If empty result, it shall state 'No results were found'. If results found,
+                  it shall state 'Found X result(s)"
+              total:
+                type: "integer"
+                description: "The actual number of results found"
+              offset:
+                type: "integer"
+                description: "The returned offset from an index of 0"
+              limit:
+                type: "integer"
+                description: "Limit of the number of results returned"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "models"
+  /models/{modelId}:
+    parameters:
+    - name: "modelId"
+      in: "path"
+      required: true
+      type: "integer"
+      description: "The Id of the model"
+    get:
+      tags:
+      - "Models"
+      summary: "Get a Model's metadata"
+      operationId: "getModel"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successfully Retrieved Model"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Model"
+              message:
+                type: "string"
+        404:
+          description: "Model does not exist"
+      x-swagger-router-controller: 'models'
+definitions:
+  Model:
+    type: "object"
+    description: "Model object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Model"
+      brand:
+        type: "integer"
+        description: "the Id of Model Brand"
+      modelTitle:
+        type: "string"
+        description: "The title of Model"
+      modelImage:
+        type: "string"
+        description: "The Image Url of Model"
+      seoText:
+        type: "string"
+        description: "The SEO text for Model"
+      metaDescription:
+        type: "string"
+        description: "The Meta Description of Model"
+      titleTag:
+        type: "string"
+        description: "Tag used for Google"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Model was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Model was last updated"
+

@@ -8,16 +8,9 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "brand"
+      - name: "model"
         in: "query"
-        description: "Query for Products with same BrandId"
-        type: "array"
-        uniqueItems: true
-        items:
-          type: "integer"
-      - name: "size"
-        in: "query"
-        description: "Query for Products with same SizeId"
+        description: "Query for Products with same modelId"
         type: "array"
         uniqueItems: true
         items:
@@ -233,7 +226,7 @@ definitions:
         type: "boolean"
         description: "Boolean Value to classify new cars and used cars"
       brand:
-        type: "string"
+        type: "integer"
         description: "the Id of Product Brand"
       model:
         type: "string"
@@ -325,6 +318,30 @@ definitions:
         uniqueItems: true
         items:
           type: "object"
+      downpayment:
+        type: "integer"
+        description: "Downpayment of Product"
+      economy:
+        type: "string"
+        description: "the economy of Product"
+      fuelType:
+        type: "string"
+        description: "the fuelType of Product"
+      doors:
+        type: "string"
+        description: "the doors of Product"
+      motor:
+        type: "string"
+        description: "the motor of Product"
+      cargoSize:
+        type: "string"
+        description: "the cargoSize of Product"
+      gear:
+        type: "string"
+        description: "the gear of Product"
+      energyLabel:
+        type: "string"
+        description: "the energyLabel of Product"
       createdAt:
         type: "string"
         format: "date"
@@ -443,3 +460,27 @@ definitions:
         uniqueItems: true
         items:
           type: "integer"
+      downpayment:
+        type: "integer"
+        description: "Downpayment of Product"
+      economy:
+        type: "string"
+        description: "the economy of Product"
+      fuelType:
+        type: "string"
+        description: "the fuelType of Product"
+      doors:
+        type: "string"
+        description: "the doors of Product"
+      motor:
+        type: "string"
+        description: "the motor of Product"
+      cargoSize:
+        type: "string"
+        description: "the cargoSize of Product"
+      gear:
+        type: "string"
+        description: "the gear of Product"
+      energyLabel:
+        type: "string"
+        description: "the energyLabel of Product"

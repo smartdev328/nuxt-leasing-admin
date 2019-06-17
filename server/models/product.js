@@ -17,19 +17,26 @@ module.exports = (sequelize, DataTypes) => {
     thumbnail3: DataTypes.STRING,
     thumbnail4: DataTypes.STRING,
     short_description: DataTypes.STRING,
-    long_description: DataTypes.STRING,
+    long_description: DataTypes.TEXT,
     acquisition_cost: DataTypes.INTEGER,
     scrap_value: DataTypes.ARRAY(DataTypes.INTEGER),
     leasing_period: DataTypes.ARRAY(DataTypes.INTEGER),
     start_kilometer: DataTypes.INTEGER,
     end_kilometer: DataTypes.INTEGER,
     interval_kilometer: DataTypes.INTEGER,
-    interval_price: DataTypes.INTEGER
+    interval_price: DataTypes.INTEGER,
+    economy: DataTypes.STRING,
+    fuelType: DataTypes.STRING,
+    doors: DataTypes.STRING,
+    motor: DataTypes.STRING,
+    cargoSize: DataTypes.STRING,
+    gear: DataTypes.STRING,
+    energyLabel: DataTypes.STRING
   })
 
   Product.associate = models => {
-    Product.belongsTo(models.Brand, {
-      foreignKey: 'brandId',
+    Product.belongsTo(models.Model, {
+      foreignKey: 'modelId',
       targetKey: 'id'
     })
     Product.belongsTo(models.Size, {

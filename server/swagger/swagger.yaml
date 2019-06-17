@@ -3,7 +3,7 @@ info:
   description: "Swagger Doc for Leasing Customer App"
   version: "0.0.1"
   title: "Leasing Customer Swagger Doc"
-host: "localhost:3000"
+host: "localhost:5000"
 basePath: "/api/v1"
 
 definitions:

@@ -4,14 +4,10 @@ const _ = require('lodash')
 const Promise = require('bluebird')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
-const exceptions = require('../../lib/exceptions')
 const Products = require('../../models').Product
-const Brand = require('../../models').Brand
-const Size = require('../../models').Size
 
 module.exports = {
   sanitize: input => {
-    const errors = []
     if (!input.categories) {
       input.categories = []
     }
@@ -21,25 +17,13 @@ module.exports = {
     if (!input.professions) {
       input.professions = []
     }
-    return Products.findAll({
-      where: { brandId: input.brand, sizeId: input.size }
-    }).then(prod => {
-      if (_.size(prod) > 0) {
-        errors.push({ msg: 'Product with same Brand and Size Already Exists' })
-      }
-      if (!_.isEmpty(errors)) {
-        return Promise.reject(new exceptions.InvalidInputError(errors))
-      }
-
-      return {
-        ...input
-      }
-    })
+    return new Promise(resolve => resolve({
+      ...input
+    }))
   },
   create: params => {
     let newProduct = {}
     return Products.create({
-      model: params.model,
       o_variant: params.oVariant,
       variant: params.variant,
       year: params.year,
@@ -56,12 +40,19 @@ module.exports = {
       start_kilometer: params.startKilometer,
       end_kilometer: params.endKilometer,
       interval_kilometer: params.intervalKilometer,
-      interval_price: params.intervalPrice
+      interval_price: params.intervalPrice,
+      economy: params.economy,
+      fuel_type: params.fuelType,
+      doors: params.doors,
+      motor: params.motor,
+      cargoSize: params.cargoSize,
+      gear: params.gear,
+      energyLabel: params.energyLabel
     })
       .then(prod => {
         newProduct = prod
         return Promise.all([
-          newProduct.setBrand(params.brand),
+          newProduct.setModel(params.model),
           newProduct.setSize(params.size),
           newProduct.setFinance(1),
           newProduct.setColors(params.colors),
@@ -74,21 +65,11 @@ module.exports = {
   },
   search: options => {
     const where = {}
-    const include = [
-      {
-        model: Brand
-      },
-      {
-        model: Size
-      }
-    ]
+    const include = []
 
     // Filters
-    if (options.brand) {
-      Object.assign(where, { brandId: { [Op.or]: options.brand } })
-    }
-    if (options.size) {
-      Object.assign(where, { sizeId: { [Op.or]: options.size } })
+    if (options.model) {
+      Object.assign(where, { modelId: { [Op.or]: options.model } })
     }
 
     return Promise.props({
@@ -113,7 +94,6 @@ module.exports = {
       .then(product =>
         Promise.props({
           productUpdate: product.update({
-            model: params.model,
             o_variant: params.oVariant,
             variant: params.variant,
             year: params.year,
@@ -130,9 +110,16 @@ module.exports = {
             start_kilometer: params.startKilometer,
             end_kilometer: params.endKilometer,
             interval_kilometer: params.intervalKilometer,
-            interval_price: params.intervalPrice
+            interval_price: params.intervalPrice,
+            economy: params.economy,
+            fuel_type: params.fuelType,
+            doors: params.doors,
+            motor: params.motor,
+            cargoSize: params.cargoSize,
+            gear: params.gear,
+            energyLabel: params.energyLabel
           }),
-          brand: product.setBrand(params.brand),
+          model: product.setModel(params.model),
           size: product.setSize(params.size),
           colors: product.setColors(params.colors),
           categories: product.setCategories(params.categories),
@@ -159,7 +146,7 @@ module.exports = {
     const output = _.clone(productModel)
     output.id = product.id
     return Promise.props({
-      brand: product.getBrand().then(res => res.name),
+      model: product.getModel().then(res => ({ name: res.modelTitle, brand: res.brandId })),
       size: product.getSize().then(res => res.name),
       finances: product.getFinance(),
       colors: product.getColors(),
@@ -168,7 +155,8 @@ module.exports = {
       professions: product.getProfessions()
     }).then(result => {
       output.newCar = product.new_car
-      output.model = product.model
+      output.model = result.model.name
+      output.brand = result.model.brand
       output.oVariant = product.o_variant
       output.variant = product.variant
       output.year = product.year
@@ -186,12 +174,18 @@ module.exports = {
       output.endKilometer = product.end_kilometer
       output.intervalKilometer = product.interval_kilometer
       output.intervalPrice = product.interval_price
-      output.brand = result.brand
       output.size = result.size
       output.equipments = result.equipments
       output.colors = result.colors
       output.categories = result.categories
       output.professions = result.professions
+      output.economy = product.economy
+      output.fuelType = product.fuelType
+      output.doors = product.doors
+      output.motor = product.motor
+      output.cargoSize = product.cargoSize
+      output.gear = product.gear
+      output.energyLabel = product.energyLabel
       let downpayment = result.finances.downpayment3
       if (!downpayment) {
         downpayment = result.finances.downpayment2
@@ -245,7 +239,15 @@ const productModel = {
   colorId: undefined,
   categoryId: undefined,
   equipmentId: undefined,
-  downpayment2: undefined,
+  downpayment: undefined,
+  monthlyPrice: undefined,
+  economy: undefined,
+  fuelType: undefined,
+  doors: undefined,
+  motor: undefined,
+  cargoSize: undefined,
+  gear: undefined,
+  energyLabel: undefined,
   createdAt: undefined,
   updatedAt: undefined
 }
