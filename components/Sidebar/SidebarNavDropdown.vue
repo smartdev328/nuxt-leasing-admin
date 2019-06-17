@@ -1,8 +1,10 @@
 <template>
   <router-link tag="li" class="nav-item nav-dropdown" :to="url" disabled>
-    <div class="nav-link nav-dropdown-toggle" @click="handleClick"><i :class="icon"></i> {{name}}</div>
+    <div class="nav-link nav-dropdown-toggle" @click="handleClick">
+      <i :class="icon" /> {{ name }}
+    </div>
     <ul class="nav-dropdown-items">
-      <slot></slot>
+      <slot />
     </ul>
   </router-link>
 </template>
@@ -24,7 +26,7 @@ export default {
     }
   },
   methods: {
-    handleClick (e) {
+    handleClick(e) {
       e.preventDefault()
       e.target.parentElement.classList.toggle('open')
     }

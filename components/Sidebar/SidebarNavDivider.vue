@@ -1,26 +1,26 @@
 <template>
-  <li :class="classList"></li>
+  <li :class="classList" />
 </template>
 
 <script>
-  export default {
-    name: 'sidebar-nav-divider',
-    props: {
-      classes: {
-        type: String,
-        default: ''
-      }
+export default {
+  name: 'SidebarNavDivider',
+  props: {
+    classes: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    classList() {
+      return [
+        'divider',
+        ...this.itemClasses
+      ]
     },
-    computed: {
-      classList () {
-        return [
-          'divider',
-          ...this.itemClasses
-        ]
-      },
-      itemClasses () {
-        return this.classes ? this.classes.split(' ') : ''
-      }
+    itemClasses() {
+      return this.classes ? this.classes.split(' ') : ''
     }
   }
+}
 </script>

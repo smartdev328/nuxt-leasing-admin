@@ -6,6 +6,6 @@
 <script>
 
 export default {
-  name: 'sidebar-form'
+  name: 'SidebarForm'
 }
 </script>

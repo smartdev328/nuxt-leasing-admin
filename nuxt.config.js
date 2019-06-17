@@ -10,6 +10,7 @@ const changeLoaderOptions = loaders => {
   }
 }
 
+// eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = {
   /*
   ** Headers of the page
@@ -51,7 +52,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    
+
   ],
 
   /*
@@ -84,19 +85,22 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend (config, { isDev, isClient }) {
+    extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
+          exclude: /(node_modules)/,
+          options: {
+            fix: true
+          }
         })
 
         const vueLoader = config.module.rules.find(
-          ({loader}) => loader === 'vue-loader')
-        const { options: {loaders} } = vueLoader || { options: {} }
-        
+          ({ loader }) => loader === 'vue-loader')
+        const { options: { loaders } } = vueLoader || { options: {} }
+
         if (loaders) {
           for (const loader of Object.values(loaders)) {
             changeLoaderOptions(Array.isArray(loader) ? loader : [loader])

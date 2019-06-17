@@ -1,8 +1,10 @@
 <template>
   <ol class="breadcrumb">
-    <li class="breadcrumb-item" v-for="(item, index) in list" v-bind:key="index">
-      <span class="active" v-if="isLast(index)">{{ item }}</span>
-      <router-link :to="link(item, index)" v-else>{{ item || 'Home' }}</router-link>
+    <li v-for="(item, index) in list" :key="index" class="breadcrumb-item">
+      <span v-if="isLast(index)" class="active">{{ item }}</span>
+      <router-link v-else :to="link(item, index)">
+        {{ item || 'Home' }}
+      </router-link>
     </li>
   </ol>
 </template>
@@ -17,14 +19,13 @@ export default {
     }
   },
   methods: {
-    isLast (index) {
+    isLast(index) {
       return index === this.list.length - 1
     },
-    link (item, index) {
-      const arr = this.list.slice(0, index + 1);
-      const path = arr.join('/');
-      if (index === 0)
-        return '/'
+    link(item, index) {
+      const arr = this.list.slice(0, index + 1)
+      const path = arr.join('/')
+      if (index === 0) { return '/' }
       return path
     }
   }

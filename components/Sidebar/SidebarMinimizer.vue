@@ -1,15 +1,15 @@
 <template>
-  <button class="sidebar-minimizer" type="button" @click="sidebarMinimize();brandMinimize()"></button>
+  <button class="sidebar-minimizer" type="button" @click="sidebarMinimize();brandMinimize()" />
 </template>
 <script>
 
 export default {
-  name: 'sidebar-minimizer',
+  name: 'SidebarMinimizer',
   methods: {
-    sidebarMinimize () {
+    sidebarMinimize() {
       document.body.classList.toggle('sidebar-minimized')
     },
-    brandMinimize () {
+    brandMinimize() {
       document.body.classList.toggle('brand-minimized')
     }
   }

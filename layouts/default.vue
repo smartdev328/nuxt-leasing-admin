@@ -1,10 +1,10 @@
 <template>
   <div class="app">
-    <AppHeader/>
+    <AppHeader />
     <div class="app-body">
-      <Sidebar :navItems="nav"/>
+      <Sidebar :nav-items="nav" />
       <main class="main">
-        <breadcrumb :list="list"/>
+        <breadcrumb :list="list" />
         <div class="container-fluid">
           <nuxt />
         </div>
@@ -18,22 +18,22 @@ import nav from './menu'
 import { Header as AppHeader, Sidebar, Breadcrumb } from '~/components/'
 
 export default {
-  name: 'full',
+  name: 'Full',
   components: {
     AppHeader,
     Sidebar,
     Breadcrumb
   },
-  data () {
+  data() {
     return {
       nav: nav.items
     }
   },
   computed: {
-    name () {
+    name() {
       return this.$route.name
     },
-    list () {
+    list() {
       return this.$route.fullPath.split('/')
     }
   }

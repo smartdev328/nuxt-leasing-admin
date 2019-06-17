@@ -2,7 +2,9 @@
   <div class="products">
     <b-row class="justify-content-end" style="padding: 15px;">
       <router-link :to="`/products/new`">
-        <b-button variant="success">Add New Product</b-button>
+        <b-button variant="success">
+          Add New Product
+        </b-button>
       </router-link>
     </b-row>
     <b-row>
@@ -15,18 +17,20 @@
             :fields="fields"
           >
             <template slot="id" slot-scope="data">
-              <router-link :to="`/products/${data.item.id}`" >{{ data.item.id }}</router-link>
+              <router-link :to="`/products/${data.item.id}`">
+                {{ data.item.id }}
+              </router-link>
             </template>
           </b-table>
           <nav>
             <b-pagination
+              v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"
-              v-model="currentPage"
               prev-text="Prev"
               next-text="Next"
-              @change="getProducts"
               hide-goto-end-buttons
+              @change="getProducts"
             />
           </nav>
         </b-card>
@@ -42,30 +46,30 @@ import axios from 'axios'
 import Loading from '~/components/Loading.vue'
 
 export default {
-  name: 'products',
+  name: 'Products',
   components: {
-    Loading,
+    Loading
   },
   data: () => {
     return {
       products: [],
       fields: [
-        {key: 'id', sortable: true, label: 'ID'},
-        {key: 'brand', sortable: true },
-        {key: 'model', sortable: true },
-        {key: 'oVariant', sortable: true, label: 'oVariant' },
-        {key: 'variant', sortable: true },
-        {key: 'year', sortable: true},
-        {key: 'acquisitionCost', sortable: true },
-        {key: 'scrapValues'},
-        {key: 'leasingPeriods'}
+        { key: 'id', sortable: true, label: 'ID' },
+        { key: 'brand', sortable: true },
+        { key: 'model', sortable: true },
+        { key: 'oVariant', sortable: true, label: 'oVariant' },
+        { key: 'variant', sortable: true },
+        { key: 'year', sortable: true },
+        { key: 'acquisitionCost', sortable: true },
+        { key: 'scrapValues' },
+        { key: 'leasingPeriods' }
       ],
       currentPage: 1,
       perPage: 3,
       totalRows: 0,
-      header: "List of All Products",
+      header: 'List of All Products',
       loading: false,
-      striped: true,
+      striped: true
     }
   },
   mounted() {
@@ -78,7 +82,7 @@ export default {
       axios.get('/api/v1/products/', {
         params: {
           limit: this.perPage,
-          offset: (this.currentPage - 1) * this.perPage + 0,
+          offset: (this.currentPage - 1) * this.perPage + 0
         }
       }).then(response => {
         this.products = response.data.results

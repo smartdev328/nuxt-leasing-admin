@@ -1,30 +1,37 @@
 <template>
   <div class="sidebar">
-    <SidebarHeader/>
-    <SidebarForm/>
+    <SidebarHeader />
+    <SidebarForm />
     <nav class="sidebar-nav">
-      <div slot="header"></div>
+      <div slot="header" />
       <ul class="nav">
         <template v-for="(item) in navItems">
           <template v-if="item.title">
-            <SidebarNavTitle :name="item.name" :classes="item.class" :wrapper="item.wrapper" v-bind:key="item.key"/>
+            <SidebarNavTitle :key="item.key" :name="item.name" :classes="item.class" :wrapper="item.wrapper" />
           </template>
           <template v-else-if="item.divider">
-            <SidebarNavDivider :classes="item.class" v-bind:key="item.key"/>
+            <SidebarNavDivider :key="item.key" :classes="item.class" />
           </template>
           <template v-else-if="item.label">
-            <SidebarNavLabel :name="item.name" :url="item.url" :icon="item.icon" :label="item.label" :classes="item.class" v-bind:key="item.key"/>
+            <SidebarNavLabel
+              :key="item.key"
+              :name="item.name"
+              :url="item.url"
+              :icon="item.icon"
+              :label="item.label"
+              :classes="item.class"
+            />
           </template>
           <template v-else>
             <template v-if="item.children">
               <!-- First level dropdown -->
-              <SidebarNavDropdown :name="item.name" :url="item.url" :icon="item.icon" v-bind:key="item.key">
+              <SidebarNavDropdown :key="item.key" :name="item.name" :url="item.url" :icon="item.icon">
                 <template v-for="(childL1) in item.children">
                   <template v-if="childL1.children">
                     <!-- Second level dropdown -->
-                    <SidebarNavDropdown :name="childL1.name" :url="childL1.url" :icon="childL1.icon" v-bind:key="childL1.key">
-                      <li class="nav-item" v-for="(childL2) in childL1.children" v-bind:key="childL2.key">
-                        <SidebarNavLink :name="childL2.name" :url="childL2.url" :icon="childL2.icon" :badge="childL2.badge" :variant="item.variant"/>
+                    <SidebarNavDropdown :key="childL1.key" :name="childL1.name" :url="childL1.url" :icon="childL1.icon">
+                      <li v-for="(childL2) in childL1.children" :key="childL2.key" class="nav-item">
+                        <SidebarNavLink :name="childL2.name" :url="childL2.url" :icon="childL2.icon" :badge="childL2.badge" :variant="item.variant" />
                       </li>
                     </SidebarNavDropdown>
                   </template>
@@ -39,17 +46,17 @@
               </SidebarNavDropdown>
             </template>
             <template v-else>
-              <SidebarNavItem :classes="item.class" v-bind:key="item.key">
-                <SidebarNavLink :name="item.name" :url="item.url" :icon="item.icon" :badge="item.badge" :variant="item.variant"/>
+              <SidebarNavItem :key="item.key" :classes="item.class">
+                <SidebarNavLink :name="item.name" :url="item.url" :icon="item.icon" :badge="item.badge" :variant="item.variant" />
               </SidebarNavItem>
             </template>
           </template>
         </template>
       </ul>
-      <slot></slot>
+      <slot />
     </nav>
-    <SidebarFooter/>
-    <SidebarMinimizer/>
+    <SidebarFooter />
+    <SidebarMinimizer />
   </div>
 </template>
 <script>
@@ -64,14 +71,7 @@ import SidebarNavTitle from './SidebarNavTitle'
 import SidebarNavItem from './SidebarNavItem'
 import SidebarNavLabel from './SidebarNavLabel'
 export default {
-  name: 'sidebar',
-  props: {
-    navItems: {
-      type: Array,
-      required: true,
-      default: () => []
-    }
-  },
+  name: 'Sidebar',
   components: {
     SidebarFooter,
     SidebarForm,
@@ -84,8 +84,15 @@ export default {
     SidebarNavItem,
     SidebarNavLabel
   },
+  props: {
+    navItems: {
+      type: Array,
+      required: true,
+      default: () => []
+    }
+  },
   methods: {
-    handleClick (e) {
+    handleClick(e) {
       e.preventDefault()
       e.target.parentElement.classList.toggle('open')
     }

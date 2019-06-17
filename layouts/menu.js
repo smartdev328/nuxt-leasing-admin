@@ -3,7 +3,7 @@ export default {
     {
       name: 'Dashboard',
       url: '/',
-      icon: 'icon-speedometer',
+      icon: 'icon-speedometer'
     },
     {
       name: 'Products',
@@ -18,12 +18,12 @@ export default {
     {
       name: 'Sizes',
       url: '/sizes',
-      icon: 'icon-puzzle',
+      icon: 'icon-puzzle'
     },
     {
       name: 'Colors',
       url: '/colors',
-      icon: 'icon-cursor',
+      icon: 'icon-cursor'
     },
     {
       name: 'Categories',
@@ -33,17 +33,17 @@ export default {
     {
       name: 'Equipments',
       url: '/equipments',
-      icon: 'icon-star',
+      icon: 'icon-star'
     },
     {
       name: 'Professions',
       url: '/professions',
-      icon: 'icon-bell',
+      icon: 'icon-bell'
     },
     {
       name: 'Finances',
       url: '/finances',
-      icon: 'icon-calculator',
-    },
+      icon: 'icon-calculator'
+    }
   ]
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="loading">
-    <img src="~/assets/images/preloader.gif" />
+    <img src="~/assets/images/preloader.gif">
   </div>
 </template>
 
