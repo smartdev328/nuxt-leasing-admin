@@ -14,8 +14,13 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { message } from 'ant-design-vue'
+
 import nav from './menu'
 import { Header as AppHeader, Sidebar, Breadcrumb } from '~/components/'
+
+Vue.prototype.$message = message
 
 export default {
   name: 'Full',
