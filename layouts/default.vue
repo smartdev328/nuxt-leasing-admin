@@ -16,6 +16,7 @@
 <script>
 import Vue from 'vue'
 import { message } from 'ant-design-vue'
+import 'ant-design-vue/lib/message/style/index.css'
 
 import nav from './menu'
 import { Header as AppHeader, Sidebar, Breadcrumb } from '~/components/'
