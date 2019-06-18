@@ -17,12 +17,22 @@
             :busy="loading"
             class="mt-3"
             outlined
-            style="width: 700px"
+            style="width: 800px"
           >
             <template slot="id" slot-scope="data">
               <router-link :to="`/brands/${data.item.id}`">
                 {{ data.item.id }}
               </router-link>
+            </template>
+            <template slot="actions" slot-scope="data">
+              <span class="editbtn">
+                <router-link :to="`/brands/${data.item.id}`">
+                  Edit
+                </router-link>
+              </span>
+              <span class="text-danger deletebtn" @click="showMsgBoxOne(data.item.id)">
+                Delete
+              </span>
             </template>
             <div slot="table-busy" class="text-center text-danger my-2">
               <b-spinner class="align-middle" />
@@ -57,9 +67,10 @@ export default {
       brands: [],
       fields: [
         { key: 'id', sortable: true, label: 'ID' },
-        { key: 'name', sortable: true },
+        { key: 'name', sortable: true, tdClass: 'td-name-style' },
         { key: 'createdAt', sortable: true },
-        { key: 'updatedAt', sortable: true }
+        { key: 'updatedAt', sortable: true },
+        { key: 'actions', label: '', tdClass: 'td-action-style' }
       ],
       currentPage: 1,
       perPage: 3,
@@ -95,7 +106,61 @@ export default {
         const endIndex = this.currentPage * this.perPage > this.totalRows ? this.totalRows : this.currentPage * this.perPage
         this.header = `List of All Brands (${startIndex} - ${endIndex} / ${this.totalRows})`
       })
+    },
+    deleteBrand(brandId) {
+      this.loading = true
+      axios.delete(`/api/v1/brands/${brandId}`)
+        .then(response => {
+          this.loading = false
+          this.getBrands(this.currentPage)
+          this.$message.success('Successfully Removed!')
+        })
+        .catch(() => {
+          this.loading = false
+          this.$message.error('Failed to remove!')
+        })
+    },
+    showMsgBoxOne(brandId) {
+      this.$bvModal.msgBoxConfirm(
+        'Do you really want to delete the Brand?',
+        {
+          size: 'md',
+          okVariant: 'danger',
+          okTitle: 'Confirm',
+          cancelTitle: 'Cancel',
+          buttonSize: 'sm',
+          footerClass: 'p-2 border-top-0',
+          hideHeaderClose: true,
+          centered: true
+        }
+      )
+        .then(value => {
+          if (value) {
+            this.deleteBrand(brandId)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }
 </script>
+<style>
+.editbtn {
+  padding: 0px 5px;
+}
+.editbtn a:hover {
+  text-decoration: none;
+}
+.deletebtn {
+  padding: 0px 5px;
+  cursor: pointer;
+}
+.td-name-style {
+  width: 300px;
+}
+.td-action-style {
+  width: 120px;
+}
+</style>
