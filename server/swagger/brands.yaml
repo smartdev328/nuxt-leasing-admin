@@ -1,0 +1,237 @@
+paths:
+  /brands:
+    get:
+      tags:
+      - "Brands"
+      summary: "Get all brands"
+      operationId: "listBrands"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of returned results"
+        type: "integer"
+        format: "int32"
+        default: 50
+        minimum: 1
+      - name: "offset"
+        in: "query"
+        description: "Offset the number of returned result from an index of 0"
+        type: "integer"
+        format: "int64"
+        default: 0
+        minimum: 0
+      responses:
+        200:
+          description: "Successfully Retrieved Brands"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Brand"
+              message:
+                type: "string"
+                description: |
+                  "If empty result, it shall state 'No results were found'. If results found,
+                  it shall state 'Found X result(s)"
+              total:
+                type: "integer"
+                description: "The actual number of results found"
+              offset:
+                type: "integer"
+                description: "The returned offset from an index of 0"
+              limit:
+                type: "integer"
+                description: "Limit of the number of results returned"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "brands"
+    post:
+      tags:
+      - "Brands"
+      summary: "Create a brand"
+      operationId: "createBrand"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Brand object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/BrandCreateModify"
+      responses:
+        201:
+          description: "Successfully Created Brand"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Brand"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "brands"
+  /brands/{brandId}:
+    parameters:
+    - name: "brandId"
+      in: "path"
+      required: true
+      type: "integer"
+      description: "The Id of the brand"
+    get:
+      tags:
+      - "Brands"
+      summary: "Get a Brand's metadata"
+      operationId: "getBrand"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successfully Retrieved Brand"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Brand"
+              message:
+                type: "string"
+        404:
+          description: "Brand does not exist"
+      x-swagger-router-controller: 'brands'
+    put:
+      tags:
+      - "Brands"
+      summary: "Modify a Brand"
+      operationId: "modifyBrand"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Brand object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/BrandCreateModify"
+      responses:
+        200:
+          description: "Successfully Modified Brand"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Brand"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+        404:
+          description: "Brand not found"
+      x-swagger-router-controller: "brands"
+    delete:
+      tags:
+      - "Brands"
+      summary: "Delete a Brand"
+      operationId: "deleteBrand"
+      responses:
+        200:
+          description: "Successfully Deleted Brand"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Brand"
+              message:
+                type: "string"
+        400:
+          description: 'Cannot be deleted'
+          schema:
+            type: 'object'
+            properties:
+              status:
+                type: 'integer'
+                description: 'The http status code'
+              code:
+                type: 'integer'
+                description: 'The error code'
+              errors:
+                type: 'array'
+                items:
+                  type: 'string'
+                  description: 'The error messages'
+        404:
+          description: "Brand does not exist"
+      x-swagger-router-controller: 'brands'
+definitions:
+  Brand:
+    type: "object"
+    description: "Brand object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Brand"
+      name:
+        type: "string"
+        description: "The name of the Brand"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Brand was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Brand was last updated"
+  BrandCreateModify:
+    type: "object"
+    description: "The model to create or modify a brand object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the Brand"

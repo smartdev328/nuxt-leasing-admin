@@ -38,25 +38,6 @@ definitions:
         type: "string"
         format: "date"
         description: "The date at which the Finance was last updated"
-  Brand:
-    type: "object"
-    description: "Brand object"
-    properties:
-      id:
-        type: "integer"
-        description: |
-          "The id of Brand"
-      name:
-        type: "string"
-        description: "The name of the Brand"
-      createdAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Brand was created"
-      updatedAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Brand was last updated"
   Profession:
     type: "object"
     description: "Profession object"
