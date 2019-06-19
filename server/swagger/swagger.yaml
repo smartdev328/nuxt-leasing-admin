@@ -69,31 +69,6 @@ definitions:
         type: "string"
         format: "date"
         description: "The date at which the Profession was last updated"
-  Color:
-    type: "object"
-    description: "Color object"
-    properties:
-      id:
-        type: "integer"
-        description: |
-          "The id of Color"
-      name:
-        type: "string"
-        description: "The name of the Color"
-      hexColor:
-        type: "integer"
-        description: "The Hex value of the Color"
-      price:
-        type: "integer"
-        description: "The Price value of the Color"
-      createdAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Color was created"
-      updatedAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Color was last updated"
   Category:
     type: "object"
     description: "Category object"
