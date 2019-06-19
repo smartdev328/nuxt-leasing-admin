@@ -1,0 +1,237 @@
+paths:
+  /sizes:
+    get:
+      tags:
+      - "Sizes"
+      summary: "Get all sizes"
+      operationId: "listSizes"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of returned results"
+        type: "integer"
+        format: "int32"
+        default: 50
+        minimum: 1
+      - name: "offset"
+        in: "query"
+        description: "Offset the number of returned result from an index of 0"
+        type: "integer"
+        format: "int64"
+        default: 0
+        minimum: 0
+      responses:
+        200:
+          description: "Successfully Retrieved Sizes"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Size"
+              message:
+                type: "string"
+                description: |
+                  "If empty result, it shall state 'No results were found'. If results found,
+                  it shall state 'Found X result(s)"
+              total:
+                type: "integer"
+                description: "The actual number of results found"
+              offset:
+                type: "integer"
+                description: "The returned offset from an index of 0"
+              limit:
+                type: "integer"
+                description: "Limit of the number of results returned"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "sizes"
+    post:
+      tags:
+      - "Sizes"
+      summary: "Create a size"
+      operationId: "createSize"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Size object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/SizeCreateModify"
+      responses:
+        201:
+          description: "Successfully Created Size"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Size"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "sizes"
+  /sizes/{sizeId}:
+    parameters:
+    - name: "sizeId"
+      in: "path"
+      required: true
+      type: "integer"
+      description: "The Id of the size"
+    get:
+      tags:
+      - "Sizes"
+      summary: "Get a Size's metadata"
+      operationId: "getSize"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successfully Retrieved Size"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Size"
+              message:
+                type: "string"
+        404:
+          description: "Size does not exist"
+      x-swagger-router-controller: 'sizes'
+    put:
+      tags:
+      - "Sizes"
+      summary: "Modify a Size"
+      operationId: "modifySize"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Size object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/SizeCreateModify"
+      responses:
+        200:
+          description: "Successfully Modified Size"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Size"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+        404:
+          description: "Size not found"
+      x-swagger-router-controller: "sizes"
+    delete:
+      tags:
+      - "Sizes"
+      summary: "Delete a Size"
+      operationId: "deleteSize"
+      responses:
+        200:
+          description: "Successfully Deleted Size"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Size"
+              message:
+                type: "string"
+        400:
+          description: 'Cannot be deleted'
+          schema:
+            type: 'object'
+            properties:
+              status:
+                type: 'integer'
+                description: 'The http status code'
+              code:
+                type: 'integer'
+                description: 'The error code'
+              errors:
+                type: 'array'
+                items:
+                  type: 'string'
+                  description: 'The error messages'
+        404:
+          description: "Size does not exist"
+      x-swagger-router-controller: 'sizes'
+definitions:
+  Size:
+    type: "object"
+    description: "Size object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Size"
+      name:
+        type: "string"
+        description: "The name of the Size"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Size was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Size was last updated"
+  SizeCreateModify:
+    type: "object"
+    description: "The model to create or modify a size object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the Size"

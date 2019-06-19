@@ -69,25 +69,6 @@ definitions:
         type: "string"
         format: "date"
         description: "The date at which the Profession was last updated"
-  Size:
-    type: "object"
-    description: "Size object"
-    properties:
-      id:
-        type: "integer"
-        description: |
-          "The id of Size"
-      name:
-        type: "string"
-        description: "The name of the Size"
-      createdAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Size was created"
-      updatedAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Size was last updated"
   Color:
     type: "object"
     description: "Color object"
