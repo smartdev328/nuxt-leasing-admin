@@ -8,8 +8,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     modelTitle: DataTypes.STRING,
     modelImage: DataTypes.STRING,
-    seoText: DataTypes.STRING,
-    metaDescription: DataTypes.STRING,
+    seoText: DataTypes.TEXT,
+    metaDescription: DataTypes.TEXT,
+    modelDescription: DataTypes.TEXT,
     titleTag: DataTypes.STRING
   })
 

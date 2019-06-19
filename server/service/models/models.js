@@ -45,6 +45,7 @@ module.exports = {
       output.modelImage = model.modelImage
       output.seoText = model.seoText
       output.metaDescription = model.metaDescription
+      output.modelDescription = model.modelDescription
       output.titleTag = model.titleTag
       return output
     })

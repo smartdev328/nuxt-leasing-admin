@@ -65,7 +65,7 @@ export default {
         { key: 'leasingPeriods' }
       ],
       currentPage: 1,
-      perPage: 3,
+      perPage: 15,
       totalRows: 0,
       header: 'List of All Products',
       loading: false,

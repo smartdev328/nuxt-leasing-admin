@@ -5,6 +5,8 @@ const Promise = require('bluebird')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const Products = require('../../models').Product
+const Brands = require('../../models').Brand
+const getMonthlyPrice = require('../../lib/pmt')
 
 module.exports = {
   sanitize: input => {
@@ -156,7 +158,6 @@ module.exports = {
     }).then(result => {
       output.newCar = product.new_car
       output.model = result.model.name
-      output.brand = result.model.brand
       output.oVariant = product.o_variant
       output.variant = product.variant
       output.year = product.year
@@ -206,8 +207,12 @@ module.exports = {
         1
       )
 
-      return output
+      return Brands.findOne({ where: { id: result.model.brand } })
     })
+      .then((brand) => {
+        output.brand = brand.name
+        return output
+      })
   }
 }
 
@@ -250,46 +255,4 @@ const productModel = {
   energyLabel: undefined,
   createdAt: undefined,
   updatedAt: undefined
-}
-
-// eslint-disable-next-line no-unused-vars
-const PMT = (rate, nper, pv, fv, type) => {
-  if (!fv) fv = 0
-  if (!type) type = 0
-  if (rate === 0) return -(pv + fv) / nper
-  const pvif = Math.pow(1 + rate, nper)
-  let pmt = (rate / (pvif - 1)) * -(pv * pvif + fv)
-  if (type === 1) {
-    pmt = pmt / (1 + rate)
-  }
-  return Math.ceil(pmt / 10) * 10
-}
-
-// eslint-disable-next-line no-unused-vars
-const getMonthlyPrice = (
-  rate, // Percentage Value: 2.75%
-  leasingPeriod, // options values: 12, 24, 36, 48, 60, 72
-  acquisitionCost,
-  scrapValue,
-  downpayment,
-  colorPrice,
-  equipmentPrice,
-  professionPrice,
-  type = 1
-) => {
-  const decimalRate = rate / 100
-  const calculatedAcquisitionCost =
-    acquisitionCost -
-    downpayment -
-    colorPrice -
-    equipmentPrice -
-    professionPrice
-  const monthlyPrice = PMT(
-    decimalRate / 12,
-    leasingPeriod,
-    -calculatedAcquisitionCost,
-    scrapValue,
-    type
-  )
-  return Math.ceil(monthlyPrice / 10) * 10
 }

@@ -73,7 +73,7 @@ export default {
         { key: 'actions', label: '', tdClass: 'td-action-style' }
       ],
       currentPage: 1,
-      perPage: 3,
+      perPage: 15,
       totalRows: 0,
       header: 'List of All Sizes',
       loading: false,

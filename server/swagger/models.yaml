@@ -119,6 +119,9 @@ definitions:
       metaDescription:
         type: "string"
         description: "The Meta Description of Model"
+      modelDescription:
+        type: "string"
+        description: "The Model Description of Model"
       titleTag:
         type: "string"
         description: "Tag used for Google"
