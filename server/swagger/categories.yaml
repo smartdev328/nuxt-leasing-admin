@@ -1,0 +1,237 @@
+paths:
+  /categories:
+    get:
+      tags:
+      - "Categories"
+      summary: "Get all categories"
+      operationId: "listCategories"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of returned results"
+        type: "integer"
+        format: "int32"
+        default: 50
+        minimum: 1
+      - name: "offset"
+        in: "query"
+        description: "Offset the number of returned result from an index of 0"
+        type: "integer"
+        format: "int64"
+        default: 0
+        minimum: 0
+      responses:
+        200:
+          description: "Successfully Retrieved Categories"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Category"
+              message:
+                type: "string"
+                description: |
+                  "If empty result, it shall state 'No results were found'. If results found,
+                  it shall state 'Found X result(s)"
+              total:
+                type: "integer"
+                description: "The actual number of results found"
+              offset:
+                type: "integer"
+                description: "The returned offset from an index of 0"
+              limit:
+                type: "integer"
+                description: "Limit of the number of results returned"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "categories"
+    post:
+      tags:
+      - "Categories"
+      summary: "Create a category"
+      operationId: "createCategory"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Category object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/CategoryCreateModify"
+      responses:
+        201:
+          description: "Successfully Created Category"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Category"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "categories"
+  /categories/{categoryId}:
+    parameters:
+    - name: "categoryId"
+      in: "path"
+      required: true
+      type: "integer"
+      description: "The Id of the category"
+    get:
+      tags:
+      - "Categories"
+      summary: "Get a Category's metadata"
+      operationId: "getCategory"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successfully Retrieved Category"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Category"
+              message:
+                type: "string"
+        404:
+          description: "Category does not exist"
+      x-swagger-router-controller: 'categories'
+    put:
+      tags:
+      - "Categories"
+      summary: "Modify a Category"
+      operationId: "modifyCategory"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Category object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/CategoryCreateModify"
+      responses:
+        200:
+          description: "Successfully Modified Category"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Category"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+        404:
+          description: "Category not found"
+      x-swagger-router-controller: "categories"
+    delete:
+      tags:
+      - "Categories"
+      summary: "Delete a Category"
+      operationId: "deleteCategory"
+      responses:
+        200:
+          description: "Successfully Deleted Category"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Category"
+              message:
+                type: "string"
+        400:
+          description: 'Cannot be deleted'
+          schema:
+            type: 'object'
+            properties:
+              status:
+                type: 'integer'
+                description: 'The http status code'
+              code:
+                type: 'integer'
+                description: 'The error code'
+              errors:
+                type: 'array'
+                items:
+                  type: 'string'
+                  description: 'The error messages'
+        404:
+          description: "Category does not exist"
+      x-swagger-router-controller: 'categories'
+definitions:
+  Category:
+    type: "object"
+    description: "Category object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Category"
+      name:
+        type: "string"
+        description: "The name of the Category"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Category was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Category was last updated"
+  CategoryCreateModify:
+    type: "object"
+    description: "The model to create or modify a category object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the Category"

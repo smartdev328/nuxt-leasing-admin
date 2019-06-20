@@ -69,25 +69,6 @@ definitions:
         type: "string"
         format: "date"
         description: "The date at which the Profession was last updated"
-  Category:
-    type: "object"
-    description: "Category object"
-    properties:
-      id:
-        type: "integer"
-        description: |
-          "The id of Category"
-      name:
-        type: "string"
-        description: "The name of the Category"
-      createdAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Category was created"
-      updatedAt:
-        type: "string"
-        format: "date"
-        description: "The date at which the Category was last updated"
   Equipment:
     type: "object"
     description: "Equipment object"
