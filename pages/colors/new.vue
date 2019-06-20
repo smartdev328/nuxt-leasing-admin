@@ -1,14 +1,14 @@
 <template>
-  <div class="brands">
+  <div class="colors" :class="{ 'loading': loading }">
     <b-row>
       <b-col lg="12">
-        <h2>Add New Brand</h2>
+        <h2>Add New Color</h2>
       </b-col>
       <b-col lg="12">
         <b-row class="form-group">
-          <b-col cols="4">
+          <b-col lg="4">
             <b-form-group>
-              <label class="col-form-label">Brand Name *</label>
+              <label class="col-form-label">Color Name *</label>
               <input
                 id="name"
                 type="text"
@@ -23,6 +23,47 @@
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row class="form-group">
+          <b-col lg="4">
+            <b-form-group>
+              <label class="col-form-label">Hex Color Code *</label>
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-input-group-text>#</b-input-group-text>
+                </b-input-group-prepend>
+                <b-form-input
+                  id="hexColor"
+                  type="text"
+                  :class="{
+                    'is-valid': isValidated && validated.hexColor,
+                    'is-invalid': isValidated && !validated.hexColor,
+                  }"
+                  :value="formData.hexColor"
+                  @change="updateFormData($event, 'hexColor')"
+                />
+              </b-input-group>
+              <b-form-invalid-feedback>
+                * Required Field
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </b-col>
+          <b-col lg="4">
+            <b-form-group>
+              <label class="col-form-label">Price</label>
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-input-group-text>$</b-input-group-text>
+                </b-input-group-prepend>
+                <b-form-input
+                  id="price"
+                  type="number"
+                  :value="formData.price || 0"
+                  @change="updateFormData(parseInt($event, 10), 'price')"
+                />
+              </b-input-group>
             </b-form-group>
           </b-col>
         </b-row>
@@ -43,7 +84,7 @@
         </b-button>
       </div>
       <div>
-        <b-button type="submit" variant="primary" @click="createBrand()">
+        <b-button type="submit" variant="primary" @click="createColor()">
           <i class="fa fa-dot-circle-o" /> Create
         </b-button>
         &nbsp;&nbsp;
@@ -60,11 +101,12 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'Brands',
+  name: 'Colors',
   data: () => ({
     formData: {},
     validated: {
-      name: null
+      name: null,
+      hexColor: null
     },
     isValidated: false,
     loading: false
@@ -73,24 +115,26 @@ export default {
     this.formData.scrapValues = []
   },
   methods: {
-    createBrand() {
+    createColor() {
       const valid = this.validateData()
       if (valid) {
         this.resetValidate()
         this.loading = true
-        axios.post('/api/v1/brands/', {
-          ...this.formData
+        axios.post('/api/v1/colors/', {
+          name: this.formData.name,
+          price: this.formData.price || 0,
+          hexColor: `#${this.formData.hexColor}`
         })
           .then(response => {
             this.loading = false
             this.$message.success('Successfully Created!', 1, () => {
-              this.$router.push('/brands')
+              this.$router.push('/colors')
             })
           })
           .catch(() => {
             this.loading = false
             this.$message.error('Failed to create!', () => {
-              this.$router.push('/brands')
+              this.$router.push('/colors')
             })
           })
       }
@@ -100,7 +144,7 @@ export default {
       this.resetValidate()
     },
     cancel() {
-      this.$router.push('/brands')
+      this.$router.push('/colors')
     },
     updateFormData(e, property = undefined) {
       this.resetValidate()
@@ -123,10 +167,14 @@ export default {
         if (value) {
           this.validated[key] = true
         }
+        if (key === 'hexColor' && !/^[0-9a-f]{3}([0-9a-f]{3})?$/i.test(value)) {
+          this.validated[key] = false
+        }
       })
       _.map(this.validated, (value, key) => {
         if (!value) {
           valid = false
+          this.$message.error(`The ${key} field is Invalid`, 1)
         }
       })
       return valid
@@ -139,7 +187,7 @@ export default {
   margin-bottom: 1rem;
   margin: 2.5rem -15px;
 }
-.brands {
+.colors {
   margin-bottom: 80px;
 }
 .actions-group {
