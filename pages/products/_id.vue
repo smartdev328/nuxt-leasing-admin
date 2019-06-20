@@ -28,18 +28,19 @@
           </b-col>
           <b-col cols="4">
             <b-form-group>
-              <label class="col-form-label">Model *</label>
-              <input
+              <label class="col-form-label" for="model">Model *</label>
+              <b-form-select
                 id="model"
-                type="text"
+                :plain="true"
                 class="form-control"
                 :class="{
                   'is-valid': isValidated && validated.model,
                   'is-invalid': isValidated && !validated.model
                 }"
-                :value="formData.model"
-                @change="updateFormData($event)"
-              >
+                :options="brandOptions"
+                :value="formData.model || null"
+                @change="updateFormData($event, 'model')"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -199,6 +200,101 @@
                 rows="6"
                 max-rows="9"
                 @change="updateFormData($event, 'longDescription')"
+              />
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="3">
+            <b-form-group>
+              <label class="col-form-label">Economy</label>
+              <b-input-group>
+                <b-form-input
+                  id="economy"
+                  type="number"
+                  :value="formData.economy"
+                  @change="updateFormData(parseInt($event, 10), 'economy')"
+                />
+                <b-input-group-append>
+                  <b-input-group-text>Km / L</b-input-group-text>
+                </b-input-group-append>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+          <b-col lg="3">
+            <b-form-group>
+              <label class="col-form-label">Motor</label>
+              <b-input-group>
+                <b-form-input
+                  id="motor"
+                  type="number"
+                  :value="formData.motor"
+                  @change="updateFormData(parseInt($event, 10), 'motor')"
+                />
+                <b-input-group-append>
+                  <b-input-group-text>hk</b-input-group-text>
+                </b-input-group-append>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+          <b-col lg="3">
+            <b-form-group>
+              <label class="col-form-label" for="fuelType">Fuel Type</label>
+              <b-form-select
+                id="fuelType"
+                :plain="true"
+                class="form-control"
+                :options="fuelTypeOptions"
+                :value="formData.fuelType || null"
+                @change="updateFormData($event, 'fuelType')"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col lg="3">
+            <b-form-group>
+              <label class="col-form-label" for="fuelType">Gear Type</label>
+              <b-form-select
+                id="gear"
+                :plain="true"
+                class="form-control"
+                :options="gearOptions"
+                :value="formData.gear || null"
+                @change="updateFormData($event, 'gear')"
+              />
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="3">
+            <b-form-group>
+              <label class="col-form-label">Doors</label>
+              <b-form-input
+                id="doors"
+                type="number"
+                :value="formData.doors"
+                @change="updateFormData(parseInt($event, 10), 'doors')"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col lg="3">
+            <b-form-group>
+              <label class="col-form-label">Energy Label</label>
+              <b-form-input
+                id="energyLabel"
+                type="number"
+                :value="formData.energyLabel"
+                @change="updateFormData(parseInt($event, 10), 'energyLabel')"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col lg="3">
+            <b-form-group>
+              <label class="col-form-label">Cargo Size</label>
+              <b-form-input
+                id="cargoSize"
+                type="number"
+                :value="formData.cargoSize"
+                @change="updateFormData(parseInt($event, 10), 'cargoSize')"
               />
             </b-form-group>
           </b-col>
@@ -604,6 +700,40 @@ export default {
       {
         id: 3,
         name: 'Seat Warmer'
+      }
+    ],
+    fuelTypeOptions: [
+      {
+        text: 'Select a Fuel Type',
+        value: null,
+        disabled: true
+      },
+      {
+        text: 'Benzin',
+        value: 'benzin'
+      },
+      {
+        text: 'Diesel',
+        value: 'diesel'
+      },
+      {
+        text: 'Elektrisk',
+        value: 'elektrisk'
+      }
+    ],
+    gearOptions: [
+      {
+        text: 'Select a Gear type',
+        value: null,
+        disabled: true
+      },
+      {
+        text: 'Manuelt',
+        value: 'manuelt'
+      },
+      {
+        text: 'Automatisk',
+        value: 'automatisk'
       }
     ],
     validated: {
