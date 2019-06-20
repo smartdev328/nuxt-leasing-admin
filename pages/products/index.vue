@@ -12,15 +12,30 @@
         <b-card :header="header">
           <b-table
             :striped="striped"
-            responsive="sm"
             :items="products"
+            :busy="loading"
             :fields="fields"
+            outlined
           >
             <template slot="id" slot-scope="data">
               <router-link :to="`/products/${data.item.id}`">
                 {{ data.item.id }}
               </router-link>
             </template>
+            <template slot="actions" slot-scope="data">
+              <span class="editbtn">
+                <router-link :to="`/products/${data.item.id}`">
+                  Edit
+                </router-link>
+              </span>
+              <span class="text-danger deletebtn" @click="showMsgBoxOne(data.item.id)">
+                Delete
+              </span>
+            </template>
+            <div slot="table-busy" class="text-center text-danger my-2">
+              <b-spinner class="align-middle" />
+              <strong>Loading...</strong>
+            </div>
           </b-table>
           <nav>
             <b-pagination
@@ -34,7 +49,6 @@
             />
           </nav>
         </b-card>
-        <Loading v-show="loading" />
       </b-col>
     </b-row>
   </div>
@@ -43,13 +57,8 @@
 <script>
 import axios from 'axios'
 
-import Loading from '~/components/Loading.vue'
-
 export default {
   name: 'Products',
-  components: {
-    Loading
-  },
   data: () => {
     return {
       products: [],
@@ -62,7 +71,8 @@ export default {
         { key: 'year', sortable: true },
         { key: 'acquisitionCost', sortable: true },
         { key: 'scrapValues' },
-        { key: 'leasingPeriods' }
+        { key: 'leasingPeriods' },
+        { key: 'actions', label: '', tdClass: 'td-action-style' }
       ],
       currentPage: 1,
       perPage: 15,
@@ -92,7 +102,58 @@ export default {
         const endIndex = this.currentPage * this.perPage > this.totalRows ? this.totalRows : this.currentPage * this.perPage
         this.header = `List of All Products (${startIndex} - ${endIndex} / ${this.totalRows})`
       })
+    },
+    deleteProduct(productId) {
+      this.loading = true
+      axios.delete(`/api/v1/products/${productId}`)
+        .then(response => {
+          this.loading = false
+          this.getProducts(this.currentPage)
+          this.$message.success('Successfully Removed!')
+        })
+        .catch(() => {
+          this.loading = false
+          this.$message.error('Failed to remove!')
+        })
+    },
+    showMsgBoxOne(productId) {
+      this.$bvModal.msgBoxConfirm(
+        'Do you really want to delete the Product?',
+        {
+          size: 'md',
+          okVariant: 'danger',
+          okTitle: 'Confirm',
+          cancelTitle: 'Cancel',
+          buttonSize: 'sm',
+          footerClass: 'p-2 border-top-0',
+          hideHeaderClose: true,
+          centered: true
+        }
+      )
+        .then(value => {
+          if (value) {
+            this.deleteProduct(productId)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }
 </script>
+<style>
+.editbtn {
+  padding: 0px 5px;
+}
+.editbtn a:hover {
+  text-decoration: none;
+}
+.deletebtn {
+  padding: 0px 5px;
+  cursor: pointer;
+}
+.td-action-style {
+  width: 120px;
+}
+</style>
