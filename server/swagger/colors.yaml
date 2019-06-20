@@ -237,6 +237,7 @@ definitions:
     description: "The model to create or modify a color object"
     required:
     - "name"
+    - "hexColor"
     properties:
       name:
         type: "string"
