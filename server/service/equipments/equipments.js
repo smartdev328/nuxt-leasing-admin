@@ -37,7 +37,9 @@ module.exports = {
       .then(equipment =>
         Promise.props({
           equipmentUpdate: equipment.update({
-            name: params.name
+            name: params.name,
+            price: params.price,
+            icon: params.icon
           })
         })
       )
