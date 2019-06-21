@@ -243,6 +243,7 @@ definitions:
     description: "The model to create or modify a profession object"
     required:
     - "name"
+    - "price"
     properties:
       name:
         type: "string"
