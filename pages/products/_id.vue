@@ -5,6 +5,14 @@
         <h2>{{ productName }}</h2>
       </b-col>
       <b-col lg="12">
+        <b-row>
+          <b-col lg="12">
+            <div v-if="loading" class="text-center text-danger my-2">
+              <b-spinner class="align-middle" />
+              <strong>Loading...</strong>
+            </div>
+          </b-col>
+        </b-row>
         <b-row class="form-group">
           <b-col lg="4">
             <b-form-group>
@@ -213,7 +221,7 @@
                   id="economy"
                   type="number"
                   :value="formData.economy"
-                  @change="updateFormData(parseInt($event, 10), 'economy')"
+                  @change="updateFormData($event, 'economy')"
                 />
                 <b-input-group-append>
                   <b-input-group-text>Km / L</b-input-group-text>
@@ -229,7 +237,7 @@
                   id="motor"
                   type="number"
                   :value="formData.motor"
-                  @change="updateFormData(parseInt($event, 10), 'motor')"
+                  @change="updateFormData($event, 'motor')"
                 />
                 <b-input-group-append>
                   <b-input-group-text>hk</b-input-group-text>
@@ -272,7 +280,7 @@
                 id="doors"
                 type="number"
                 :value="formData.doors"
-                @change="updateFormData(parseInt($event, 10), 'doors')"
+                @change="updateFormData($event, 'doors')"
               />
             </b-form-group>
           </b-col>
@@ -283,7 +291,7 @@
                 id="energyLabel"
                 type="number"
                 :value="formData.energyLabel"
-                @change="updateFormData(parseInt($event, 10), 'energyLabel')"
+                @change="updateFormData($event, 'energyLabel')"
               />
             </b-form-group>
           </b-col>
@@ -294,7 +302,7 @@
                 id="cargoSize"
                 type="number"
                 :value="formData.cargoSize"
-                @change="updateFormData(parseInt($event, 10), 'cargoSize')"
+                @change="updateFormData($event, 'cargoSize')"
               />
             </b-form-group>
           </b-col>
@@ -589,7 +597,7 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'Products',
+  name: 'EditProduct',
   data: () => ({
     formData: {},
     brandOptions: [
@@ -669,7 +677,8 @@ export default {
       colors: null
     },
     isValidated: false,
-    productId: undefined
+    productId: undefined,
+    loading: false
   }),
   computed: {
     productName: function () {
@@ -680,6 +689,7 @@ export default {
     }
   },
   mounted() {
+    this.loading = true
     this.formData.scrapValues = []
     this.formData.leasingPeriods = []
     this.productId = this.$route.params.id
@@ -716,7 +726,7 @@ export default {
     })
     axios.get(`/api/v1/products/${this.productId}`).then(response => {
       this.formData = response.data.data
-      console.log('----------- form data:', this.formData)
+      this.loading = false
     })
   },
   methods: {
@@ -727,10 +737,10 @@ export default {
     updateProduct() {
       const valid = this.validateData()
       if (valid) {
-        console.log('---------- upudate product')
         this.resetValidate()
+        const data = _.pickBy(this.formData, _.identity)
         axios.put(`/api/v1/products/${this.productId}`, {
-          ...this.formData
+          ...data
         }).then(response => {
           this.$router.push('/products')
         })
@@ -762,7 +772,6 @@ export default {
           value: null,
           disabled: true
         })
-        console.log('------ this.filteredModelOptions:', this.modelOptions, this.filteredModelOptions)
       }
       if (property === 'model') {
         const modelObj = _.find(this.modelOptions, { value })

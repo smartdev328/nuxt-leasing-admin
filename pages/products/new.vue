@@ -37,7 +37,7 @@
                   'is-valid': isValidated && validated.model,
                   'is-invalid': isValidated && !validated.model
                 }"
-                :options="brandOptions"
+                :options="filteredModelOptions"
                 :value="formData.model || null"
                 @change="updateFormData($event, 'model')"
               />
@@ -213,7 +213,7 @@
                   id="economy"
                   type="number"
                   :value="formData.economy"
-                  @change="updateFormData(parseInt($event, 10), 'economy')"
+                  @change="updateFormData($event, 'economy')"
                 />
                 <b-input-group-append>
                   <b-input-group-text>Km / L</b-input-group-text>
@@ -229,7 +229,7 @@
                   id="motor"
                   type="number"
                   :value="formData.motor"
-                  @change="updateFormData(parseInt($event, 10), 'motor')"
+                  @change="updateFormData($event, 'motor')"
                 />
                 <b-input-group-append>
                   <b-input-group-text>hk</b-input-group-text>
@@ -272,7 +272,7 @@
                 id="doors"
                 type="number"
                 :value="formData.doors"
-                @change="updateFormData(parseInt($event, 10), 'doors')"
+                @change="updateFormData($event, 'doors')"
               />
             </b-form-group>
           </b-col>
@@ -283,7 +283,7 @@
                 id="energyLabel"
                 type="number"
                 :value="formData.energyLabel"
-                @change="updateFormData(parseInt($event, 10), 'energyLabel')"
+                @change="updateFormData($event, 'energyLabel')"
               />
             </b-form-group>
           </b-col>
@@ -294,7 +294,7 @@
                 id="cargoSize"
                 type="number"
                 :value="formData.cargoSize"
-                @change="updateFormData(parseInt($event, 10), 'cargoSize')"
+                @change="updateFormData($event, 'cargoSize')"
               />
             </b-form-group>
           </b-col>
@@ -584,7 +584,7 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'Products',
+  name: 'NewProduct',
   data: () => ({
     formData: {},
     brandOptions: [
@@ -592,111 +592,27 @@ export default {
         text: 'Select a brand',
         value: null,
         disabled: true
-      },
-      {
-        text: 'Volkswagen',
-        value: 1
-      },
-      {
-        text: 'Volvo',
-        value: 2
-      },
-      {
-        text: 'Mazda',
-        value: 3
-      },
-      {
-        text: 'BMW',
-        value: 4
-      },
-      {
-        text: 'Mercedes',
-        value: 5
-      },
-      {
-        text: 'Ford',
-        value: 6
-      },
-      {
-        text: 'Nissan',
-        value: 7
       }
     ],
+    modelOptions: [
+      {
+        text: 'Select a model',
+        value: null,
+        disabled: true
+      }
+    ],
+    filteredModelOptions: [],
     sizeOptions: [
       {
         text: 'Select a size',
         value: null,
         disabled: true
-      },
-      {
-        text: 'Small',
-        value: 1
-      },
-      {
-        text: 'Medium',
-        value: 2
-      },
-      {
-        text: 'Large',
-        value: 3
       }
     ],
-    professionsArr: [
-      {
-        id: 1,
-        name: 'Plumber'
-      },
-      {
-        id: 2,
-        name: 'Carpenter'
-      },
-      {
-        id: 3,
-        name: 'Electrician'
-      }
-    ],
-    colorsArr: [
-      {
-        id: 1,
-        name: 'White'
-      },
-      {
-        id: 2,
-        name: 'Black'
-      },
-      {
-        id: 3,
-        name: 'Red'
-      }
-    ],
-    categoriesArr: [
-      {
-        id: 1,
-        name: 'A Smiths Choice'
-      },
-      {
-        id: 2,
-        name: 'A Plumbers Favorite'
-      },
-      {
-        id: 3,
-        name: 'Easy and Handy'
-      }
-    ],
-    equipmentsArr: [
-      {
-        id: 1,
-        name: 'Snow Tires'
-      },
-      {
-        id: 2,
-        name: 'Tow'
-      },
-      {
-        id: 3,
-        name: 'Seat Warmer'
-      }
-    ],
+    professionsArr: [],
+    colorsArr: [],
+    categoriesArr: [],
+    equipmentsArr: [],
     fuelTypeOptions: [
       {
         text: 'Select a Fuel Type',
@@ -747,18 +663,56 @@ export default {
       size: null,
       colors: null
     },
-    isValidated: false
+    isValidated: false,
+    productId: undefined
   }),
   mounted() {
     this.formData.scrapValues = []
+    this.formData.leasingPeriods = []
+    axios.get(`/api/v1/brands`).then(response => {
+      const data = response.data.results || []
+      data.forEach(item => {
+        this.brandOptions.push({ text: this.capitalize(item.name), value: item.id })
+      })
+    })
+    axios.get(`/api/v1/models`).then(response => {
+      const data = response.data.results || []
+      data.forEach(item => {
+        this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand })
+        this.filteredModelOptions = _.cloneDeep(this.modelOptions)
+      })
+    })
+    axios.get(`/api/v1/sizes`).then(response => {
+      const data = response.data.results || []
+      data.forEach(item => {
+        this.sizeOptions.push({ text: this.capitalize(item.name), value: item.id })
+      })
+    })
+    axios.get(`/api/v1/professions`).then(response => {
+      this.professionsArr = response.data.results || []
+    })
+    axios.get(`/api/v1/colors`).then(response => {
+      this.colorsArr = response.data.results || []
+    })
+    axios.get(`/api/v1/categories`).then(response => {
+      this.categoriesArr = response.data.results || []
+    })
+    axios.get(`/api/v1/equipments`).then(response => {
+      this.equipmentsArr = response.data.results || []
+    })
   },
   methods: {
+    capitalize(s) {
+      if (typeof s !== 'string') return ''
+      return s.charAt(0).toUpperCase() + s.slice(1)
+    },
     createProduct() {
       const valid = this.validateData()
       if (valid) {
         this.resetValidate()
+        const data = _.pickBy(this.formData, _.identity)
         axios.post('/api/v1/products/', {
-          ...this.formData
+          ...data
         }).then(response => {
           this.$router.push('/products')
         })
@@ -777,6 +731,21 @@ export default {
       const value = _.isObject(e) ? e.target.value : e
       this.formData = _.cloneDeep(this.formData)
       this.formData[name] = value
+      if (property === 'brand') {
+        const brandObj = _.find(this.brandOptions, { value })
+        this.filteredModelOptions = this.modelOptions.filter(item => item.brand === brandObj.text)
+        this.formData.model = null
+        this.filteredModelOptions.unshift({
+          text: 'Select a model',
+          value: null,
+          disabled: true
+        })
+      }
+      if (property === 'model') {
+        const modelObj = _.find(this.modelOptions, { value })
+        const brandObj = _.find(this.brandOptions, { text: modelObj.brand })
+        this.formData.brand = brandObj.value
+      }
     },
     updateArrayFormData(name, value, index) {
       this.resetValidate()
