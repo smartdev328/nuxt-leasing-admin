@@ -374,8 +374,8 @@ definitions:
         type: "integer"
         description: "the Id of Product Brand"
       model:
-        type: "string"
-        description: "The model name of Product"
+        type: "integer"
+        description: "The model Id of Product"
       oVariant:
         type: "string"
         description: "The oVariant name of Product"
@@ -460,9 +460,6 @@ definitions:
         uniqueItems: true
         items:
           type: "integer"
-      downpayment:
-        type: "integer"
-        description: "Downpayment of Product"
       economy:
         type: "string"
         description: "the economy of Product"

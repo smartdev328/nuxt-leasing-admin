@@ -37,7 +37,7 @@
                   'is-valid': isValidated && validated.model,
                   'is-invalid': isValidated && !validated.model
                 }"
-                :options="modelOptions"
+                :options="filteredModelOptions"
                 :value="formData.model || null"
                 @change="updateFormData($event, 'model')"
               />
@@ -606,6 +606,7 @@ export default {
         disabled: true
       }
     ],
+    filteredModelOptions: [],
     sizeOptions: [
       {
         text: 'Select a size',
@@ -672,8 +673,8 @@ export default {
   }),
   computed: {
     productName: function () {
-      const brandObj = _.find(this.brandOptions, { value: this.formData.brand })
-      const modelObj = _.find(this.modelOptions, { value: this.formData.model })
+      const brandObj = this.formData.brand && _.find(this.brandOptions, { value: this.formData.brand })
+      const modelObj = this.formData.model && _.find(this.modelOptions, { value: this.formData.model })
       const pn = `${(brandObj && brandObj.text) || ''} ${(modelObj && modelObj.text) || ''}`
       return pn
     }
@@ -691,7 +692,8 @@ export default {
     axios.get(`/api/v1/models`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
-        this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id })
+        this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand })
+        this.filteredModelOptions = _.cloneDeep(this.modelOptions)
       })
     })
     axios.get(`/api/v1/sizes`).then(response => {
@@ -751,6 +753,22 @@ export default {
       const value = _.isObject(e) ? e.target.value : e
       this.formData = _.cloneDeep(this.formData)
       this.formData[name] = value
+      if (property === 'brand') {
+        const brandObj = _.find(this.brandOptions, { value })
+        this.filteredModelOptions = this.modelOptions.filter(item => item.brand === brandObj.text)
+        this.formData.model = null
+        this.filteredModelOptions.unshift({
+          text: 'Select a model',
+          value: null,
+          disabled: true
+        })
+        console.log('------ this.filteredModelOptions:', this.modelOptions, this.filteredModelOptions)
+      }
+      if (property === 'model') {
+        const modelObj = _.find(this.modelOptions, { value })
+        const brandObj = _.find(this.brandOptions, { text: modelObj.brand })
+        this.formData.brand = brandObj.value
+      }
     },
     updateArrayFormData(name, value, index) {
       this.resetValidate()
