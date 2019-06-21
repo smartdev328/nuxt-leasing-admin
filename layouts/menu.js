@@ -44,6 +44,11 @@ export default {
       name: 'Finances',
       url: '/finances',
       icon: 'icon-calculator'
+    },
+    {
+      name: 'Models',
+      url: '/models',
+      icon: 'icon-pencil'
     }
   ]
 }
