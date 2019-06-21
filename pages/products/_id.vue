@@ -2,7 +2,7 @@
   <div class="products">
     <b-row>
       <b-col lg="12">
-        <h2>Brand + Model</h2>
+        <h2>{{ productName }}</h2>
       </b-col>
       <b-col lg="12">
         <b-row class="form-group">
@@ -37,7 +37,7 @@
                   'is-valid': isValidated && validated.model,
                   'is-invalid': isValidated && !validated.model
                 }"
-                :options="brandOptions"
+                :options="modelOptions"
                 :value="formData.model || null"
                 @change="updateFormData($event, 'model')"
               />
@@ -597,34 +597,13 @@ export default {
         text: 'Select a brand',
         value: null,
         disabled: true
-      },
+      }
+    ],
+    modelOptions: [
       {
-        text: 'Volkswagen',
-        value: 'Volkswagen'
-      },
-      {
-        text: 'Volvo',
-        value: 'Volvo'
-      },
-      {
-        text: 'Mazda',
-        value: 'Mazda'
-      },
-      {
-        text: 'BMW',
-        value: 'BMW'
-      },
-      {
-        text: 'Mercedes',
-        value: 'Mercedes'
-      },
-      {
-        text: 'Ford',
-        value: 'Ford'
-      },
-      {
-        text: 'Nissan',
-        value: 'Nissan'
+        text: 'Select a model',
+        value: null,
+        disabled: true
       }
     ],
     sizeOptions: [
@@ -632,76 +611,12 @@ export default {
         text: 'Select a size',
         value: null,
         disabled: true
-      },
-      {
-        text: 'Small',
-        value: 'small'
-      },
-      {
-        text: 'Medium',
-        value: 'medium'
-      },
-      {
-        text: 'Large',
-        value: 'large'
       }
     ],
-    professionsArr: [
-      {
-        id: 1,
-        name: 'Plumber'
-      },
-      {
-        id: 2,
-        name: 'Carpenter'
-      },
-      {
-        id: 3,
-        name: 'Electrician'
-      }
-    ],
-    colorsArr: [
-      {
-        id: 1,
-        name: 'White'
-      },
-      {
-        id: 2,
-        name: 'Black'
-      },
-      {
-        id: 3,
-        name: 'Red'
-      }
-    ],
-    categoriesArr: [
-      {
-        id: 1,
-        name: 'A Smiths Choice'
-      },
-      {
-        id: 2,
-        name: 'A Plumbers Favorite'
-      },
-      {
-        id: 3,
-        name: 'Easy and Handy'
-      }
-    ],
-    equipmentsArr: [
-      {
-        id: 1,
-        name: 'Snow Tires'
-      },
-      {
-        id: 2,
-        name: 'Tow'
-      },
-      {
-        id: 3,
-        name: 'Seat Warmer'
-      }
-    ],
+    professionsArr: [],
+    colorsArr: [],
+    categoriesArr: [],
+    equipmentsArr: [],
     fuelTypeOptions: [
       {
         text: 'Select a Fuel Type',
@@ -755,28 +670,58 @@ export default {
     isValidated: false,
     productId: undefined
   }),
+  computed: {
+    productName: function () {
+      const brandObj = _.find(this.brandOptions, { value: this.formData.brand })
+      const modelObj = _.find(this.modelOptions, { value: this.formData.model })
+      const pn = `${(brandObj && brandObj.text) || ''} ${(modelObj && modelObj.text) || ''}`
+      return pn
+    }
+  },
   mounted() {
     this.formData.scrapValues = []
     this.formData.leasingPeriods = []
     this.productId = this.$route.params.id
+    axios.get(`/api/v1/brands`).then(response => {
+      const data = response.data.results || []
+      data.forEach(item => {
+        this.brandOptions.push({ text: this.capitalize(item.name), value: item.id })
+      })
+    })
+    axios.get(`/api/v1/models`).then(response => {
+      const data = response.data.results || []
+      data.forEach(item => {
+        this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id })
+      })
+    })
+    axios.get(`/api/v1/sizes`).then(response => {
+      const data = response.data.results || []
+      data.forEach(item => {
+        this.sizeOptions.push({ text: this.capitalize(item.name), value: item.id })
+      })
+    })
+    axios.get(`/api/v1/professions`).then(response => {
+      this.professionsArr = response.data.results || []
+    })
+    axios.get(`/api/v1/colors`).then(response => {
+      this.colorsArr = response.data.results || []
+    })
+    axios.get(`/api/v1/categories`).then(response => {
+      this.categoriesArr = response.data.results || []
+    })
+    axios.get(`/api/v1/equipments`).then(response => {
+      this.equipmentsArr = response.data.results || []
+    })
     axios.get(`/api/v1/products/${this.productId}`).then(response => {
       this.formData = response.data.data
-      if (this.formData.colors) {
-        this.formData.colors = this.formData.colors.map(color => color.id)
-      }
-      if (this.formData.professions) {
-        this.formData.professions = this.formData.professions.map(color => color.id)
-      }
-      if (this.formData.categories) {
-        this.formData.categories = this.formData.categories.map(color => color.id)
-      }
-      if (this.formData.equipments) {
-        this.formData.equipments = this.formData.equipments.map(color => color.id)
-      }
       console.log('----------- form data:', this.formData)
     })
   },
   methods: {
+    capitalize(s) {
+      if (typeof s !== 'string') return ''
+      return s.charAt(0).toUpperCase() + s.slice(1)
+    },
     updateProduct() {
       const valid = this.validateData()
       if (valid) {
