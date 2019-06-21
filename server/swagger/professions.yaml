@@ -1,0 +1,261 @@
+paths:
+  /professions:
+    get:
+      tags:
+      - "Professions"
+      summary: "Get all professions"
+      operationId: "listProfessions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of returned results"
+        type: "integer"
+        format: "int32"
+        default: 50
+        minimum: 1
+      - name: "offset"
+        in: "query"
+        description: "Offset the number of returned result from an index of 0"
+        type: "integer"
+        format: "int64"
+        default: 0
+        minimum: 0
+      responses:
+        200:
+          description: "Successfully Retrieved Professions"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Profession"
+              message:
+                type: "string"
+                description: |
+                  "If empty result, it shall state 'No results were found'. If results found,
+                  it shall state 'Found X result(s)"
+              total:
+                type: "integer"
+                description: "The actual number of results found"
+              offset:
+                type: "integer"
+                description: "The returned offset from an index of 0"
+              limit:
+                type: "integer"
+                description: "Limit of the number of results returned"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "professions"
+    post:
+      tags:
+      - "Professions"
+      summary: "Create a profession"
+      operationId: "createProfession"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Profession object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/ProfessionCreateModify"
+      responses:
+        201:
+          description: "Successfully Created Profession"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Profession"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "professions"
+  /professions/{professionId}:
+    parameters:
+    - name: "professionId"
+      in: "path"
+      required: true
+      type: "integer"
+      description: "The Id of the profession"
+    get:
+      tags:
+      - "Professions"
+      summary: "Get a Profession's metadata"
+      operationId: "getProfession"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successfully Retrieved Profession"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Profession"
+              message:
+                type: "string"
+        404:
+          description: "Profession does not exist"
+      x-swagger-router-controller: 'professions'
+    put:
+      tags:
+      - "Professions"
+      summary: "Modify a Profession"
+      operationId: "modifyProfession"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Profession object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/ProfessionCreateModify"
+      responses:
+        200:
+          description: "Successfully Modified Profession"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Profession"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+        404:
+          description: "Profession not found"
+      x-swagger-router-controller: "professions"
+    delete:
+      tags:
+      - "Professions"
+      summary: "Delete a Profession"
+      operationId: "deleteProfession"
+      responses:
+        200:
+          description: "Successfully Deleted Profession"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Profession"
+              message:
+                type: "string"
+        400:
+          description: 'Cannot be deleted'
+          schema:
+            type: 'object'
+            properties:
+              status:
+                type: 'integer'
+                description: 'The http status code'
+              code:
+                type: 'integer'
+                description: 'The error code'
+              errors:
+                type: 'array'
+                items:
+                  type: 'string'
+                  description: 'The error messages'
+        404:
+          description: "Profession does not exist"
+      x-swagger-router-controller: 'professions'
+definitions:
+  Profession:
+    type: "object"
+    description: "Profession object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Profession"
+      name:
+        type: "string"
+        description: "The name of the Profession"
+      price:
+        type: "integer"
+        description: "The Price value of the Profession"
+      icon:
+        type: "string"
+        description: "The icon of the Profession"
+      shortDescription:
+        type: "string"
+        description: "The Short description of the Profession"
+      link:
+        type: "string"
+        description: "The Link of the Profession"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Profession was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Profession was last updated"
+  ProfessionCreateModify:
+    type: "object"
+    description: "The model to create or modify a profession object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the Profession"
+      price:
+        type: "integer"
+        description: "The Price value of the Profession"
+      icon:
+        type: "string"
+        description: "The icon of the Profession"
+      shortDescription:
+        type: "string"
+        description: "The Short description of the Profession"
+      link:
+        type: "string"
+        description: "The Link of the Profession"
