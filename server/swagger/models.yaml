@@ -68,6 +68,47 @@ paths:
                 type: "string"
                 description: "The message associated to the error code"
       x-swagger-router-controller: "models"
+    post:
+      tags:
+      - "Models"
+      summary: "Create a model"
+      operationId: "createModel"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Model object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/ModelCreateModify"
+      responses:
+        201:
+          description: "Successfully Created Model"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Model"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "models"
   /models/{modelId}:
     parameters:
     - name: "modelId"
@@ -92,6 +133,83 @@ paths:
                 $ref: "#/definitions/Model"
               message:
                 type: "string"
+        404:
+          description: "Model does not exist"
+      x-swagger-router-controller: 'models'
+    put:
+      tags:
+      - "Models"
+      summary: "Modify a Model"
+      operationId: "modifyModel"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Model object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/ModelCreateModify"
+      responses:
+        200:
+          description: "Successfully Modified Model"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Model"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+        404:
+          description: "Model not found"
+      x-swagger-router-controller: "models"
+    delete:
+      tags:
+      - "Models"
+      summary: "Delete a Model"
+      operationId: "deleteModel"
+      responses:
+        200:
+          description: "Successfully Deleted Model"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Model"
+              message:
+                type: "string"
+        400:
+          description: 'Cannot be deleted'
+          schema:
+            type: 'object'
+            properties:
+              status:
+                type: 'integer'
+                description: 'The http status code'
+              code:
+                type: 'integer'
+                description: 'The error code'
+              errors:
+                type: 'array'
+                items:
+                  type: 'string'
+                  description: 'The error messages'
         404:
           description: "Model does not exist"
       x-swagger-router-controller: 'models'
@@ -125,12 +243,34 @@ definitions:
       titleTag:
         type: "string"
         description: "Tag used for Google"
-      createdAt:
+  ModelCreateModify:
+    type: "object"
+    description: "he model to create or modify a Model object"
+    required:
+    - "brand"
+    - "modelTitle"
+    - "modelImage"
+    - "seoText"
+    - "modelDescription"
+    properties:
+      brand:
+        type: "integer"
+        description: "the Id of Model Brand"
+      modelTitle:
         type: "string"
-        format: "date"
-        description: "The date at which the Model was created"
-      updatedAt:
+        description: "The title of Model"
+      modelImage:
         type: "string"
-        format: "date"
-        description: "The date at which the Model was last updated"
-
+        description: "The Image Url of Model"
+      seoText:
+        type: "string"
+        description: "The SEO text for Model"
+      metaDescription:
+        type: "string"
+        description: "The Meta Description of Model"
+      modelDescription:
+        type: "string"
+        description: "The Model Description of Model"
+      titleTag:
+        type: "string"
+        description: "Tag used for Google"

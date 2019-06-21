@@ -1,10 +1,25 @@
 const _ = require('lodash')
 const logger = require('../lib/logger')
+const exceptions = require('../lib/exceptions')
 const models = require('../service').models
 const SequelizeEmptyResultError = require('../models').Sequelize
   .EmptyResultError
 
 module.exports = {
+  createModel: (req, res) => {
+    return models.create(req.body)
+      .then(newModel => models.fullRes(newModel))
+      .then(output =>
+        res.status(201).send(simpleRes('Successfully Created Model', output))
+      )
+      .catch(exceptions.InvalidInputError, err =>
+        res.status(400).send(invalidInputRes(0, err.errors))
+      )
+      .catch(err => {
+        logger.error(err)
+        return res.status(500).send()
+      })
+  },
   listModels: (req, res) => {
     const limit = req.swagger.params.limit.value
     const offset = req.swagger.params.offset.value
@@ -55,6 +70,46 @@ module.exports = {
         logger.error(err)
         res.status(500).send()
       })
+  },
+  modifyModel: (req, res) => {
+    logger.info('Modifying a model')
+    const id = req.swagger.params.modelId.value
+
+    return models.modify(id, req.body)
+      .then(prod => models.fullRes(prod))
+      .then(data =>
+        res.status(201).send(simpleRes('Successfully Modified Model', data))
+      )
+      .catch(exceptions.InvalidInputError, err =>
+        res.status(400).send(invalidInputRes(0, err.errors))
+      )
+      .catch(SequelizeEmptyResultError, () => res.status(404).send())
+      .catch(err => {
+        logger.error(err)
+        return res.status(500).send()
+      })
+  },
+  deleteModel: (req, res) => {
+    logger.info('Deleting a model')
+    const modelId = req.swagger.params.modelId.value
+    let response = {}
+    return models
+      .get(modelId, { rejectOnEmpty: true })
+      .then(model => models.fullRes(model))
+      .then(data => {
+        response = data
+        return models.delete(modelId)
+      })
+      .then(() =>
+        res
+          .status(200)
+          .send(simpleRes('Successfully Deleted Model', response))
+      )
+      .catch(SequelizeEmptyResultError, () => res.status(404).send())
+      .catch(err => {
+        logger.error(err)
+        res.status(500).send()
+      })
   }
 }
 
@@ -69,4 +124,11 @@ const searchRes = (datas, total, offset, limit) => ({
 const simpleRes = (message, data) => ({
   message: message,
   data: data
+})
+
+const invalidInputRes = (code, err) => ({
+  status: 400,
+  code: code,
+  message: 'Invalid Input(s)',
+  errors: err
 })
