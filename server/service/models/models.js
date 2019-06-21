@@ -76,7 +76,7 @@ module.exports = {
     const output = {}
     output.id = model.id
     return Promise.props({
-      brand: model.getBrand().then(res => res.name)
+      brand: model.getBrand().then(res => ({ id: res.id, name: res.name }))
     }).then(result => {
       output.brand = result.brand
       output.modelTitle = model.modelTitle

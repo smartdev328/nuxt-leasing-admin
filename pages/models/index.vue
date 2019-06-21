@@ -65,7 +65,7 @@ export default {
       fields: [
         { key: 'id', sortable: true, label: 'ID' },
         { key: 'modelTitle', sortable: true },
-        { key: 'brand', sortable: true },
+        { key: 'brand.name', label: 'Brand', sortable: true },
         { key: 'modelImage' },
         { key: 'modelDescription' },
         { key: 'actions', label: '', tdClass: 'td-action-style' }
