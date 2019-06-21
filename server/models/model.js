@@ -6,7 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    modelTitle: DataTypes.STRING,
+    modelTitle: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
     modelImage: DataTypes.STRING,
     seoText: DataTypes.TEXT,
     metaDescription: DataTypes.TEXT,
