@@ -4,6 +4,13 @@ const Promise = require('bluebird')
 const Equipments = require('../../models').Equipment
 
 module.exports = {
+  create: params => {
+    return Equipments.create({
+      name: params.name,
+      price: params.price,
+      icon: params.icon
+    })
+  },
   search: options => {
     const where = {}
     const include = []
@@ -19,6 +26,34 @@ module.exports = {
         limit: options.limit,
         offset: options.offset
       })
+    })
+  },
+  modify: (equipmentId, params) => {
+    const id = equipmentId
+    return Equipments.findOne({
+      where: { id: id },
+      rejectOnEmpty: true
+    })
+      .then(equipment =>
+        Promise.props({
+          equipmentUpdate: equipment.update({
+            name: params.name
+          })
+        })
+      )
+      .then(result => result.equipmentUpdate)
+  },
+  get: (equipmentId, options = {}) => {
+    const id = equipmentId
+    return Equipments.findOne({
+      where: { id: id },
+      rejectOnEmpty: options.rejectOnEmpty ? options.rejectOnEmpty : false
+    })
+  },
+  delete: equipmentId => {
+    return Equipments.destroy({
+      where: { id: equipmentId },
+      rejectOnEmpty: true
     })
   },
   fullRes: equipment => {
