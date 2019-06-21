@@ -23,7 +23,7 @@ module.exports = {
         const promises = []
         _.forEach(searchResult.objects, model => {
           promises.push(
-            models.fullResWithPrice(model).then(data => {
+            models.fullRes(model).then(data => {
               parsedEvents.push(data)
             })
           )

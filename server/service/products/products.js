@@ -6,7 +6,6 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const Products = require('../../models').Product
 const Brands = require('../../models').Brand
-const getMonthlyPrice = require('../../lib/pmt')
 
 module.exports = {
   sanitize: input => {
@@ -150,11 +149,10 @@ module.exports = {
     return Promise.props({
       model: product.getModel().then(res => ({ name: res.modelTitle, brand: res.brandId })),
       size: product.getSize().then(res => res.name),
-      finances: product.getFinance(),
-      colors: product.getColors(),
-      equipments: product.getEquipments(),
-      categories: product.getCategories(),
-      professions: product.getProfessions()
+      colors: product.getColors().then(res => res.map(item => item.id)),
+      equipments: product.getEquipments().then(res => res.map(item => item.id)),
+      categories: product.getCategories().then(res => res.map(item => item.id)),
+      professions: product.getProfessions().then(res => res.map(item => item.id))
     }).then(result => {
       output.newCar = product.new_car
       output.model = result.model.name
@@ -187,32 +185,58 @@ module.exports = {
       output.cargoSize = product.cargoSize
       output.gear = product.gear
       output.energyLabel = product.energyLabel
-      let downpayment = result.finances.downpayment3
-      if (!downpayment) {
-        downpayment = result.finances.downpayment2
-      }
-      if (!downpayment) {
-        downpayment = result.finances.downpayment1
-      }
-      output.downpayment = result.finances.downpayment1 || 0
-      output.monthlyPrice = getMonthlyPrice(
-        result.finances.rate,
-        product.leasing_period[product.leasing_period.length - 1],
-        product.acquisition_cost,
-        product.scrap_value[product.scrap_value.length - 1],
-        downpayment,
-        0,
-        0,
-        0,
-        1
-      )
-
       return Brands.findOne({ where: { id: result.model.brand } })
     })
       .then((brand) => {
         output.brand = brand.name
         return output
       })
+  },
+  fullResForOne: product => {
+    const output = _.clone(productModel)
+    output.id = product.id
+    return Promise.props({
+      model: product.getModel().then(res => ({ id: res.id, brand: res.brandId })),
+      size: product.getSize().then(res => res.id),
+      colors: product.getColors().then(res => res.map(item => item.id)),
+      equipments: product.getEquipments().then(res => res.map(item => item.id)),
+      categories: product.getCategories().then(res => res.map(item => item.id)),
+      professions: product.getProfessions().then(res => res.map(item => item.id))
+    }).then(result => {
+      output.newCar = product.new_car
+      output.model = result.model.id
+      output.brand = result.model.brand
+      output.oVariant = product.o_variant
+      output.variant = product.variant
+      output.year = product.year
+      output.primaryImage = product.primary_image
+      output.thumbnail1 = product.thumbnail1
+      output.thumbnail2 = product.thumbnail2
+      output.thumbnail3 = product.thumbnail3
+      output.thumbnail4 = product.thumbnail4
+      output.shortDescription = product.short_description
+      output.longDescription = product.long_description
+      output.acquisitionCost = product.acquisition_cost
+      output.scrapValues = product.scrap_value
+      output.leasingPeriods = product.leasing_period
+      output.startKilometer = product.start_kilometer
+      output.endKilometer = product.end_kilometer
+      output.intervalKilometer = product.interval_kilometer
+      output.intervalPrice = product.interval_price
+      output.size = result.size
+      output.equipments = result.equipments
+      output.colors = result.colors
+      output.categories = result.categories
+      output.professions = result.professions
+      output.economy = product.economy
+      output.fuelType = product.fuelType
+      output.doors = product.doors
+      output.motor = product.motor
+      output.cargoSize = product.cargoSize
+      output.gear = product.gear
+      output.energyLabel = product.energyLabel
+      return output
+    })
   }
 }
 

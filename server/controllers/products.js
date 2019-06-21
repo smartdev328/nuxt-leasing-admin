@@ -10,7 +10,7 @@ module.exports = {
     return products
       .sanitize(req.body)
       .then(params => products.create(params))
-      .then(newProduct => products.fullRes(newProduct))
+      .then(newProduct => products.fullResForOne(newProduct))
       .then(output =>
         res.status(201).send(simpleRes('Successfully Created Product', output))
       )
@@ -63,7 +63,7 @@ module.exports = {
     const id = req.swagger.params.productId.value
     return products
       .get(id, { rejectOnEmpty: true })
-      .then(product => products.fullRes(product))
+      .then(product => products.fullResForOne(product))
       .then(data =>
         res.status(200).send(simpleRes('Successfully Retrieved Product', data))
       )
@@ -80,7 +80,7 @@ module.exports = {
     return products
       .sanitize(req.body)
       .then(input => products.modify(id, input))
-      .then(prod => products.fullRes(prod))
+      .then(prod => products.fullResForOne(prod))
       .then(data =>
         res.status(201).send(simpleRes('Successfully Modified Product', data))
       )
@@ -99,7 +99,7 @@ module.exports = {
     let response = {}
     return products
       .get(productId, { rejectOnEmpty: true })
-      .then(product => products.fullRes(product))
+      .then(product => products.fullResForOne(product))
       .then(data => {
         response = data
         return products.delete(productId)

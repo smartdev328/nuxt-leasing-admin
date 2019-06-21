@@ -299,25 +299,25 @@ definitions:
         type: "array"
         uniqueItems: true
         items:
-          type: "object"
+          type: "integer"
       colors:
         description: "Product Colors"
         type: "array"
         uniqueItems: true
         items:
-          type: "object"
+          type: "integer"
       categories:
         description: "Product Categories"
         type: "array"
         uniqueItems: true
         items:
-          type: "object"
+          type: "integer"
       equipments:
         description: "Product Equipments"
         type: "array"
         uniqueItems: true
         items:
-          type: "object"
+          type: "integer"
       downpayment:
         type: "integer"
         description: "Downpayment of Product"
