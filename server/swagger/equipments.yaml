@@ -1,0 +1,249 @@
+paths:
+  /equipments:
+    get:
+      tags:
+      - "Equipments"
+      summary: "Get all equipments"
+      operationId: "listEquipments"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Limit the number of returned results"
+        type: "integer"
+        format: "int32"
+        default: 50
+        minimum: 1
+      - name: "offset"
+        in: "query"
+        description: "Offset the number of returned result from an index of 0"
+        type: "integer"
+        format: "int64"
+        default: 0
+        minimum: 0
+      responses:
+        200:
+          description: "Successfully Retrieved Equipments"
+          schema:
+            type: "object"
+            properties:
+              results:
+                type: "array"
+                items:
+                  $ref: "#/definitions/Equipment"
+              message:
+                type: "string"
+                description: |
+                  "If empty result, it shall state 'No results were found'. If results found,
+                  it shall state 'Found X result(s)"
+              total:
+                type: "integer"
+                description: "The actual number of results found"
+              offset:
+                type: "integer"
+                description: "The returned offset from an index of 0"
+              limit:
+                type: "integer"
+                description: "Limit of the number of results returned"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "equipments"
+    post:
+      tags:
+      - "Equipments"
+      summary: "Create a equipment"
+      operationId: "createEquipment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Equipment object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/EquipmentCreateModify"
+      responses:
+        201:
+          description: "Successfully Created Equipment"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Equipment"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+      x-swagger-router-controller: "equipments"
+  /equipments/{equipmentId}:
+    parameters:
+    - name: "equipmentId"
+      in: "path"
+      required: true
+      type: "integer"
+      description: "The Id of the equipment"
+    get:
+      tags:
+      - "Equipments"
+      summary: "Get a Equipment's metadata"
+      operationId: "getEquipment"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successfully Retrieved Equipment"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Equipment"
+              message:
+                type: "string"
+        404:
+          description: "Equipment does not exist"
+      x-swagger-router-controller: 'equipments'
+    put:
+      tags:
+      - "Equipments"
+      summary: "Modify a Equipment"
+      operationId: "modifyEquipment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Equipment object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/EquipmentCreateModify"
+      responses:
+        200:
+          description: "Successfully Modified Equipment"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Equipment"
+              message:
+                type: "string"
+        400:
+          description: "Invalid Input"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "integer"
+                description: "The http status code"
+              code:
+                type: "integer"
+                description: "The error code"
+              message:
+                type: "string"
+                description: "The message associated to the error code"
+        404:
+          description: "Equipment not found"
+      x-swagger-router-controller: "equipments"
+    delete:
+      tags:
+      - "Equipments"
+      summary: "Delete a Equipment"
+      operationId: "deleteEquipment"
+      responses:
+        200:
+          description: "Successfully Deleted Equipment"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/Equipment"
+              message:
+                type: "string"
+        400:
+          description: 'Cannot be deleted'
+          schema:
+            type: 'object'
+            properties:
+              status:
+                type: 'integer'
+                description: 'The http status code'
+              code:
+                type: 'integer'
+                description: 'The error code'
+              errors:
+                type: 'array'
+                items:
+                  type: 'string'
+                  description: 'The error messages'
+        404:
+          description: "Equipment does not exist"
+      x-swagger-router-controller: 'equipments'
+definitions:
+  Equipment:
+    type: "object"
+    description: "Equipment object"
+    properties:
+      id:
+        type: "integer"
+        description: |
+          "The id of Equipment"
+      name:
+        type: "string"
+        description: "The name of the Equipment"
+      price:
+        type: "integer"
+        description: "The price of the Equipment"
+      icon:
+        type: "string"
+        description: "The Icon url of the Equipment"
+      createdAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Equipment was created"
+      updatedAt:
+        type: "string"
+        format: "date"
+        description: "The date at which the Equipment was last updated"
+  EquipmentCreateModify:
+    type: "object"
+    description: "The model to create or modify a equipment object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the Equipment"
+      price:
+        type: "integer"
+        description: "The price of the Equipment"
+      icon:
+        type: "string"
+        description: "The Icon url of the Equipment"
