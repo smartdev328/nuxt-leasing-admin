@@ -2,17 +2,9 @@
   <div class="models">
     <b-row>
       <b-col lg="12">
-        <h2>Edit Model - {{ formData.modelTitle }} </h2>
+        <h2>Add New Model</h2>
       </b-col>
       <b-col lg="12">
-        <b-row>
-          <b-col lg="12">
-            <div v-if="loading" class="text-center text-danger my-2">
-              <b-spinner class="align-middle" />
-              <strong>Loading...</strong>
-            </div>
-          </b-col>
-        </b-row>
         <b-row class="form-group">
           <b-col lg="4">
             <b-form-group>
@@ -148,12 +140,12 @@
         </b-button>
       </div>
       <div>
-        <b-button type="submit" variant="primary" @click="updateModel()">
-          <i class="fa fa-dot-circle-o" /> Save
+        <b-button type="submit" variant="primary" @click="createModel()">
+          <i class="fa fa-dot-circle-o" /> Create
         </b-button>
         &nbsp;&nbsp;
-        <b-button type="button" variant="danger" @click="deleteModel()">
-          <i class="fa fa-trash" /> Delete
+        <b-button type="button" variant="danger" @click="cancel()">
+          <i class="fa fa-close" /> Cancel
         </b-button>
       </div>
     </b-row>
@@ -165,7 +157,7 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'EditModel',
+  name: 'NewModel',
   data: () => ({
     formData: {},
     brandOptions: [
@@ -186,18 +178,11 @@ export default {
     loading: false
   }),
   mounted() {
-    this.loading = true
-    this.modelId = this.$route.params.id
     axios.get(`/api/v1/brands`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.brandOptions.push({ text: this.capitalize(item.name), value: item.id })
       })
-    })
-    axios.get(`/api/v1/models/${this.modelId}`).then(response => {
-      this.formData = response.data.data
-      this.formData.brand = this.formData.brand.id
-      this.loading = false
     })
   },
   methods: {
@@ -205,12 +190,12 @@ export default {
       if (typeof s !== 'string') return ''
       return s.charAt(0).toUpperCase() + s.slice(1)
     },
-    updateModel() {
+    createModel() {
       const valid = this.validateData()
       if (valid) {
         this.resetValidate()
         const data = _.pickBy(this.formData, _.identity)
-        axios.put(`/api/v1/models/${this.modelId}`, {
+        axios.post('/api/v1/models/', {
           ...data
         }).then(response => {
           this.$router.push('/models')
@@ -218,18 +203,11 @@ export default {
       }
     },
     reset() {
+      this.formData = {}
       this.resetValidate()
-      this.loading = true
-      axios.get(`/api/v1/models/${this.modelId}`).then(response => {
-        this.formData = response.data.data
-        this.formData.brand = this.formData.brand.id
-        this.loading = false
-      })
     },
-    deleteModel() {
-      axios.delete(`/api/v1/models/${this.modelId}`).then(response => {
-        this.$router.push('/models')
-      })
+    cancel() {
+      this.$router.push('/models')
     },
     updateFormData(e, property = undefined) {
       this.resetValidate()
@@ -248,6 +226,7 @@ export default {
       let valid = true
       this.isValidated = true
       _.map(this.formData, (value, key) => {
+        this.validated[key] = false
         if (value) {
           this.validated[key] = true
         }
