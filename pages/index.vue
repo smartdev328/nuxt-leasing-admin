@@ -20,7 +20,6 @@
             </h4>
             <p>Members online</p>
           </b-card-body>
-          <card-line1-chart-example class="chart-wrapper px-3" style="height:70px;" height="70" />
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
@@ -42,7 +41,6 @@
             </h4>
             <p>Members online</p>
           </b-card-body>
-          <card-line2-chart-example class="chart-wrapper px-3" style="height:70px;" height="70" />
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
@@ -64,7 +62,6 @@
             </h4>
             <p>Members online</p>
           </b-card-body>
-          <card-line3-chart-example class="chart-wrapper" style="height:70px;" height="70" />
         </b-card>
       </b-col>
       <b-col sm="6" lg="3">
@@ -86,7 +83,6 @@
             </h4>
             <p>Members online</p>
           </b-card-body>
-          <card-bar-chart-example class="chart-wrapper px-3" style="height:70px;" height="70" />
         </b-card>
       </b-col>
     </b-row>
