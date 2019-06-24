@@ -122,7 +122,7 @@ const searchRes = (datas, total, offset, limit) => ({
   total: total,
   offset: offset,
   limit: limit,
-  results: datas
+  results: _.orderBy(datas, ['id'], ['asc'])
 })
 
 const invalidInputRes = (code, err) => ({

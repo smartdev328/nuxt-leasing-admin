@@ -25,7 +25,10 @@ module.exports = {
         where: where,
         include: include,
         limit: options.limit,
-        offset: options.offset
+        offset: options.offset,
+        order: [
+          ['id', 'ASC']
+        ]
       })
     })
   },
