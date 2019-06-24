@@ -678,7 +678,7 @@ export default {
     axios.get(`/api/v1/models`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
-        this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand })
+        this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand.id })
         this.filteredModelOptions = _.cloneDeep(this.modelOptions)
       })
     })
@@ -733,7 +733,7 @@ export default {
       this.formData[name] = value
       if (property === 'brand') {
         const brandObj = _.find(this.brandOptions, { value })
-        this.filteredModelOptions = this.modelOptions.filter(item => item.brand === brandObj.text)
+        this.filteredModelOptions = this.modelOptions.filter(item => item.brand === brandObj.value)
         this.formData.model = null
         this.filteredModelOptions.unshift({
           text: 'Select a model',
@@ -743,7 +743,7 @@ export default {
       }
       if (property === 'model') {
         const modelObj = _.find(this.modelOptions, { value })
-        const brandObj = _.find(this.brandOptions, { text: modelObj.brand })
+        const brandObj = _.find(this.brandOptions, { value: modelObj.brand })
         this.formData.brand = brandObj.value
       }
     },
