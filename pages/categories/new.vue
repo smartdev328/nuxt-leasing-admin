@@ -48,7 +48,7 @@
         </b-button>
         &nbsp;&nbsp;
         <b-button type="button" variant="danger" @click="cancel()">
-          <i class="fa fa-trash" /> Cancel
+          <i class="fa fa-close" /> Cancel
         </b-button>
       </div>
     </b-row>
