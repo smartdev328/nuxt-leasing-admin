@@ -5,6 +5,14 @@
         <h2>Add New Product</h2>
       </b-col>
       <b-col lg="12">
+        <b-row>
+          <b-col lg="12">
+            <div v-if="loading" class="text-center text-danger my-2">
+              <b-spinner class="align-middle" />
+              <strong>Loading...</strong>
+            </div>
+          </b-col>
+        </b-row>
         <b-row class="form-group">
           <b-col lg="4">
             <b-form-group>
@@ -356,14 +364,16 @@
           <b-col lg="12">
             <label class="col-form-label">Scrap values *</label>
           </b-col>
-          <b-col v-for="(item, index) in formData.leasingPeriods" :key="index" lg="3">
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-input-group-text>{{ item }} months</b-input-group-text>
-              </b-input-group-prepend>
-              <b-form-input id="elementsPrependAppend" type="number" name="scrapValues" :value="formData.scrapValues[index]" @change="updateArrayFormData('scrapValues', $event, index)" />
-            </b-input-group>
-          </b-col>
+          <template v-for="(item, index) in formData.scrapValues">
+            <b-col v-if="item !== undefined" :key="index" lg="3">
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-input-group-text>{{ 12 * (index + 1) }} months</b-input-group-text>
+                </b-input-group-prepend>
+                <b-form-input id="elementsPrependAppend" type="number" name="scrapValues" :value="formData.scrapValues[index]" @change="updateArrayFormData('scrapValues', $event, index)" />
+              </b-input-group>
+            </b-col>
+          </template>
         </b-row>
         <b-row class="form-group">
           <b-col lg="3">
@@ -664,10 +674,12 @@ export default {
       colors: null
     },
     isValidated: false,
-    productId: undefined
+    productId: undefined,
+    loading: false
   }),
   mounted() {
-    this.formData.scrapValues = []
+    this.loading = true
+    this.formData.scrapValues = new Array(6).fill(undefined) // 12, 24, 36, 48, 60, 72
     this.formData.leasingPeriods = []
     axios.get(`/api/v1/brands`).then(response => {
       const data = response.data.results || []
@@ -680,6 +692,7 @@ export default {
       data.forEach(item => {
         this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand.id })
         this.filteredModelOptions = _.cloneDeep(this.modelOptions)
+        this.loading = false
       })
     })
     axios.get(`/api/v1/sizes`).then(response => {
@@ -719,20 +732,20 @@ export default {
           year: this.formData.year,
           primaryImage: this.formData.primaryImage,
           acquisitionCost: this.formData.acquisitionCost,
-          leasingPeriods: this.formData.leasingPeriods,
+          leasingPeriods: _.sortBy(this.formData.leasingPeriods),
           startKilometer: this.formData.startKilometer,
           endKilometer: this.formData.endKilometer,
           intervalKilometer: this.formData.intervalKilometer,
           intervalPrice: this.formData.intervalPrice,
           size: this.formData.size,
           colors: this.formData.colors,
+          scrapValues: _.filter(this.formData.scrapValues, value => value !== undefined),
           thumbnail1: this.formData.thumbnail1 || '',
           thumbnail2: this.formData.thumbnail2 || '',
           thumbnail3: this.formData.thumbnail3 || '',
           thumbnail4: this.formData.thumbnail4 || '',
           shortDescription: this.formData.shortDescription || '',
           longDescription: this.formData.longDescription || '',
-          scrapValues: this.formData.scrapValues || [],
           professions: this.formData.professions || [],
           categories: this.formData.categories || [],
           equipments: this.formData.equipments || [],
@@ -794,14 +807,14 @@ export default {
         }
         this.formData[name].push(value)
         if (name === 'leasingPeriods') {
-          this.formData.scrapValues.push(0)
+          this.formData.scrapValues[value / 12 - 1] = 0
         }
       } else {
         const removeItemIndex = this.formData[name].indexOf(value)
         if (removeItemIndex > -1) {
           this.formData[name].splice(removeItemIndex, 1)
           if (name === 'leasingPeriods') {
-            this.formData.scrapValues.splice(removeItemIndex, 1)
+            this.formData.scrapValues[value / 12 - 1] = undefined
           }
         }
       }
