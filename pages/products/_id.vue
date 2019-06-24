@@ -740,7 +740,37 @@ export default {
         this.resetValidate()
         // const data = _.pickBy(this.formData, _.identity)
         axios.put(`/api/v1/products/${this.productId}`, {
-          ...this.formData
+          brand: this.formData.brand,
+          model: this.formData.model,
+          oVariant: this.formData.oVariant,
+          variant: this.formData.variant,
+          year: this.formData.year,
+          primaryImage: this.formData.primaryImage,
+          acquisitionCost: this.formData.acquisitionCost,
+          leasingPeriods: this.formData.leasingPeriods,
+          startKilometer: this.formData.startKilometer,
+          endKilometer: this.formData.endKilometer,
+          intervalKilometer: this.formData.intervalKilometer,
+          intervalPrice: this.formData.intervalPrice,
+          size: this.formData.size,
+          colors: this.formData.colors,
+          thumbnail1: this.formData.thumbnail1 || '',
+          thumbnail2: this.formData.thumbnail2 || '',
+          thumbnail3: this.formData.thumbnail3 || '',
+          thumbnail4: this.formData.thumbnail4 || '',
+          shortDescription: this.formData.shortDescription || '',
+          longDescription: this.formData.longDescription || '',
+          scrapValues: this.formData.scrapValues || [],
+          professions: this.formData.professions || [],
+          categories: this.formData.categories || [],
+          equipments: this.formData.equipments || [],
+          economy: this.formData.economy || '',
+          fuelType: this.formData.fuelType || '',
+          doors: this.formData.doors || '',
+          motor: this.formData.motor || '',
+          cargoSize: this.formData.cargoSize || '',
+          gear: this.formData.gear || '',
+          energyLabel: this.formData.energyLabel || ''
         }).then(response => {
           this.$router.push('/products')
         })
@@ -817,14 +847,17 @@ export default {
     validateData() {
       let valid = true
       this.isValidated = true
-      _.map(this.formData, (value, key) => {
-        if (key === 'leasingPeriods' || key === 'colors') {
-          if (value && value.length > 0) {
-            this.validated[key] = true
-          }
-        }
-        if (value) {
+      _.map(this.validated, (value, key) => {
+        this.validated[key] = false
+        if (this.formData[key]) {
           this.validated[key] = true
+        }
+        if (key === 'leasingPeriods' || key === 'colors') {
+          if (this.formData[key] && this.formData[key].length > 0) {
+            this.validated[key] = true
+          } else {
+            this.validated[key] = false
+          }
         }
       })
       _.map(this.validated, (value, key) => {
