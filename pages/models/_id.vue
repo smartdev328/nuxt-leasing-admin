@@ -113,15 +113,22 @@
           </b-col>
           <b-col lg="6">
             <b-form-group>
-              <label class="col-form-label">SEO text of Model</label>
+              <label class="col-form-label">SEO text of Model *</label>
               <b-form-textarea
                 id="seoText"
                 :value="formData.seoText"
                 placeholder="Enter SEO text for model ..."
                 rows="6"
                 max-rows="9"
+                :class="{
+                  'is-valid': isValidated && validated.seoText,
+                  'is-invalid': isValidated && !validated.seoText,
+                }"
                 @change="updateFormData($event, 'seoText')"
               />
+              <b-form-invalid-feedback>
+                * Required Field
+              </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
         </b-row>
@@ -179,7 +186,8 @@ export default {
       brand: null,
       modelTitle: null,
       modelImage: null,
-      modelDescription: null
+      modelDescription: null,
+      seoText: null
     },
     isValidated: false,
     modelId: undefined,
