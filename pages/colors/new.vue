@@ -162,12 +162,12 @@ export default {
     validateData() {
       let valid = true
       this.isValidated = true
-      _.map(this.formData, (value, key) => {
+      _.map(this.validated, (value, key) => {
         this.validated[key] = false
-        if (value) {
+        if (this.formData[key]) {
           this.validated[key] = true
         }
-        if (key === 'hexColor' && !/^[0-9a-f]{3}([0-9a-f]{3})?$/i.test(value)) {
+        if (key === 'hexColor' && !/^[0-9a-f]{3}([0-9a-f]{3})?$/i.test(this.formData[key])) {
           this.validated[key] = false
         }
       })

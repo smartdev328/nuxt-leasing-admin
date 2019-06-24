@@ -155,9 +155,13 @@ export default {
       if (valid) {
         this.resetValidate()
         this.loading = true
-        const data = _.pickBy(this.formData, _.identity)
+        // const data = _.pickBy(this.formData, _.identity)
         axios.put(`/api/v1/professions/${this.professionId}`, {
-          ...data
+          name: this.formData.name,
+          price: this.formData.price,
+          icon: this.formData.icon || '',
+          shortDescription: this.formData.shortDescription || '',
+          link: this.formData.link || ''
         })
           .then(response => {
             this.loading = false
@@ -209,8 +213,8 @@ export default {
     validateData() {
       let valid = true
       this.isValidated = true
-      _.map(this.formData, (value, key) => {
-        if (value) {
+      _.map(this.validated, (value, key) => {
+        if (this.formData[key]) {
           this.validated[key] = true
         }
       })

@@ -25,7 +25,7 @@ paths:
                 type: "string"
         404:
           description: "Finance does not exist"
-      x-swagger-router-controller: 'finances'
+      x-swagger-router-controller: "finances"
     put:
       tags:
       - "Finances"
@@ -115,5 +115,5 @@ definitions:
         type: "integer"
         description: "The Second Downpayment choice of the Finance"
       downpayment3:
-        type: "integer"
+        type: ["integer", "null"]
         description: "The Third Downpayment choice of the Finance"

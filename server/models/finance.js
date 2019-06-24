@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     rate: DataTypes.FLOAT,
     downpayment1: DataTypes.INTEGER,
     downpayment2: DataTypes.INTEGER,
-    datdownpayment3: DataTypes.INTEGER
+    downpayment3: DataTypes.INTEGER
   })
 
   return Finance

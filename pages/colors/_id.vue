@@ -134,8 +134,9 @@ export default {
         this.resetValidate()
         this.loading = true
         axios.put(`/api/v1/colors/${this.colorId}`, {
-          ...this.formData,
-          hexColor: `#${this.formData.hexColor}`
+          name: this.formData.name,
+          hexColor: `#${this.formData.hexColor}`,
+          price: this.formData.price || 0
         })
           .then(response => {
             this.loading = false
@@ -190,11 +191,11 @@ export default {
     validateData() {
       let valid = true
       this.isValidated = true
-      _.map(this.formData, (value, key) => {
-        if (value) {
+      _.map(this.validated, (value, key) => {
+        if (this.formData[key]) {
           this.validated[key] = true
         }
-        if (key === 'hexColor' && !/^[0-9a-f]{3}([0-9a-f]{3})?$/i.test(value)) {
+        if (key === 'hexColor' && !/^[0-9a-f]{3}([0-9a-f]{3})?$/i.test(this.formData[key])) {
           this.validated[key] = false
         }
       })

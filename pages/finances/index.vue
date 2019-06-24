@@ -148,10 +148,13 @@ export default {
       if (valid) {
         this.resetValidate()
         this.loading = true
-        const data = _.pickBy(this.formData, value => value !== undefined && value !== null && !isNaN(value))
-        console.log('------- data:', data)
+        // const data = _.pickBy(this.formData, value => value !== undefined && value !== null && !isNaN(value))
+        // console.log('------- data:', data)
         axios.put(`/api/v1/finances/${this.financeId}`, {
-          ...data
+          rate: this.formData.rate,
+          downpayment1: this.formData.downpayment1,
+          downpayment2: this.formData.downpayment2,
+          downpayment3: this.formData.downpayment3
         })
           .then(response => {
             this.loading = false
@@ -187,8 +190,8 @@ export default {
     validateData() {
       let valid = true
       this.isValidated = true
-      _.map(this.formData, (value, key) => {
-        if (value || value === 0) {
+      _.map(this.validated, (value, key) => {
+        if (this.formData[key] || this.formData[key] === 0) {
           this.validated[key] = true
         }
       })

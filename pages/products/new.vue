@@ -710,9 +710,9 @@ export default {
       const valid = this.validateData()
       if (valid) {
         this.resetValidate()
-        const data = _.pickBy(this.formData, _.identity)
+        // const data = _.pickBy(this.formData, _.identity)
         axios.post('/api/v1/products/', {
-          ...data
+          ...this.formData
         }).then(response => {
           this.$router.push('/products')
         })

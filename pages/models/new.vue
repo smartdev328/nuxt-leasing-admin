@@ -202,9 +202,15 @@ export default {
       const valid = this.validateData()
       if (valid) {
         this.resetValidate()
-        const data = _.pickBy(this.formData, _.identity)
+        // const data = _.pickBy(this.formData, _.identity)
         axios.post('/api/v1/models/', {
-          ...data
+          brand: this.formData.brand,
+          modelTitle: this.formData.modelTitle,
+          modelImage: this.formData.modelImage,
+          modelDescription: this.formData.modelDescription,
+          seoText: this.formData.seoText,
+          metaDescription: this.formData.metaDescription || '',
+          titleTag: this.formData.titleTag || ''
         }).then(response => {
           this.$router.push('/models')
         })
@@ -233,9 +239,9 @@ export default {
     validateData() {
       let valid = true
       this.isValidated = true
-      _.map(this.formData, (value, key) => {
+      _.map(this.validated, (value, key) => {
         this.validated[key] = false
-        if (value) {
+        if (this.formData[key]) {
           this.validated[key] = true
         }
       })

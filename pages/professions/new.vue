@@ -1,18 +1,19 @@
 <template>
-  <div class="equipments">
+  <div class="professions">
     <b-row>
       <b-col lg="12">
-        <h2>Add New Equipment</h2>
+        <h2>Add New Profession</h2>
       </b-col>
       <b-col lg="12">
         <b-row class="form-group">
           <b-col lg="4">
             <b-form-group>
-              <label class="col-form-label">Equipment Name *</label>
+              <label class="col-form-label">Profession Name *</label>
               <input
                 id="name"
                 type="text"
                 class="form-control"
+                placeholder="Enter profession name"
                 :class="{
                   'is-valid': isValidated && validated.name,
                   'is-invalid': isValidated && !validated.name
@@ -41,6 +42,7 @@
                 <b-form-input
                   id="price"
                   type="number"
+                  placeholder="Enter price of profession"
                   :value="formData.price"
                   @change="updateFormData(parseInt($event, 10), 'price')"
                 />
@@ -50,16 +52,47 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="6">
+        </b-row>
+        <b-row class="form-group">
+          <b-col lg="4">
             <b-form-group>
               <label class="col-form-label">Icon</label>
               <input
                 id="icon"
                 type="text"
+                placeholder="Enter URL of icon"
                 class="form-control"
                 :value="formData.icon"
                 @change="updateFormData($event)"
               >
+            </b-form-group>
+          </b-col>
+          <b-col lg="4">
+            <b-form-group>
+              <label class="col-form-label">Link</label>
+              <input
+                id="link"
+                type="text"
+                placeholder="Enter URL of link"
+                class="form-control"
+                :value="formData.link"
+                @change="updateFormData($event)"
+              >
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row class="form-group">
+          <b-col lg="8">
+            <b-form-group>
+              <label class="col-form-label">Short Description</label>
+              <b-form-textarea
+                id="shortDescription"
+                :value="formData.shortDescription"
+                placeholder="Enter short description of the profession ..."
+                rows="6"
+                max-rows="9"
+                @change="updateFormData($event, 'shortDescription')"
+              />
             </b-form-group>
           </b-col>
         </b-row>
@@ -80,7 +113,7 @@
         </b-button>
       </div>
       <div>
-        <b-button type="submit" variant="primary" @click="createEquipment()">
+        <b-button type="submit" variant="primary" @click="createProfession()">
           <i class="fa fa-dot-circle-o" /> Create
         </b-button>
         &nbsp;&nbsp;
@@ -97,7 +130,7 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'NewEquipment',
+  name: 'NewProfession',
   data: () => ({
     formData: {},
     validated: {
@@ -108,25 +141,29 @@ export default {
     loading: false
   }),
   methods: {
-    createEquipment() {
+    createProfession() {
       const valid = this.validateData()
       if (valid) {
         this.resetValidate()
         this.loading = true
-        const data = _.pickBy(this.formData, _.identity)
-        axios.post('/api/v1/equipments/', {
-          ...data
+        // const data = _.pickBy(this.formData, _.identity)
+        axios.post('/api/v1/professions/', {
+          name: this.formData.name,
+          price: this.formData.price,
+          icon: this.formData.icon || '',
+          shortDescription: this.formData.shortDescription || '',
+          link: this.formData.link || ''
         })
           .then(response => {
             this.loading = false
             this.$message.success('Successfully Created!', 1, () => {
-              this.$router.push('/equipments')
+              this.$router.push('/professions')
             })
           })
           .catch(() => {
             this.loading = false
             this.$message.error('Failed to create!', () => {
-              this.$router.push('/equipments')
+              this.$router.push('/professions')
             })
           })
       }
@@ -136,7 +173,7 @@ export default {
       this.resetValidate()
     },
     cancel() {
-      this.$router.push('/equipments')
+      this.$router.push('/professions')
     },
     updateFormData(e, property = undefined) {
       this.resetValidate()
@@ -154,9 +191,9 @@ export default {
     validateData() {
       let valid = true
       this.isValidated = true
-      _.map(this.formData, (value, key) => {
+      _.map(this.validated, (value, key) => {
         this.validated[key] = false
-        if (value) {
+        if (this.formData[key]) {
           this.validated[key] = true
         }
       })
@@ -175,7 +212,7 @@ export default {
   margin-bottom: 1rem;
   margin: 2.5rem -15px;
 }
-.equipments {
+.professions {
   margin-bottom: 80px;
 }
 .actions-group {
