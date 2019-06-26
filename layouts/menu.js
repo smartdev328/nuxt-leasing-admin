@@ -16,6 +16,11 @@ export default {
       icon: 'icon-pencil'
     },
     {
+      name: 'Models',
+      url: '/models',
+      icon: 'icon-pencil'
+    },
+    {
       name: 'Sizes',
       url: '/sizes',
       icon: 'icon-puzzle'
@@ -44,11 +49,6 @@ export default {
       name: 'Finances',
       url: '/finances',
       icon: 'icon-calculator'
-    },
-    {
-      name: 'Models',
-      url: '/models',
-      icon: 'icon-pencil'
     }
   ]
 }
