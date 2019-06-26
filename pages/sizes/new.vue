@@ -60,7 +60,8 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'Sizes',
+  name: 'NewSize',
+  middleware: 'guest',
   data: () => ({
     formData: {},
     validated: {

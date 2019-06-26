@@ -98,6 +98,7 @@ import * as _ from 'lodash'
 
 export default {
   name: 'NewEquipment',
+  middleware: 'guest',
   data: () => ({
     formData: {},
     validated: {

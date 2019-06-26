@@ -39,7 +39,7 @@
               <strong>Loading...</strong>
             </div>
           </b-table>
-          <nav>
+          <nav v-if="!loading">
             <b-pagination
               v-model="currentPage"
               :total-rows="totalRows"
@@ -62,6 +62,7 @@ import moment from 'moment'
 
 export default {
   name: 'Categories',
+  middleware: 'guest',
   data: () => {
     return {
       categories: [],

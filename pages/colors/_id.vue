@@ -102,7 +102,8 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'Colors',
+  name: 'EditColors',
+  middleware: 'guest',
   data: () => ({
     loading: false,
     formData: {},

@@ -60,7 +60,8 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'Categories',
+  name: 'EditCategories',
+  middleware: 'guest',
   data: () => ({
     loading: false,
     formData: {},

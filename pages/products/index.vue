@@ -37,7 +37,7 @@
               <strong>Loading...</strong>
             </div>
           </b-table>
-          <nav>
+          <nav v-if="!loading">
             <b-pagination
               v-model="currentPage"
               :total-rows="totalRows"
@@ -59,6 +59,7 @@ import axios from 'axios'
 
 export default {
   name: 'Products',
+  middleware: 'guest',
   data: () => {
     return {
       products: [],

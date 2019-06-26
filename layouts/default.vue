@@ -42,6 +42,11 @@ export default {
     list() {
       return this.$route.fullPath.split('/')
     }
+  },
+  mounted() {
+    // this.$nextTick(() => {
+    //   console.log('--------- loading')
+    // })
   }
 }
 </script>

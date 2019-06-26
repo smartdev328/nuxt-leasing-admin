@@ -93,6 +93,7 @@
 
 export default {
   name: 'Dashboard',
+  middleware: 'guest',
   data: function () {
     return {
     }

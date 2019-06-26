@@ -173,6 +173,7 @@ import * as _ from 'lodash'
 
 export default {
   name: 'EditModel',
+  middleware: 'guest',
   data: () => ({
     formData: {},
     brandOptions: [

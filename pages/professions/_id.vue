@@ -131,6 +131,7 @@ import * as _ from 'lodash'
 
 export default {
   name: 'EditProfession',
+  middleware: 'guest',
   data: () => ({
     loading: false,
     formData: {},

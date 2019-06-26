@@ -595,6 +595,7 @@ import * as _ from 'lodash'
 
 export default {
   name: 'NewProduct',
+  middleware: 'guest',
   data: () => ({
     formData: {},
     brandOptions: [

@@ -101,7 +101,8 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export default {
-  name: 'Colors',
+  name: 'NewColors',
+  middleware: 'guest',
   data: () => ({
     formData: {},
     validated: {

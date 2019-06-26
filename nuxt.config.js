@@ -59,16 +59,18 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
-    // Doc: https://github.com/bootstrap-vue/bootstrap-vue
+    ['nuxt-vuex-localstorage', {
+      mode: 'debug',
+      localStorage: ['localStorage']
+    }],
     'bootstrap-vue/nuxt'
   ],
   /*
   ** Axios module configuration
   */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: 'http://localhost:3000/api/v1'
   },
 
   /*
@@ -77,7 +79,6 @@ module.exports = {
   styleResources: {
     scss: './assets/scss/style.scss'
   },
-
   /*
   ** Build configuration
   */

@@ -125,6 +125,7 @@ import * as _ from 'lodash'
 
 export default {
   name: 'EditFinance',
+  middleware: 'guest',
   data: () => ({
     loading: false,
     formData: {},

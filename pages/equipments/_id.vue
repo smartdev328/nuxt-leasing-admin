@@ -98,6 +98,7 @@ import * as _ from 'lodash'
 
 export default {
   name: 'EditEquipment',
+  middleware: 'guest',
   data: () => ({
     loading: false,
     formData: {},
