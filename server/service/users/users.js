@@ -1,8 +1,8 @@
 'use strict'
 
 const Promise = require('bluebird')
-const jwt = require('jsonwebtoken')
 const Users = require('../../models').User
+const authConfig = require('../../config/auth')
 
 module.exports = {
   create: params => {
@@ -76,11 +76,7 @@ module.exports = {
     output.user = {}
     output.user.username = user.username
     output.user.email = user.email
-    const token = jwt.sign({
-      id: user.id
-    }, 'secretKey', {
-      expiresIn: '1h'
-    })
+    const token = authConfig.issueToken(user.username)
     output.token = token
     return new Promise(resolve => resolve(output))
   },

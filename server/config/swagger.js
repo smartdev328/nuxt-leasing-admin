@@ -8,6 +8,7 @@ const swaggerui = require('swagger-ui-express')
 const yaml = require('js-yaml')
 
 const logger = require('../lib/logger')
+const auth = require('./auth')
 
 module.exports = (app, done) => {
   const swaggerObject = {}
@@ -26,10 +27,13 @@ module.exports = (app, done) => {
   initializeSwagger(swaggerObject, swaggerMiddleware => {
     app.use(swaggerMiddleware.swaggerMetadata())
     app.use(swaggerMiddleware.swaggerValidator())
+    app.use(swaggerMiddleware.swaggerSecurity({
+      bearerAuth: auth.verifyToken
+    }))
     app.use(
       swaggerMiddleware.swaggerRouter({
         controllers: path.resolve(__dirname, '../controllers'),
-        useStubs: false // Do not use mock stubs
+        useStubs: false
       })
     )
 
