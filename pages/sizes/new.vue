@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -79,7 +79,7 @@ export default {
       if (valid) {
         this.resetValidate()
         this.loading = true
-        axios.post('/api/v1/sizes/', {
+        this.$axios.post('/sizes/', {
           ...this.formData
         })
           .then(response => {

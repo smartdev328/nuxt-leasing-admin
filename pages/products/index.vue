@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
   name: 'Products',
@@ -90,7 +89,7 @@ export default {
     getProducts(pageNum) {
       this.currentPage = pageNum
       this.loading = true
-      axios.get('/api/v1/products/', {
+      this.$axios.get('/products/', {
         params: {
           limit: this.perPage,
           offset: (this.currentPage - 1) * this.perPage + 0
@@ -106,7 +105,7 @@ export default {
     },
     deleteProduct(productId) {
       this.loading = true
-      axios.delete(`/api/v1/products/${productId}`)
+      this.$axios.delete(`/products/${productId}`)
         .then(response => {
           this.loading = false
           this.getProducts(this.currentPage)

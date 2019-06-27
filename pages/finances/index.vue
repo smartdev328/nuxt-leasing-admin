@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -138,7 +138,7 @@ export default {
   }),
   mounted() {
     this.loading = true
-    axios.get(`/api/v1/finances/${this.financeId}`).then(response => {
+    this.$axios.get(`/finances/${this.financeId}`).then(response => {
       this.formData = response.data.data
       this.loading = false
     })
@@ -151,7 +151,7 @@ export default {
         this.loading = true
         // const data = _.pickBy(this.formData, value => value !== undefined && value !== null && !isNaN(value))
         // console.log('------- data:', data)
-        axios.put(`/api/v1/finances/${this.financeId}`, {
+        this.$axios.put(`/finances/${this.financeId}`, {
           rate: this.formData.rate,
           downpayment1: this.formData.downpayment1,
           downpayment2: this.formData.downpayment2,
@@ -171,7 +171,7 @@ export default {
     },
     reset() {
       this.resetValidate()
-      axios.get(`/api/v1/finances/${this.financeId}`).then(response => {
+      this.$axios.get(`/finances/${this.financeId}`).then(response => {
         this.formData = response.data.data
       })
     },

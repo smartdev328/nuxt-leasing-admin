@@ -168,7 +168,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -197,13 +197,13 @@ export default {
   mounted() {
     this.loading = true
     this.modelId = this.$route.params.id
-    axios.get(`/api/v1/brands`).then(response => {
+    this.$axios.get(`/brands`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.brandOptions.push({ text: this.capitalize(item.name), value: item.id })
       })
     })
-    axios.get(`/api/v1/models/${this.modelId}`).then(response => {
+    this.$axios.get(`/models/${this.modelId}`).then(response => {
       this.formData = response.data.data
       this.formData.brand = this.formData.brand.id
       this.loading = false
@@ -219,7 +219,7 @@ export default {
       if (valid) {
         this.resetValidate()
         // const data = _.pickBy(this.formData, _.identity)
-        axios.put(`/api/v1/models/${this.modelId}`, {
+        this.$axios.put(`/models/${this.modelId}`, {
           brand: this.formData.brand,
           modelTitle: this.formData.modelTitle,
           modelImage: this.formData.modelImage,
@@ -235,14 +235,14 @@ export default {
     reset() {
       this.resetValidate()
       this.loading = true
-      axios.get(`/api/v1/models/${this.modelId}`).then(response => {
+      this.$axios.get(`/models/${this.modelId}`).then(response => {
         this.formData = response.data.data
         this.formData.brand = this.formData.brand.id
         this.loading = false
       })
     },
     deleteModel() {
-      axios.delete(`/api/v1/models/${this.modelId}`).then(response => {
+      this.$axios.delete(`/models/${this.modelId}`).then(response => {
         this.$router.push('/models')
       })
     },

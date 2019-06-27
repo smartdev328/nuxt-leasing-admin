@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import moment from 'moment'
 
 export default {
@@ -89,7 +89,7 @@ export default {
     getColors(pageNum) {
       this.currentPage = pageNum
       this.loading = true
-      axios.get('/api/v1/colors/', {
+      this.$axios.get('/colors/', {
         params: {
           limit: this.perPage,
           offset: (this.currentPage - 1) * this.perPage + 0
@@ -111,7 +111,7 @@ export default {
     },
     deleteColor(colorId) {
       this.loading = true
-      axios.delete(`/api/v1/colors/${colorId}`)
+      this.$axios.delete(`/colors/${colorId}`)
         .then(response => {
           this.loading = false
           this.getColors(this.currentPage)

@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -74,7 +74,7 @@ export default {
   mounted() {
     this.brandId = this.$route.params.id
     this.loading = true
-    axios.get(`/api/v1/brands/${this.brandId}`).then(response => {
+    this.$axios.get(`/brands/${this.brandId}`).then(response => {
       this.formData = response.data.data
       this.loading = false
     })
@@ -85,7 +85,7 @@ export default {
       if (valid) {
         this.resetValidate()
         this.loading = true
-        axios.put(`/api/v1/brands/${this.brandId}`, {
+        this.$axios.put(`/brands/${this.brandId}`, {
           ...this.formData
         })
           .then(response => {
@@ -104,13 +104,13 @@ export default {
     },
     reset() {
       this.resetValidate()
-      axios.get(`/api/v1/brands/${this.brandId}`).then(response => {
+      this.$axios.get(`/brands/${this.brandId}`).then(response => {
         this.formData = response.data.data
       })
     },
     deleteBrand() {
       this.loading = true
-      axios.delete(`/api/v1/brands/${this.brandId}`)
+      this.$axios.delete(`/brands/${this.brandId}`)
         .then(response => {
           this.loading = false
           this.$message.success('Successfully Removed!', 1, () => {

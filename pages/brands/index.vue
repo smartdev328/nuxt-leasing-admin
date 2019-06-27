@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import moment from 'moment'
 
 export default {
@@ -88,7 +88,7 @@ export default {
     getBrands(pageNum) {
       this.currentPage = pageNum
       this.loading = true
-      axios.get('/api/v1/brands/', {
+      this.$axios.get('/brands/', {
         params: {
           limit: this.perPage,
           offset: (this.currentPage - 1) * this.perPage + 0
@@ -110,7 +110,7 @@ export default {
     },
     deleteBrand(brandId) {
       this.loading = true
-      axios.delete(`/api/v1/brands/${brandId}`)
+      this.$axios.delete(`/brands/${brandId}`)
         .then(response => {
           this.loading = false
           this.getBrands(this.currentPage)

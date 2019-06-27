@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -112,7 +112,7 @@ export default {
   mounted() {
     this.equipmentId = this.$route.params.id
     this.loading = true
-    axios.get(`/api/v1/equipments/${this.equipmentId}`).then(response => {
+    this.$axios.get(`/equipments/${this.equipmentId}`).then(response => {
       this.formData = response.data.data
       this.loading = false
     })
@@ -124,7 +124,7 @@ export default {
         this.resetValidate()
         this.loading = true
         // const data = _.pickBy(this.formData, _.identity)
-        axios.put(`/api/v1/equipments/${this.equipmentId}`, {
+        this.$axios.put(`/equipments/${this.equipmentId}`, {
           name: this.formData.name,
           price: this.formData.price,
           icon: this.formData.icon || ''
@@ -143,13 +143,13 @@ export default {
     },
     reset() {
       this.resetValidate()
-      axios.get(`/api/v1/equipments/${this.equipmentId}`).then(response => {
+      this.$axios.get(`/equipments/${this.equipmentId}`).then(response => {
         this.formData = response.data.data
       })
     },
     deleteEquipment() {
       this.loading = true
-      axios.delete(`/api/v1/equipments/${this.equipmentId}`)
+      this.$axios.delete(`/equipments/${this.equipmentId}`)
         .then(response => {
           this.loading = false
           this.$message.success('Successfully Removed!', 1, () => {

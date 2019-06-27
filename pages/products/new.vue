@@ -590,7 +590,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -682,13 +682,13 @@ export default {
     this.loading = true
     this.formData.scrapValues = new Array(6).fill(undefined) // 12, 24, 36, 48, 60, 72
     this.formData.leasingPeriods = []
-    axios.get(`/api/v1/brands`).then(response => {
+    this.$axios.get(`/brands`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.brandOptions.push({ text: this.capitalize(item.name), value: item.id })
       })
     })
-    axios.get(`/api/v1/models`).then(response => {
+    this.$axios.get(`/models`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand.id })
@@ -696,22 +696,22 @@ export default {
         this.loading = false
       })
     })
-    axios.get(`/api/v1/sizes`).then(response => {
+    this.$axios.get(`/sizes`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.sizeOptions.push({ text: this.capitalize(item.name), value: item.id })
       })
     })
-    axios.get(`/api/v1/professions`).then(response => {
+    this.$axios.get(`/professions`).then(response => {
       this.professionsArr = response.data.results || []
     })
-    axios.get(`/api/v1/colors`).then(response => {
+    this.$axios.get(`/colors`).then(response => {
       this.colorsArr = response.data.results || []
     })
-    axios.get(`/api/v1/categories`).then(response => {
+    this.$axios.get(`/categories`).then(response => {
       this.categoriesArr = response.data.results || []
     })
-    axios.get(`/api/v1/equipments`).then(response => {
+    this.$axios.get(`/equipments`).then(response => {
       this.equipmentsArr = response.data.results || []
     })
   },
@@ -725,7 +725,7 @@ export default {
       if (valid) {
         this.resetValidate()
         // const data = _.pickBy(this.formData, _.identity)
-        axios.post('/api/v1/products/', {
+        this.$axios.post('/products/', {
           brand: this.formData.brand,
           model: this.formData.model,
           oVariant: this.formData.oVariant,

@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -115,7 +115,7 @@ export default {
         this.resetValidate()
         this.loading = true
         // const data = _.pickBy(this.formData, _.identity)
-        axios.post('/api/v1/equipments/', {
+        this.$axios.post('/equipments/', {
           name: this.formData.name,
           price: this.formData.price,
           icon: this.formData.icon || ''

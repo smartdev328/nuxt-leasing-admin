@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -121,7 +121,7 @@ export default {
       if (valid) {
         this.resetValidate()
         this.loading = true
-        axios.post('/api/v1/colors/', {
+        this.$axios.post('/colors/', {
           name: this.formData.name,
           price: this.formData.price || 0,
           hexColor: `#${this.formData.hexColor}`

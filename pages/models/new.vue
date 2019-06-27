@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -187,7 +187,7 @@ export default {
     loading: false
   }),
   mounted() {
-    axios.get(`/api/v1/brands`).then(response => {
+    this.$axios.get(`/brands`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.brandOptions.push({ text: this.capitalize(item.name), value: item.id })
@@ -204,7 +204,7 @@ export default {
       if (valid) {
         this.resetValidate()
         // const data = _.pickBy(this.formData, _.identity)
-        axios.post('/api/v1/models/', {
+        this.$axios.post('/models/', {
           brand: this.formData.brand,
           modelTitle: this.formData.modelTitle,
           modelImage: this.formData.modelImage,

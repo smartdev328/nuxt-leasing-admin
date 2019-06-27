@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import moment from 'moment'
 
 export default {
@@ -88,7 +88,7 @@ export default {
     getSizes(pageNum) {
       this.currentPage = pageNum
       this.loading = true
-      axios.get('/api/v1/sizes/', {
+      this.$axios.get('/sizes/', {
         params: {
           limit: this.perPage,
           offset: (this.currentPage - 1) * this.perPage + 0
@@ -110,7 +110,7 @@ export default {
     },
     deleteSize(sizeId) {
       this.loading = true
-      axios.delete(`/api/v1/sizes/${sizeId}`)
+      this.$axios.delete(`/sizes/${sizeId}`)
         .then(response => {
           this.loading = false
           this.getSizes(this.currentPage)

@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -122,7 +122,7 @@ export default {
   mounted() {
     this.colorId = this.$route.params.id
     this.loading = true
-    axios.get(`/api/v1/colors/${this.colorId}`).then(response => {
+    this.$axios.get(`/colors/${this.colorId}`).then(response => {
       this.formData = response.data.data
       this.formData.hexColor = this.formData.hexColor.substring(1)
       this.loading = false
@@ -134,7 +134,7 @@ export default {
       if (valid) {
         this.resetValidate()
         this.loading = true
-        axios.put(`/api/v1/colors/${this.colorId}`, {
+        this.$axios.put(`/colors/${this.colorId}`, {
           name: this.formData.name,
           hexColor: `#${this.formData.hexColor}`,
           price: this.formData.price || 0
@@ -155,14 +155,14 @@ export default {
     },
     reset() {
       this.resetValidate()
-      axios.get(`/api/v1/colors/${this.colorId}`).then(response => {
+      this.$axios.get(`/colors/${this.colorId}`).then(response => {
         this.formData = response.data.data
         this.formData.hexColor = this.formData.hexColor.substring(1)
       })
     },
     deleteColor() {
       this.loading = true
-      axios.delete(`/api/v1/colors/${this.colorId}`)
+      this.$axios.delete(`/colors/${this.colorId}`)
         .then(response => {
           this.loading = false
           this.$message.success('Successfully Removed!', 1, () => {

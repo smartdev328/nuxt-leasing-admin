@@ -595,7 +595,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -697,38 +697,38 @@ export default {
     this.scrapValues = new Array(6).fill(undefined)
     this.formData.leasingPeriods = []
     this.productId = this.$route.params.id
-    axios.get(`/api/v1/brands`).then(response => {
+    this.$axios.get(`/brands`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.brandOptions.push({ text: this.capitalize(item.name), value: item.id })
       })
     })
-    axios.get(`/api/v1/models`).then(response => {
+    this.$axios.get(`/models`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand.id })
         this.filteredModelOptions = _.cloneDeep(this.modelOptions)
       })
     })
-    axios.get(`/api/v1/sizes`).then(response => {
+    this.$axios.get(`/sizes`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
         this.sizeOptions.push({ text: this.capitalize(item.name), value: item.id })
       })
     })
-    axios.get(`/api/v1/professions`).then(response => {
+    this.$axios.get(`/professions`).then(response => {
       this.professionsArr = response.data.results || []
     })
-    axios.get(`/api/v1/colors`).then(response => {
+    this.$axios.get(`/colors`).then(response => {
       this.colorsArr = response.data.results || []
     })
-    axios.get(`/api/v1/categories`).then(response => {
+    this.$axios.get(`/categories`).then(response => {
       this.categoriesArr = response.data.results || []
     })
-    axios.get(`/api/v1/equipments`).then(response => {
+    this.$axios.get(`/equipments`).then(response => {
       this.equipmentsArr = response.data.results || []
     })
-    axios.get(`/api/v1/products/${this.productId}`).then(response => {
+    this.$axios.get(`/products/${this.productId}`).then(response => {
       this.formData = response.data.data
       this.formData.leasingPeriods.forEach((item, index) => {
         this.scrapValues[item / 12 - 1] = this.formData.scrapValues[index]
@@ -747,7 +747,7 @@ export default {
       if (valid) {
         this.resetValidate()
         // const data = _.pickBy(this.formData, _.identity)
-        axios.put(`/api/v1/products/${this.productId}`, {
+        this.$axios.put(`/products/${this.productId}`, {
           brand: this.formData.brand,
           model: this.formData.model,
           oVariant: this.formData.oVariant,
@@ -786,12 +786,12 @@ export default {
     },
     reset() {
       this.resetValidate()
-      axios.get(`/api/v1/products/${this.productId}`).then(response => {
+      this.$axios.get(`/products/${this.productId}`).then(response => {
         this.formData = response.data.data
       })
     },
     deleteProduct() {
-      axios.delete(`/api/v1/products/${this.productId}`).then(response => {
+      this.$axios.delete(`/products/${this.productId}`).then(response => {
         this.$router.push('/products')
       })
     },

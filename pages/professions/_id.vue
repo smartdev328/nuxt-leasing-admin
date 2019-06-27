@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import * as _ from 'lodash'
 
 export default {
@@ -145,7 +145,7 @@ export default {
   mounted() {
     this.professionId = this.$route.params.id
     this.loading = true
-    axios.get(`/api/v1/professions/${this.professionId}`).then(response => {
+    this.$axios.get(`/professions/${this.professionId}`).then(response => {
       this.formData = response.data.data
       this.loading = false
     })
@@ -157,7 +157,7 @@ export default {
         this.resetValidate()
         this.loading = true
         // const data = _.pickBy(this.formData, _.identity)
-        axios.put(`/api/v1/professions/${this.professionId}`, {
+        this.$axios.put(`/professions/${this.professionId}`, {
           name: this.formData.name,
           price: this.formData.price,
           icon: this.formData.icon || '',
@@ -178,13 +178,13 @@ export default {
     },
     reset() {
       this.resetValidate()
-      axios.get(`/api/v1/professions/${this.professionId}`).then(response => {
+      this.$axios.get(`/professions/${this.professionId}`).then(response => {
         this.formData = response.data.data
       })
     },
     deleteProfession() {
       this.loading = true
-      axios.delete(`/api/v1/professions/${this.professionId}`)
+      this.$axios.delete(`/professions/${this.professionId}`)
         .then(response => {
           this.loading = false
           this.$message.success('Successfully Removed!', 1, () => {
