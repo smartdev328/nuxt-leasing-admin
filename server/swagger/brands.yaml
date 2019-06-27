@@ -5,6 +5,8 @@ paths:
       - "Brands"
       summary: "Get all brands"
       operationId: "listBrands"
+      security:
+      - bearerAuth: []
       produces:
       - "application/json"
       parameters:
@@ -60,6 +62,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "brands"
     post:
       tags:
@@ -101,6 +111,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "brands"
   /brands/{brandId}:
     parameters:
@@ -126,6 +144,14 @@ paths:
                 $ref: "#/definitions/Brand"
               message:
                 type: "string"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Brand does not exist"
       x-swagger-router-controller: 'brands'
@@ -169,6 +195,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Brand not found"
       x-swagger-router-controller: "brands"
@@ -203,6 +237,14 @@ paths:
                 items:
                   type: 'string'
                   description: 'The error messages'
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Brand does not exist"
       x-swagger-router-controller: 'brands'

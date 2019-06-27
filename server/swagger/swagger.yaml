@@ -3,5 +3,10 @@ info:
   description: "Swagger Doc for Leasing Customer App"
   version: "0.0.1"
   title: "Leasing Customer Swagger Doc"
-host: "localhost:5000"
+host: "localhost:3000"
 basePath: "/api/v1"
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
