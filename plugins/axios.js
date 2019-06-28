@@ -6,8 +6,8 @@ export default function ({ $axios, store, redirect, app }) {
   })
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status)
-    if (code === 400) {
-      redirect('/400')
+    if (code === 404) {
+      redirect('/404')
     }
     if (code === 403) {
       app.$toast.error('Re-authentication Required!', {
