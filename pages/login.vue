@@ -2,7 +2,7 @@
   <div class="app flex-row align-items-center">
     <div class="container">
       <b-row class="justify-content-center">
-        <b-col md="8">
+        <b-col md="6">
           <b-card-group>
             <b-card no-body class="p-4">
               <b-card-body>
@@ -53,31 +53,20 @@
                     * Required Field
                   </b-form-invalid-feedback>
                 </b-form-group>
-                <b-row>
-                  <b-col cols="6">
-                    <b-button variant="primary" class="px-4" @click="login">
-                      Login
+                <b-form-group class="mt-3 mb-3">
+                  <b-row>
+                    <b-col cols="6">
+                      <b-button variant="primary" class="px-4" @click="login">
+                        Login
+                      </b-button>
+                    </b-col>
+                  <!-- <b-col cols="6" class="text-right">
+                    <b-button variant="link" class="px-0">
+                      Forgot password?
                     </b-button>
-                  </b-col>
-                <!-- <b-col cols="6" class="text-right">
-                  <b-button variant="link" class="px-0">
-                    Forgot password?
-                  </b-button>
-                </b-col> -->
-                </b-row>
-              </b-card-body>
-            </b-card>
-            <b-card no-body class="text-white bg-primary py-5 d-md-down-none" style="width:44%">
-              <b-card-body class="text-center">
-                <div>
-                  <h2>Sign up</h2>
-                  <p>Don't you have an account? Then please register a new account to manage Admin dashboard</p>
-                  <router-link to="/register">
-                    <b-button variant="primary" class="active mt-3">
-                      Register Now!
-                    </b-button>
-                  </router-link>
-                </div>
+                  </b-col> -->
+                  </b-row>
+                </b-form-group>
               </b-card-body>
             </b-card>
           </b-card-group>

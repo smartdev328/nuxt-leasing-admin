@@ -49,6 +49,11 @@ export default {
       name: 'Finances',
       url: '/finances',
       icon: 'icon-calculator'
+    },
+    {
+      name: 'New Account',
+      url: '/register',
+      icon: 'icon-user'
     }
   ]
 }
