@@ -60,6 +60,7 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/toast',
     ['nuxt-vuex-localstorage', {
       mode: 'debug',
       localStorage: ['localStorage']
