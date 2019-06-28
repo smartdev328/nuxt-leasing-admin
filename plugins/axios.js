@@ -10,7 +10,7 @@ export default function ({ $axios, store, redirect, app }) {
       redirect('/400')
     }
     if (code === 403) {
-      app.$toast.error('Authentication Failed!', {
+      app.$toast.error('Re-authentication Required!', {
         position: 'top-center',
         duration: 2000
       })
