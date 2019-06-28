@@ -5,6 +5,8 @@ paths:
       - "Users"
       summary: "Get all users"
       operationId: "listUsers"
+      security:
+      - bearerAuth: []
       produces:
       - "application/json"
       parameters:
@@ -60,12 +62,22 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "users"
     post:
       tags:
       - "Users"
       summary: "Create a user"
       operationId: "createUser"
+      security:
+      - bearerAuth: []
       consumes:
       - "application/json"
       produces:
@@ -101,6 +113,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "users"
   /users/token:
     post:
@@ -156,6 +176,8 @@ paths:
       - "Users"
       summary: "Get a User's metadata"
       operationId: "getUser"
+      security:
+      - bearerAuth: []
       produces:
       - "application/json"
       responses:
@@ -168,6 +190,14 @@ paths:
                 $ref: "#/definitions/User"
               message:
                 type: "string"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "User does not exist"
       x-swagger-router-controller: 'users'
@@ -176,6 +206,8 @@ paths:
       - "Users"
       summary: "Modify a User"
       operationId: "modifyUser"
+      security:
+      - bearerAuth: []
       consumes:
       - "application/json"
       produces:
@@ -211,6 +243,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "User not found"
       x-swagger-router-controller: "users"
@@ -219,6 +259,8 @@ paths:
       - "Users"
       summary: "Delete a User"
       operationId: "deleteUser"
+      security:
+      - bearerAuth: []
       responses:
         200:
           description: "Successfully Deleted User"
@@ -245,6 +287,14 @@ paths:
                 items:
                   type: 'string'
                   description: 'The error messages'
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "User does not exist"
       x-swagger-router-controller: 'users'

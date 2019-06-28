@@ -20,7 +20,6 @@ exports.verifyToken = function (req, authOrSecDef, token, callback) {
     const tokenString = token.split(' ')[1]
     jwt.verify(tokenString, sharedSecret, function (verificationError, decodedToken) {
       // check if the JWT was verified correctly
-      console.log('-------- verification', verificationError)
       if (verificationError === null) {
         // check if the role is valid for this endpoint
         // const roleMatch = currentScopes.indexOf(decodedToken.role) !== -1

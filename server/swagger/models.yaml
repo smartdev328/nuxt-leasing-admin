@@ -5,6 +5,8 @@ paths:
       - "Models"
       summary: "Get all models"
       operationId: "listModels"
+      security:
+      - bearerAuth: []
       produces:
       - "application/json"
       parameters:
@@ -67,12 +69,22 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "models"
     post:
       tags:
       - "Models"
       summary: "Create a model"
       operationId: "createModel"
+      security:
+      - bearerAuth: []
       consumes:
       - "application/json"
       produces:
@@ -108,6 +120,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "models"
   /models/{modelId}:
     parameters:
@@ -121,6 +141,8 @@ paths:
       - "Models"
       summary: "Get a Model's metadata"
       operationId: "getModel"
+      security:
+      - bearerAuth: []
       produces:
       - "application/json"
       responses:
@@ -133,6 +155,14 @@ paths:
                 $ref: "#/definitions/Model"
               message:
                 type: "string"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Model does not exist"
       x-swagger-router-controller: 'models'
@@ -141,6 +171,8 @@ paths:
       - "Models"
       summary: "Modify a Model"
       operationId: "modifyModel"
+      security:
+      - bearerAuth: []
       consumes:
       - "application/json"
       produces:
@@ -176,6 +208,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Model not found"
       x-swagger-router-controller: "models"
@@ -184,6 +224,8 @@ paths:
       - "Models"
       summary: "Delete a Model"
       operationId: "deleteModel"
+      security:
+      - bearerAuth: []
       responses:
         200:
           description: "Successfully Deleted Model"
@@ -210,6 +252,14 @@ paths:
                 items:
                   type: 'string'
                   description: 'The error messages'
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Model does not exist"
       x-swagger-router-controller: 'models'

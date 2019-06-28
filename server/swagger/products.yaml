@@ -5,6 +5,8 @@ paths:
       - "Products"
       summary: "Get all products"
       operationId: "listProducts"
+      security:
+      - bearerAuth: []
       produces:
       - "application/json"
       parameters:
@@ -67,12 +69,22 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "products"
     post:
       tags:
       - "Products"
       summary: "Create a product"
       operationId: "createProduct"
+      security:
+      - bearerAuth: []
       consumes:
       - "application/json"
       produces:
@@ -108,6 +120,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
       x-swagger-router-controller: "products"
   /products/{productId}:
     parameters:
@@ -121,6 +141,8 @@ paths:
       - "Products"
       summary: "Get a Product's metadata"
       operationId: "getProduct"
+      security:
+      - bearerAuth: []
       produces:
       - "application/json"
       responses:
@@ -133,6 +155,14 @@ paths:
                 $ref: "#/definitions/Product"
               message:
                 type: "string"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Product does not exist"
       x-swagger-router-controller: 'products'
@@ -141,6 +171,8 @@ paths:
       - "Products"
       summary: "Modify a Product"
       operationId: "modifyProduct"
+      security:
+      - bearerAuth: []
       consumes:
       - "application/json"
       produces:
@@ -176,6 +208,14 @@ paths:
               message:
                 type: "string"
                 description: "The message associated to the error code"
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Product not found"
       x-swagger-router-controller: "products"
@@ -184,6 +224,8 @@ paths:
       - "Products"
       summary: "Delete a Product"
       operationId: "deleteProduct"
+      security:
+      - bearerAuth: []
       responses:
         200:
           description: "Successfully Deleted Product"
@@ -210,6 +252,14 @@ paths:
                 items:
                   type: 'string'
                   description: 'The error messages'
+        403:
+          description: "Unauthorized Error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                description: "The Access Denied Error message"
         404:
           description: "Product does not exist"
       x-swagger-router-controller: 'products'
