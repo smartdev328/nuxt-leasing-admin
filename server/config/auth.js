@@ -52,7 +52,7 @@ exports.issueToken = function (username) {
     sub: username,
     iss: issuer
   }, sharedSecret, {
-    expiresIn: '60s'
+    expiresIn: '2h'
   })
   return token
 }

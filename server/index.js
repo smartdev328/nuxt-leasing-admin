@@ -23,7 +23,7 @@ async function start() {
     await nuxt.ready()
   }
 
-  const allowFeedData = true
+  const allowFeedData = false
   // Listen the server
   async.series(
     [
