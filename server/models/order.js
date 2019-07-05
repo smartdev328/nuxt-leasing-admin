@@ -5,7 +5,8 @@ const enums = {
     AWAITING_CONTACT: 'AWAITING_CONTACT',
     FINISHED: 'FINISHED',
     WAITING: 'WAITING',
-    NOT_INTERESTED: 'NOT_INTERESTED'
+    NOT_INTERESTED: 'NOT_INTERESTED',
+    TEMP_CREATED: 'TEMP_CREATED'
   }
 }
 
@@ -43,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     comments: DataTypes.TEXT,
     status: {
       type: DataTypes.ENUM(_.values(enums.STATUS)),
-      defaultValue: enums.STATUS.AWAITING_CONTACT
+      defaultValue: enums.STATUS.TEMP_CREATED
     }
   })
 

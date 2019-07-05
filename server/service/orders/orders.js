@@ -1,7 +1,9 @@
 'use strict'
 
 const Promise = require('bluebird')
+const Sequelize = require('sequelize')
 const Orders = require('../../models').Order
+const Op = Sequelize.Op
 
 module.exports = {
   create: params => {
@@ -35,7 +37,9 @@ module.exports = {
     })
   },
   search: options => {
-    const where = {}
+    const where = {
+      status: { [Op.ne]: 'TEMP_CREATED' }
+    }
     const include = []
 
     return Promise.props({
@@ -100,7 +104,8 @@ module.exports = {
         addressZipcode: params.address.zipcode,
         addressCity: params.address.city,
         newsletter: params.newsletter,
-        message: params.message
+        message: params.message,
+        status: params.status
       }))
   },
   fullRes: order => {
@@ -131,6 +136,7 @@ module.exports = {
       output.address.city = order.addressCity
       output.newsletter = order.newsletter
       output.message = order.message
+      output.status = order.status
       return resolve(output)
     })
   }

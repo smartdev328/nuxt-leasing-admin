@@ -23,11 +23,16 @@
                 {{ data.item.id }}
               </router-link>
             </template>
-            <template slot="name" slot-scope="data">
+            <template slot="username" slot-scope="data">
               <span>{{ data.item.firstName }} {{ data.item.lastName }}</span>
             </template>
             <template slot="address" slot-scope="data">
               <span>{{ data.item.addressStreet && `${data.item.addressStreet},` }} {{ data.item.city && data.item.city }} {{ data.item.zipcode && data.item.zipcode }}</span>
+            </template>
+            <template slot="status" slot-scope="data">
+              <a-button type="primary" size="small" :class="data.item.status">
+                {{ data.item.status.replace('_', ' ') }}
+              </a-button>
             </template>
             <template slot="actions" slot-scope="data">
               <span class="editbtn">
@@ -73,11 +78,12 @@ export default {
       orders: [],
       fields: [
         { key: 'id', sortable: true, label: 'ID' },
-        { key: 'name', sortable: true },
+        { key: 'username', sortable: true },
         { key: 'email', sortable: true },
         { key: 'phone' },
         { key: 'variant' },
         { key: 'address' },
+        { key: 'status', sortable: true },
         { key: 'companyName', sortable: true },
         { key: 'companyIndustry', sortable: true },
         { key: 'cvr' },

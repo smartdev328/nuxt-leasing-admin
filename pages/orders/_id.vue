@@ -5,6 +5,30 @@
         <h2>Edit Order</h2>
       </b-col>
       <b-col lg="12">
+        <b-row>
+          <b-col lg="12">
+            <div v-if="loading" class="text-center text-danger my-2">
+              <b-spinner class="align-middle" />
+              <strong>Loading...</strong>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row class="justify-content-end">
+          <a-radio-group :key="count" :value="formData.status" button-style="solid" @change="showMsgBoxOne($event)">
+            <a-radio-button value="AWAITING_CONTACT" class="AWAITING_CONTACT">
+              Awaiting Contact
+            </a-radio-button>
+            <a-radio-button value="WAITING" class="WAITING">
+              Waiting
+            </a-radio-button>
+            <a-radio-button value="FINISHED" class="FINISHED">
+              Finished
+            </a-radio-button>
+            <a-radio-button value="NOT_INTERESTED" class="NOT_INTERESTED">
+              Not Interested
+            </a-radio-button>
+          </a-radio-group>
+        </b-row>
         <b-row class="form-group">
           <b-col lg="4">
             <b-form-group>
@@ -487,7 +511,9 @@ export default {
         text: 'Company',
         value: 'company'
       }
-    ]
+    ],
+    defaultFormData: {},
+    count: 0
   }),
   mounted() {
     this.loading = true
@@ -499,6 +525,7 @@ export default {
         this.formData.addressCity = this.formData.address.city
         this.formData.addressZipcode = this.formData.address.zipcode
       }
+      this.defaultFormData = response.data.data
       this.loading = false
     })
   },
@@ -515,10 +542,7 @@ export default {
       }
     },
     reset() {
-      this.resetValidate()
-      this.$axios.get(`/orders/${this.orderId}`).then(response => {
-        this.formData = response.data.data
-      })
+      this.formData = _.cloneDeep(this.defaultFormData)
     },
     updateFormData(e, property = undefined) {
       this.resetValidate()
@@ -564,6 +588,36 @@ export default {
         }
       })
       return valid
+    },
+    showMsgBoxOne(event) {
+      this.count++
+      const value = event.target.value
+      this.$bvModal.msgBoxConfirm(
+        'Do you really want to change Order Status?',
+        {
+          size: 'md',
+          okVariant: 'danger',
+          okTitle: 'Confirm',
+          cancelTitle: 'Cancel',
+          buttonSize: 'sm',
+          footerClass: 'p-2 border-top-0',
+          hideHeaderClose: true,
+          centered: true
+        }
+      )
+        .then(res => {
+          if (res) {
+            this.formData.status = value
+            this.$axios.put(`/orders/${this.orderId}`, {
+              status: this.formData.status
+            })
+          } else {
+            this.formData.status = this.defaultFormData.status
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }

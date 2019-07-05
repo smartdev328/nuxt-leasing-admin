@@ -7,6 +7,31 @@
 
         table {
           width: 2200px;
+
+          .AWAITING_CONTACT, .WAITING {
+            background: #f8cb00;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: #222;
+            font-size: 10px;
+          }
+          .FINISHED {
+            background: #4dbd74;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 10px;
+          }
+          .NOT_INTERESTED {
+            background: #ff4a4a;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 10px;
+          }
         }
       }
     }
