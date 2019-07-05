@@ -1,12 +1,12 @@
 <template>
   <div class="orders" :class="{ loaded: !loading }">
-    <b-row class="justify-content-end" style="padding: 15px;">
+    <!-- <b-row class="justify-content-end" style="padding: 15px;">
       <router-link :to="`/orders/new`">
-        <b-button variant="success">
+        <b-button variant="success" disabled>
           Add New Order
         </b-button>
       </router-link>
-    </b-row>
+    </b-row> -->
     <b-row>
       <b-col lg="12">
         <b-card :header="header">
