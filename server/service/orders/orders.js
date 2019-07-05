@@ -17,6 +17,7 @@ module.exports = {
       leasingPeriod: params.leasingPeriod,
       kilometers: params.kilometers,
       color: params.color,
+      primaryImage: params.primaryImage,
       profession: params.profession,
       equipment: params.equipment,
       downPayment: params.downPayment,
@@ -76,12 +77,12 @@ module.exports = {
     if (!params.address) {
       params.address = {}
     }
-    console.log('---- params:', params)
     return Orders.findOne({
       where: { id: id },
       rejectOnEmpty: true
     })
       .then(order => order.update({
+        primaryImage: params.primaryImage,
         brand: params.brand,
         model: params.model,
         variant: params.variant,
@@ -112,6 +113,7 @@ module.exports = {
     const output = {}
     output.id = order.id
     return new Promise(resolve => {
+      output.primaryImage = order.primaryImage
       output.brand = order.brand
       output.model = order.model
       output.variant = order.variant
