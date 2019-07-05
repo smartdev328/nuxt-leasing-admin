@@ -51,6 +51,11 @@ export default {
       icon: 'icon-calculator'
     },
     {
+      name: 'Orders',
+      url: '/orders',
+      icon: 'icon-pie-chart'
+    },
+    {
       name: 'New Account',
       url: '/register',
       icon: 'icon-user'
