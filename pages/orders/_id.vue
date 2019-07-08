@@ -259,8 +259,8 @@
                 id="newsletter"
                 type="checkbox"
                 class="form-control"
-                :value="formData.newsletter"
-                @change="updateFormData($event)"
+                :checked="formData.newsletter"
+                @change="updateCheckboxFormData($event)"
               >
             </b-form-group>
           </b-col>
@@ -308,6 +308,7 @@
                 type="text"
                 class="form-control"
                 :value="formData.brand"
+                disabled
                 @change="updateFormData($event)"
               >
             </b-form-group>
@@ -318,7 +319,9 @@
               <input
                 id="model"
                 type="text"
+                :value="formData.model"
                 class="form-control"
+                disabled
                 @change="updateFormData($event)"
               >
               <b-form-invalid-feedback>
@@ -334,6 +337,7 @@
                 type="text"
                 class="form-control"
                 :value="formData.variant"
+                disabled
                 @change="updateFormData($event)"
               >
               <b-form-invalid-feedback>
@@ -348,6 +352,7 @@
                 id="leasingPeriod"
                 type="number"
                 class="form-control"
+                disabled
                 :value="formData.leasingPeriod"
                 @change="updateFormData(parseInt($event.target.value, 10), 'leasingPeriod')"
               >
@@ -362,6 +367,7 @@
               <input
                 id="kilometers"
                 type="number"
+                disabled
                 class="form-control"
                 :value="formData.kilometers"
                 @change="updateFormData(parseInt($event.target.value, 10), 'kilometers')"
@@ -378,7 +384,8 @@
                 id="color"
                 type="text"
                 class="form-control"
-                :value="formData.color"
+                disabled
+                :value="formData.color.hexValue"
                 @change="updateFormData($event)"
               >
               <b-form-invalid-feedback>
@@ -393,6 +400,7 @@
                 id="profession"
                 type="text"
                 class="form-control"
+                disabled
                 :value="formData.profession"
                 @change="updateFormData($event)"
               >
@@ -409,6 +417,7 @@
                 type="text"
                 class="form-control"
                 :value="formData.equipment"
+                disabled
                 @change="updateFormData($event)"
               >
               <b-form-invalid-feedback>
@@ -423,6 +432,7 @@
                 id="downPayment"
                 type="number"
                 class="form-control"
+                disabled
                 :value="formData.downPayment"
                 @change="updateFormData(parseInt($event.target.value, 10), 'downPayment')"
               >
@@ -437,6 +447,7 @@
               <input
                 id="monthlyPrice"
                 type="number"
+                disabled
                 class="form-control"
                 :value="formData.monthlyPrice"
                 @change="updateFormData(parseInt($event.target.value, 10), 'monthlyPrice')"
@@ -477,7 +488,9 @@ export default {
   middleware: 'guest',
   data: () => ({
     loading: false,
-    formData: {},
+    formData: {
+      color: {}
+    },
     validated: {
       firstName: null,
       lastName: null,
@@ -535,7 +548,27 @@ export default {
       if (valid) {
         this.resetValidate()
         this.$axios.put(`/orders/${this.orderId}`, {
-          ...this.formData
+          brand: this.formData.brand,
+          model: this.formData.model,
+          variant: this.formData.variant,
+          leasingPeriod: this.formData.leasingPeriod,
+          kilometers: this.formData.kilometers,
+          color: this.formData.color,
+          profession: this.formData.profession,
+          equipment: this.formData.equipment,
+          downPayment: this.formData.downPayment,
+          monthlyPrice: this.formData.monthlyPrice,
+          firstName: this.formData.firstName,
+          lastName: this.formData.lastName,
+          email: this.formData.email,
+          phone: this.formData.phone,
+          companyName: this.formData.companyName,
+          numberOfEmployees: this.formData.numberOfEmployees,
+          companyIndustry: this.formData.companyIndustry,
+          cvr: this.formData.cvr,
+          address: this.formData.address,
+          newsletter: this.formData.newsletter,
+          message: this.formData.message
         }).then(response => {
           this.$router.push('/orders')
         })
@@ -543,6 +576,12 @@ export default {
     },
     reset() {
       this.formData = _.cloneDeep(this.defaultFormData)
+    },
+    updateCheckboxFormData(e, property = undefined) {
+      const name = property || e.target.id
+      const value = e.target.checked
+      this.formData = _.cloneDeep(this.formData)
+      this.formData[name] = value
     },
     updateFormData(e, property = undefined) {
       this.resetValidate()

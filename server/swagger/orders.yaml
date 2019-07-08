@@ -281,7 +281,7 @@ definitions:
         type: "integer"
         description: "Kilometers value of Order Product"
       color:
-        type: "string"
+        type: "object"
         description: "The Color of Order Product"
       profession:
         type: "string"
@@ -359,7 +359,7 @@ definitions:
         type: "integer"
         description: "Kilometers value of Order Product"
       color:
-        type: "string"
+        type: "object"
         description: "The Color of Order Product"
       profession:
         type: "string"
@@ -395,7 +395,7 @@ definitions:
         type: "integer"
         description: "The Number of Employees"
       companyIndustry:
-        type: "integer"
+        type: "string"
         description: "The Company Industry of Order"
       cvr:
         type: "integer"

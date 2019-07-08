@@ -27,7 +27,10 @@
               <span>{{ data.item.firstName }} {{ data.item.lastName }}</span>
             </template>
             <template slot="address" slot-scope="data">
-              <span>{{ data.item.addressStreet && `${data.item.addressStreet},` }} {{ data.item.city && data.item.city }} {{ data.item.zipcode && data.item.zipcode }}</span>
+              <span>{{ data.item.address.street && `${data.item.address.street},` }} {{ data.item.address.city && data.item.address.city }} {{ data.item.address.zipcode && data.item.address.zipcode }}</span>
+            </template>
+            <template slot="color" slot-scope="data">
+              <span>{{ data.item.color.hexValue }}</span>
             </template>
             <template slot="status" slot-scope="data">
               <a-button type="primary" size="small" :class="data.item.status">
