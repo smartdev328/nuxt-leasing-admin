@@ -106,7 +106,8 @@ module.exports = {
         addressCity: params.address.city,
         newsletter: params.newsletter,
         message: params.message,
-        status: params.status
+        status: params.status,
+        comments: params.comments
       }))
   },
   fullRes: order => {
@@ -128,6 +129,7 @@ module.exports = {
       output.lastName = order.lastName
       output.email = order.email
       output.phone = order.phone
+      output.comments = order.comments
       output.companyName = order.companyName
       output.numberOfEmployees = order.numberOfEmployees
       output.companyIndustry = order.companyIndustry

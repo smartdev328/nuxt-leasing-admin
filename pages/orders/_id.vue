@@ -567,8 +567,9 @@ export default {
           companyIndustry: this.formData.companyIndustry,
           cvr: this.formData.cvr,
           address: this.formData.address,
-          newsletter: this.formData.newsletter,
-          message: this.formData.message
+          newsletter: this.formData.newsletter || false,
+          message: this.formData.message || '',
+          comments: this.formData.message || ''
         }).then(response => {
           this.$router.push('/orders')
         })
