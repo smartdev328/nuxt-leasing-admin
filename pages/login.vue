@@ -10,63 +10,65 @@
                 <p class="text-muted">
                   Sign In to your account
                 </p>
-                <b-form-group class="mb-3">
-                  <label class="col-form-label">Username *</label>
-                  <b-input-group>
-                    <b-input-group-prepend>
-                      <b-input-group-text><i class="icon-user" /></b-input-group-text>
-                    </b-input-group-prepend>
-                    <b-form-input
-                      id="username"
-                      type="text"
-                      :class="{
-                        'is-valid': isValidated && validated.username,
-                        'is-invalid': isValidated && !validated.username,
-                      }"
-                      :value="formData.username"
-                      @change="updateFormData($event, 'username')"
-                    />
-                  </b-input-group>
-                  <b-form-invalid-feedback>
-                    * Required Field
-                  </b-form-invalid-feedback>
-                </b-form-group>
+                <b-form @submit.stop.prevent="login($event)">
+                  <b-form-group class="mb-3">
+                    <label class="col-form-label">Username *</label>
+                    <b-input-group>
+                      <b-input-group-prepend>
+                        <b-input-group-text><i class="icon-user" /></b-input-group-text>
+                      </b-input-group-prepend>
+                      <b-form-input
+                        id="username"
+                        type="text"
+                        :class="{
+                          'is-valid': isValidated && validated.username,
+                          'is-invalid': isValidated && !validated.username,
+                        }"
+                        :value="formData.username"
+                        @change="updateFormData($event, 'username')"
+                      />
+                    </b-input-group>
+                    <b-form-invalid-feedback>
+                      * Required Field
+                    </b-form-invalid-feedback>
+                  </b-form-group>
 
-                <b-form-group class="mb-3">
-                  <label class="col-form-label">Password *</label>
-                  <b-input-group>
-                    <b-input-group-prepend>
-                      <b-input-group-text><i class="icon-lock" /></b-input-group-text>
-                    </b-input-group-prepend>
-                    <b-form-input
-                      id="password"
-                      type="password"
-                      :class="{
-                        'is-valid': isValidated && validated.password,
-                        'is-invalid': isValidated && !validated.password,
-                      }"
-                      :value="formData.password"
-                      @change="updateFormData($event, 'password')"
-                    />
-                  </b-input-group>
-                  <b-form-invalid-feedback>
-                    * Required Field
-                  </b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group class="mt-3 mb-3">
-                  <b-row>
-                    <b-col cols="6">
-                      <b-button variant="primary" class="px-4" @click="login">
-                        Login
+                  <b-form-group class="mb-3">
+                    <label class="col-form-label">Password *</label>
+                    <b-input-group>
+                      <b-input-group-prepend>
+                        <b-input-group-text><i class="icon-lock" /></b-input-group-text>
+                      </b-input-group-prepend>
+                      <b-form-input
+                        id="password"
+                        type="password"
+                        :class="{
+                          'is-valid': isValidated && validated.password,
+                          'is-invalid': isValidated && !validated.password,
+                        }"
+                        :value="formData.password"
+                        @change="updateFormData($event, 'password')"
+                      />
+                    </b-input-group>
+                    <b-form-invalid-feedback>
+                      * Required Field
+                    </b-form-invalid-feedback>
+                  </b-form-group>
+                  <b-form-group class="mt-3 mb-3">
+                    <b-row>
+                      <b-col cols="6">
+                        <b-button type="submit" variant="primary" class="px-4">
+                          Login
+                        </b-button>
+                      </b-col>
+                    <!-- <b-col cols="6" class="text-right">
+                      <b-button variant="link" class="px-0">
+                        Forgot password?
                       </b-button>
-                    </b-col>
-                  <!-- <b-col cols="6" class="text-right">
-                    <b-button variant="link" class="px-0">
-                      Forgot password?
-                    </b-button>
-                  </b-col> -->
-                  </b-row>
-                </b-form-group>
+                    </b-col> -->
+                    </b-row>
+                  </b-form-group>
+                </b-form>
               </b-card-body>
             </b-card>
           </b-card-group>
@@ -108,7 +110,8 @@ export default {
     }
   },
   methods: {
-    async login() {
+    async login(event) {
+      event.preventDefault()
       const valid = this.validateData()
       if (valid) {
         this.resetValidate()
@@ -122,7 +125,7 @@ export default {
           this.$router.push('/')
         } catch (e) {
           switch (e.response.status) {
-            case 404:
+            case 401:
               this.error = 'Username or Password is invalid'
               break
             default:

@@ -119,7 +119,7 @@ module.exports = {
       .catch(exceptions.InvalidInputError, err =>
         res.status(400).send(invalidInputRes(0, err.errors))
       )
-      .catch(SequelizeEmptyResultError, () => res.status(404).send())
+      .catch(SequelizeEmptyResultError, () => res.status(401).send())
       .catch(err => {
         logger.error(err)
         return res.status(500).send()
