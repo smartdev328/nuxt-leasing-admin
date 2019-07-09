@@ -403,22 +403,6 @@ definitions:
   ProductCreateModify:
     type: "object"
     description: "The model to create a product object"
-    required:
-    - "brand"
-    - "model"
-    - "oVariant"
-    - "variant"
-    - "year"
-    - "primaryImage"
-    - "acquisitionCost"
-    - "leasingPeriods"
-    - "scrapValues"
-    - "startKilometer"
-    - "endKilometer"
-    - "intervalKilometer"
-    - "intervalPrice"
-    - "size"
-    - "colors"
     properties:
       brand:
         type: "integer"
@@ -531,3 +515,6 @@ definitions:
       energyLabel:
         type: "string"
         description: "the energyLabel of Product"
+      status:
+        type: "string"
+        description: "the status of Product"

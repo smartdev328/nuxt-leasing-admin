@@ -29,7 +29,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 5
+          energyLabel: 5,
+          status: 'COMPLETED'
         },
         {
           o_variant: '2.5 SL 4D Sedan',
@@ -57,7 +58,8 @@ function run() {
           equipments: [1, 2],
           economy: 30,
           gear: 'manual',
-          energyLabel: 8
+          energyLabel: 8,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'B5-O',
@@ -85,7 +87,8 @@ function run() {
           equipments: [1, 2],
           economy: 20,
           gear: 'manual',
-          energyLabel: 5
+          energyLabel: 5,
+          status: 'COMPLETED'
         },
         {
           o_variant: '2.5 SV 4DR',
@@ -113,7 +116,8 @@ function run() {
           equipments: [1, 2],
           economy: 40,
           gear: 'manual',
-          energyLabel: 9
+          energyLabel: 9,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'Expert',
@@ -141,7 +145,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 8
+          energyLabel: 8,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'SV Duluth MW',
@@ -169,7 +174,8 @@ function run() {
           equipments: [1, 2],
           economy: 30,
           gear: 'manual',
-          energyLabel: 5
+          energyLabel: 5,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'S 4D Crew Cab',
@@ -197,7 +203,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 10
+          energyLabel: 10,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'xDrive40i',
@@ -225,7 +232,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 6
+          energyLabel: 6,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'Expert',
@@ -253,7 +261,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 6
+          energyLabel: 6,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'Titanium Petrol',
@@ -281,7 +290,8 @@ function run() {
           equipments: [1, 2],
           economy: 30,
           gear: 'manual',
-          energyLabel: 8
+          energyLabel: 8,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'SE Smoke',
@@ -309,7 +319,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 5
+          energyLabel: 5,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'San Antonio',
@@ -337,7 +348,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 5
+          energyLabel: 5,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'AB',
@@ -365,7 +377,8 @@ function run() {
           equipments: [1, 2],
           economy: 25,
           gear: 'manual',
-          energyLabel: 10
+          energyLabel: 10,
+          status: 'COMPLETED'
         },
         {
           o_variant: 'S Hatchback',
@@ -393,7 +406,8 @@ function run() {
           equipments: [1, 2],
           economy: 35,
           gear: 'manual',
-          energyLabel: 8
+          energyLabel: 8,
+          status: 'COMPLETED'
         }
       ]
       arrProduct.forEach(product => {

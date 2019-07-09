@@ -18,12 +18,25 @@
             outlined
           >
             <template slot="id" slot-scope="data">
-              <router-link :to="`/products/${data.item.id}`">
+              <router-link v-if="data.item.status == 'DRAFT'" :to="`/products/drafts/${data.item.id}`">
+                {{ data.item.id }}
+              </router-link>
+              <router-link v-if="data.item.status == 'COMPLETED'" :to="`/products/${data.item.id}`">
                 {{ data.item.id }}
               </router-link>
             </template>
+            <template slot="status" slot-scope="data">
+              <a-button type="primary" size="small" :class="data.item.status">
+                {{ data.item.status }}
+              </a-button>
+            </template>
             <template slot="actions" slot-scope="data">
-              <span class="editbtn">
+              <span v-if="data.item.status == 'DRAFT'" class="editbtn">
+                <router-link :to="`/products/drafts/${data.item.id}`">
+                  Edit
+                </router-link>
+              </span>
+              <span v-if="data.item.status == 'COMPLETED'" class="editbtn">
                 <router-link :to="`/products/${data.item.id}`">
                   Edit
                 </router-link>
@@ -72,6 +85,7 @@ export default {
         { key: 'acquisitionCost', sortable: true },
         { key: 'scrapValues' },
         { key: 'leasingPeriods' },
+        { key: 'status', sortable: true },
         { key: 'actions', label: '', tdClass: 'td-action-style' }
       ],
       currentPage: 1,

@@ -48,19 +48,26 @@ module.exports = {
       motor: params.motor,
       cargoSize: params.cargoSize,
       gear: params.gear,
-      energyLabel: params.energyLabel
+      energyLabel: params.energyLabel,
+      status: params.status
     })
       .then(prod => {
         newProduct = prod
-        return Promise.all([
-          newProduct.setModel(params.model),
-          newProduct.setSize(params.size),
-          newProduct.setFinance(1),
-          newProduct.setColors(params.colors),
-          newProduct.setCategories(params.categories),
-          newProduct.setEquipments(params.equipments),
-          newProduct.setProfessions(params.professions)
-        ])
+        const promises = []
+        if (params.model) {
+          promises.push(newProduct.setModel(params.model))
+        }
+        if (params.size) {
+          promises.push(newProduct.setSize(params.size))
+        }
+        if (params.colors && params.colors.length > 0) {
+          promises.push(newProduct.setColors(params.colors))
+        }
+        promises.push(newProduct.setFinance(1))
+        promises.push(newProduct.setCategories(params.categories))
+        promises.push(newProduct.setEquipments(params.equipments))
+        promises.push(newProduct.setProfessions(params.professions))
+        return Promise.all(promises)
       })
       .then(() => newProduct)
   },
@@ -91,47 +98,57 @@ module.exports = {
   },
   modify: (productId, params) => {
     const id = productId
+    let updatedProd = {}
     return Products.findOne({
       where: { id: id },
       rejectOnEmpty: true
     })
-      .then(product =>
-        Promise.props({
-          productUpdate: product.update({
-            o_variant: params.oVariant,
-            variant: params.variant,
-            year: params.year,
-            primary_image: params.primaryImage,
-            thumbnail1: params.thumbnail1,
-            thumbnail2: params.thumbnail2,
-            thumbnail3: params.thumbnail3,
-            thumbnail4: params.thumbnail4,
-            short_description: params.shortDescription,
-            long_description: params.longDescription,
-            acquisition_cost: params.acquisitionCost,
-            scrap_value: params.scrapValues,
-            leasing_period: params.leasingPeriods,
-            start_kilometer: params.startKilometer,
-            end_kilometer: params.endKilometer,
-            interval_kilometer: params.intervalKilometer,
-            interval_price: params.intervalPrice,
-            economy: params.economy,
-            fuelType: params.fuelType,
-            doors: params.doors,
-            motor: params.motor,
-            cargoSize: params.cargoSize,
-            gear: params.gear,
-            energyLabel: params.energyLabel
-          }),
-          model: product.setModel(params.model),
-          size: product.setSize(params.size),
-          colors: product.setColors(params.colors),
-          categories: product.setCategories(params.categories),
-          equipments: product.setEquipments(params.equipments),
-          professions: product.setProfessions(params.professions)
-        })
-      )
-      .then(result => result.productUpdate)
+      .then(product => product.update({
+        o_variant: params.oVariant,
+        variant: params.variant,
+        year: params.year,
+        primary_image: params.primaryImage,
+        thumbnail1: params.thumbnail1,
+        thumbnail2: params.thumbnail2,
+        thumbnail3: params.thumbnail3,
+        thumbnail4: params.thumbnail4,
+        short_description: params.shortDescription,
+        long_description: params.longDescription,
+        acquisition_cost: params.acquisitionCost,
+        scrap_value: params.scrapValues,
+        leasing_period: params.leasingPeriods,
+        start_kilometer: params.startKilometer,
+        end_kilometer: params.endKilometer,
+        interval_kilometer: params.intervalKilometer,
+        interval_price: params.intervalPrice,
+        economy: params.economy,
+        fuelType: params.fuelType,
+        doors: params.doors,
+        motor: params.motor,
+        cargoSize: params.cargoSize,
+        gear: params.gear,
+        energyLabel: params.energyLabel,
+        status: params.status
+      }))
+      .then(prod => {
+        const promises = []
+        updatedProd = prod
+        if (params.model) {
+          promises.push(prod.setModel(params.model))
+        }
+        if (params.size) {
+          promises.push(prod.setSize(params.size))
+        }
+        if (params.colors) {
+          promises.push(prod.setColors(params.colors))
+        }
+        promises.push(prod.setFinance(1))
+        promises.push(prod.setCategories(params.categories))
+        promises.push(prod.setEquipments(params.equipments))
+        promises.push(prod.setProfessions(params.professions))
+        return Promise.all(promises)
+      })
+      .then(() => updatedProd)
   },
   get: (productId, options = {}) => {
     const id = productId
@@ -150,15 +167,15 @@ module.exports = {
     const output = _.clone(productModel)
     output.id = product.id
     return Promise.props({
-      model: product.getModel().then(res => ({ name: res.modelTitle, brand: res.brandId })),
-      size: product.getSize().then(res => res.name),
+      model: product.getModel().then(res => res ? ({ name: res.modelTitle, brand: res.brandId }) : undefined),
+      size: product.getSize().then(res => res && res.name),
       colors: product.getColors().then(res => res.map(item => item.id)),
       equipments: product.getEquipments().then(res => res.map(item => item.id)),
       categories: product.getCategories().then(res => res.map(item => item.id)),
       professions: product.getProfessions().then(res => res.map(item => item.id))
     }).then(result => {
       output.newCar = product.new_car
-      output.model = result.model.name
+      output.model = result.model && result.model.name
       output.oVariant = product.o_variant
       output.variant = product.variant
       output.year = product.year
@@ -188,10 +205,15 @@ module.exports = {
       output.cargoSize = product.cargoSize
       output.gear = product.gear
       output.energyLabel = product.energyLabel
-      return Brands.findOne({ where: { id: result.model.brand } })
+      output.status = product.status
+      if (result.model) {
+        return Brands.findOne({ where: { id: result.model.brand } })
+      }
     })
       .then((brand) => {
-        output.brand = brand.name
+        if (brand) {
+          output.brand = brand.name
+        }
         return output
       })
   },
@@ -199,16 +221,18 @@ module.exports = {
     const output = _.clone(productModel)
     output.id = product.id
     return Promise.props({
-      model: product.getModel().then(res => ({ id: res.id, brand: res.brandId })),
-      size: product.getSize().then(res => res.id),
+      model: product.getModel().then(res => res ? ({ id: res.id, brand: res.brandId }) : undefined),
+      size: product.getSize().then(res => res && res.id),
       colors: product.getColors().then(res => res.map(item => item.id)),
       equipments: product.getEquipments().then(res => res.map(item => item.id)),
       categories: product.getCategories().then(res => res.map(item => item.id)),
       professions: product.getProfessions().then(res => res.map(item => item.id))
     }).then(result => {
       output.newCar = product.new_car
-      output.model = result.model.id
-      output.brand = result.model.brand
+      if (result.model) {
+        output.model = result.model.id
+        output.brand = result.model.brand
+      }
       output.oVariant = product.o_variant
       output.variant = product.variant
       output.year = product.year
@@ -238,6 +262,7 @@ module.exports = {
       output.cargoSize = product.cargoSize
       output.gear = product.gear
       output.energyLabel = product.energyLabel
+      output.status = product.status
       return output
     })
   }
@@ -280,6 +305,7 @@ const productModel = {
   cargoSize: undefined,
   gear: undefined,
   energyLabel: undefined,
+  status: undefined,
   createdAt: undefined,
   updatedAt: undefined
 }

@@ -1,3 +1,12 @@
+const _ = require('lodash')
+
+const enums = {
+  'STATUS': {
+    DRAFT: 'DRAFT',
+    COMPLETED: 'COMPLETED'
+  }
+}
+
 module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define('Product', {
     id: {
@@ -31,7 +40,11 @@ module.exports = (sequelize, DataTypes) => {
     motor: DataTypes.STRING,
     cargoSize: DataTypes.STRING,
     gear: DataTypes.STRING,
-    energyLabel: DataTypes.STRING
+    energyLabel: DataTypes.STRING,
+    status: {
+      type: DataTypes.ENUM(_.values(enums.STATUS)),
+      defaultValue: enums.STATUS.DRAFT
+    }
   })
 
   Product.associate = models => {

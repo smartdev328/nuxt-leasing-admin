@@ -2,7 +2,7 @@
   <div class="products">
     <b-row>
       <b-col lg="12">
-        <h2>Add New Product</h2>
+        <h2>{{ productName }}</h2>
       </b-col>
       <b-col lg="12">
         <b-row>
@@ -345,16 +345,17 @@
                   'is-invalid': isValidated && !validated.leasingPeriods,
                 }"
               >
-                <div v-for="index in 6" :key="index" class="custom-control custom-checkbox custom-control-inline">
+                <div v-for="(item, index) in [12,24,36,48,60,72]" :key="index" class="custom-control custom-checkbox custom-control-inline">
                   <input
                     :id="`leasingperiods${index}`"
                     type="checkbox"
                     class="custom-control-input"
+                    :checked="formData.leasingPeriods && formData.leasingPeriods.indexOf(item) > -1"
                     name="leasingPeriods"
-                    :value="index * 12"
+                    :value="item"
                     @change="updateMultiCheckFormData"
                   >
-                  <label class="custom-control-label" :for="`leasingperiods${index}`">{{ 12 * index }} months</label>
+                  <label class="custom-control-label" :for="`leasingperiods${index}`">{{ item }} months</label>
                 </div>
               </b-form-checkbox-group>
               <b-form-invalid-feedback>
@@ -365,13 +366,13 @@
           <b-col lg="12">
             <label class="col-form-label">Scrap values *</label>
           </b-col>
-          <template v-for="(item, index) in formData.scrapValues">
+          <template v-for="(item, index) in scrapValues">
             <b-col v-if="item !== undefined" :key="index" lg="3">
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text>{{ 12 * (index + 1) }} months</b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input id="elementsPrependAppend" type="number" name="scrapValues" :value="formData.scrapValues[index]" @change="updateArrayFormData('scrapValues', $event, index)" />
+                <b-form-input id="elementsPrependAppend" type="number" name="scrapValues" :value="scrapValues[index]" @change="updateArrayFormData('scrapValues', $event, index)" />
               </b-input-group>
             </b-col>
           </template>
@@ -492,6 +493,7 @@
                     type="checkbox"
                     class="custom-control-input"
                     name="professions"
+                    :checked="formData.professions && formData.professions.indexOf(item.id) > -1"
                     :value="item.id"
                     @change="updateMultiCheckFormData"
                   >
@@ -520,6 +522,7 @@
                     class="custom-control-input"
                     name="colors"
                     :value="item.id"
+                    :checked="formData.colors && formData.colors.indexOf(item.id) > -1"
                     @change="updateMultiCheckFormData"
                   >
                   <label class="custom-control-label" :for="`colors${index}`">{{ item.name }}</label>
@@ -542,6 +545,7 @@
                     class="custom-control-input"
                     name="categories"
                     :value="item.id"
+                    :checked="formData.categories && formData.categories.indexOf(item.id) > -1"
                     @change="updateMultiCheckFormData"
                   >
                   <label class="custom-control-label" :for="`categories${index}`">{{ item.name }}</label>
@@ -561,6 +565,7 @@
                     class="custom-control-input"
                     name="equipments"
                     :value="item.id"
+                    :checked="formData.equipments && formData.equipments.indexOf(item.id) > -1"
                     @change="updateMultiCheckFormData"
                   >
                   <label class="custom-control-label" :for="`equipments${index}`">{{ item.name }}</label>
@@ -578,7 +583,7 @@
         </b-button>
       </div>
       <div>
-        <b-button type="submit" variant="warning" @click="createDraft()">
+        <b-button type="submit" variant="warning" @click="updateDraft()">
           <i class="fa fa-file-text-o" />&nbsp;&nbsp;Save as Draft
         </b-button>
         &nbsp;&nbsp;
@@ -586,8 +591,8 @@
           <i class="fa fa-dot-circle-o" />&nbsp;&nbsp;Create
         </b-button>
         &nbsp;&nbsp;
-        <b-button type="button" variant="danger" @click="cancel()">
-          <i class="fa fa-close" />&nbsp;&nbsp;Cancel
+        <b-button type="button" variant="danger" @click="deleteProduct()">
+          <i class="fa fa-trash" />&nbsp;&nbsp;Delete
         </b-button>
       </div>
     </b-row>
@@ -599,7 +604,7 @@
 import * as _ from 'lodash'
 
 export default {
-  name: 'NewProduct',
+  name: 'EditProductDraft',
   middleware: 'guest',
   data: () => ({
     formData: {},
@@ -681,12 +686,23 @@ export default {
     },
     isValidated: false,
     productId: undefined,
-    loading: false
+    loading: false,
+    scrapValues: [],
+    defaultFormData: {}
   }),
+  computed: {
+    productName: function () {
+      const brandObj = this.formData.brand && _.find(this.brandOptions, { value: this.formData.brand })
+      const modelObj = this.formData.model && _.find(this.modelOptions, { value: this.formData.model })
+      const pn = `${(brandObj && brandObj.text) || ''} ${(modelObj && modelObj.text) || ''}`
+      return pn
+    }
+  },
   mounted() {
     this.loading = true
-    this.formData.scrapValues = new Array(6).fill(undefined) // 12, 24, 36, 48, 60, 72
+    this.scrapValues = new Array(6).fill(undefined)
     this.formData.leasingPeriods = []
+    this.productId = this.$route.params.id
     this.$axios.get(`/brands`).then(response => {
       const data = response.data.results || []
       data.forEach(item => {
@@ -698,7 +714,6 @@ export default {
       data.forEach(item => {
         this.modelOptions.push({ text: this.capitalize(item.modelTitle), value: item.id, brand: item.brand.id })
         this.filteredModelOptions = _.cloneDeep(this.modelOptions)
-        this.loading = false
       })
     })
     this.$axios.get(`/sizes`).then(response => {
@@ -719,16 +734,24 @@ export default {
     this.$axios.get(`/equipments`).then(response => {
       this.equipmentsArr = response.data.results || []
     })
+    this.$axios.get(`/products/${this.productId}`).then(response => {
+      this.formData = response.data.data
+      this.formData.leasingPeriods.forEach((item, index) => {
+        this.scrapValues[item / 12 - 1] = this.formData.scrapValues[index]
+      })
+      this.loading = false
+      this.defaultFormData = _.cloneDeep(this.formData)
+    })
   },
   methods: {
     capitalize(s) {
       if (typeof s !== 'string') return ''
       return s.charAt(0).toUpperCase() + s.slice(1)
     },
-    createDraft() {
-      const data = _.pickBy(this.formData, _.identity)
+    updateDraft() {
       this.loading = true
-      this.$axios.post('/products/', {
+      const data = _.pickBy(this.formData, _.identity)
+      this.$axios.put(`/products/${this.productId}`, {
         ...data,
         leasingPeriods: _.sortBy(this.formData.leasingPeriods),
         scrapValues: _.filter(this.formData.scrapValues, value => value !== undefined),
@@ -744,7 +767,7 @@ export default {
         this.resetValidate()
         this.loading = true
         // const data = _.pickBy(this.formData, _.identity)
-        this.$axios.post('/products/', {
+        this.$axios.put(`/products/${this.productId}`, {
           brand: this.formData.brand,
           model: this.formData.model,
           oVariant: this.formData.oVariant,
@@ -759,7 +782,7 @@ export default {
           intervalPrice: this.formData.intervalPrice,
           size: this.formData.size,
           colors: this.formData.colors,
-          scrapValues: _.filter(this.formData.scrapValues, value => value !== undefined),
+          scrapValues: _.filter(this.scrapValues, value => value !== undefined),
           thumbnail1: this.formData.thumbnail1 || '',
           thumbnail2: this.formData.thumbnail2 || '',
           thumbnail3: this.formData.thumbnail3 || '',
@@ -784,11 +807,15 @@ export default {
       }
     },
     reset() {
-      this.formData = {}
       this.resetValidate()
+      this.formData = _.cloneDeep(this.defaultFormData)
     },
-    cancel() {
-      this.$router.push('/products')
+    deleteProduct() {
+      this.loading = true
+      this.$axios.delete(`/products/${this.productId}`).then(response => {
+        this.loading = false
+        this.$router.push('/products')
+      })
     },
     updateFormData(e, property = undefined) {
       this.resetValidate()
@@ -816,6 +843,9 @@ export default {
       this.resetValidate()
       this.formData = _.cloneDeep(this.formData)
       this.formData[name][index] = parseInt(value, 10)
+      if (name === 'scrapValues') {
+        this.scrapValues[index] = parseInt(value, 10)
+      }
     },
     updateMultiCheckFormData(e) {
       this.resetValidate()
@@ -829,14 +859,14 @@ export default {
         }
         this.formData[name].push(value)
         if (name === 'leasingPeriods') {
-          this.formData.scrapValues[value / 12 - 1] = 0
+          this.scrapValues[value / 12 - 1] = 0
         }
       } else {
         const removeItemIndex = this.formData[name].indexOf(value)
         if (removeItemIndex > -1) {
           this.formData[name].splice(removeItemIndex, 1)
           if (name === 'leasingPeriods') {
-            this.formData.scrapValues[value / 12 - 1] = undefined
+            this.scrapValues[value / 12 - 1] = undefined
           }
         }
       }

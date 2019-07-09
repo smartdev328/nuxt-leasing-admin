@@ -32,6 +32,7 @@ async function start() {
         models.sequelize.sync().then(() => {
           if (allowFeedData) {
             consola.info('Feeding Data')
+            require('./feeds/user').run()
             require('./feeds/brand').run()
             require('./feeds/size').run()
             require('./feeds/color').run()
