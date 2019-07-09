@@ -287,12 +287,13 @@
           <b-col lg="3">
             <b-form-group>
               <label class="col-form-label">Energy Label</label>
-              <b-form-input
+              <input
                 id="energyLabel"
-                type="number"
+                type="text"
+                class="form-control"
                 :value="formData.energyLabel"
-                @change="updateFormData($event, 'energyLabel')"
-              />
+                @change="updateFormData($event)"
+              >
             </b-form-group>
           </b-col>
           <b-col lg="3">
