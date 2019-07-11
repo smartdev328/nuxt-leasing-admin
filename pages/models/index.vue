@@ -1,11 +1,16 @@
 <template>
   <div class="models">
-    <b-row class="justify-content-end" style="padding: 15px;">
-      <router-link :to="`/models/new`">
-        <b-button variant="success">
-          Add New Model
-        </b-button>
-      </router-link>
+    <b-row class="justify-content-end" style="padding: 15px 0;">
+      <b-col lg="10">
+        <MultiPropsSearch :search-options="searchOptions" @filtersChanged="filterChanged" />
+      </b-col>
+      <b-col lg="2" class="text-right">
+        <router-link :to="`/models/new`">
+          <b-button variant="success">
+            Add New Model
+          </b-button>
+        </router-link>
+      </b-col>
     </b-row>
     <b-row>
       <b-col lg="12">
@@ -55,10 +60,14 @@
 </template>
 
 <script>
+import { MultiPropsSearch } from '~/components/'
 
 export default {
   name: 'Models',
   middleware: 'guest',
+  components: {
+    MultiPropsSearch
+  },
   data: () => {
     return {
       models: [],
@@ -75,8 +84,31 @@ export default {
       totalRows: 0,
       header: 'List of All Models',
       loading: false,
-      striped: true
+      striped: true,
+      searchOptions: [
+        {
+          key: 'brand',
+          type: 'select',
+          name: 'Brand'
+        },
+        {
+          key: 'modelTitle',
+          type: 'text',
+          name: 'Model Title'
+        }
+      ]
     }
+  },
+  beforeCreate() {
+    this.$axios.get(`/brands`).then(response => {
+      const data = response.data.results || []
+      this.searchOptions = this.searchOptions.map(item => {
+        if (item.key === 'brand') {
+          item.source = data.map(item => ({ name: item.name, value: item.id }))
+        }
+        return item
+      })
+    })
   },
   mounted() {
     this.getModels(1)
@@ -134,6 +166,21 @@ export default {
         .catch(err => {
           console.error(err)
         })
+    },
+    filterChanged(filters) {
+      this.loading = true
+      this.$axios.get('/models/', {
+        params: {
+          ...filters,
+          limit: this.perPage,
+          offset: 0
+        }
+      }).then(response => {
+        this.models = response.data.results
+        this.totalRows = response.data.total
+        this.loading = false
+        this.header = `List of All Models`
+      })
     }
   }
 }
