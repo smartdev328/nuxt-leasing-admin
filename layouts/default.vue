@@ -15,17 +15,22 @@
 
 <script>
 import Vue from 'vue'
-import { message, Radio, Button } from 'ant-design-vue'
-import 'ant-design-vue/lib/message/style/index.css'
-import 'ant-design-vue/lib/radio/style/index.css'
-import 'ant-design-vue/lib/button/style/index.css'
+import { message, Radio, Button, Form, Input, Select, Icon, Row, Col } from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 
 import nav from './menu'
 import { Header as AppHeader, Sidebar, Breadcrumb } from '~/components/'
 
-Vue.prototype.$message = message
 Vue.use(Radio)
 Vue.use(Button)
+Vue.use(Form)
+Vue.use(Input)
+Vue.use(Select)
+Vue.use(Icon)
+Vue.use(Row)
+Vue.use(Col)
+Vue.prototype.$message = message
+Vue.prototype.$form = Form
 
 export default {
   name: 'Full',
