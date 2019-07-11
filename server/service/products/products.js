@@ -72,12 +72,30 @@ module.exports = {
       .then(() => newProduct)
   },
   search: options => {
-    const where = {}
+    const condition = {}
     const include = []
 
     // Filters
     if (options.model) {
-      Object.assign(where, { modelId: { [Op.or]: options.model } })
+      Object.assign(condition, { modelId: { [Op.in]: options.model } })
+    }
+    if (options.oVariant) {
+      Object.assign(condition, { o_variant: { [Op.like]: `%${options.oVariant}%` } })
+    }
+    if (options.acquisitionCost) {
+      Object.assign(condition, { acquisition_cost: { [Op.between]: options.acquisitionCost } })
+    }
+    if (options.year) {
+      Object.assign(condition, { year: { [Op.between]: options.year } })
+    }
+    if (options.status) {
+      Object.assign(condition, { status: { [Op.in]: options.status } })
+    }
+    let where = {}
+    if (!_.isEmpty(condition)) {
+      where = {
+        [Op.and]: condition
+      }
     }
 
     return Promise.props({

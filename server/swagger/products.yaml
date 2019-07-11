@@ -17,6 +17,37 @@ paths:
         uniqueItems: true
         items:
           type: "integer"
+      - name: "brand"
+        in: "query"
+        description: "Query for Products with same brandId"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      - name: "oVariant"
+        in: "query"
+        description: "Query for Products with same ovariant"
+        type: "string"
+      - name: "year"
+        in: "query"
+        description: "Query for Products with same year"
+        type: "array"
+        items:
+          type: "integer"
+      - name: "acquisitionCost"
+        in: "query"
+        description: "Query for Products with same acquisitionCost"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "integer"
+      - name: "status"
+        in: "query"
+        description: "Query for Products with same status"
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
       - name: "limit"
         in: "query"
         description: "Limit the number of returned results"
@@ -288,7 +319,7 @@ definitions:
         type: "string"
         description: "The Variant name of Product"
       year:
-        type: "string"
+        type: "integer"
         description: "The Year value of Product"
       primaryImage:
         type: "string"
@@ -417,7 +448,7 @@ definitions:
         type: "string"
         description: "The Variant name of Product"
       year:
-        type: "string"
+        type: "integer"
         description: "The Year value of Product"
       primaryImage:
         type: "string"

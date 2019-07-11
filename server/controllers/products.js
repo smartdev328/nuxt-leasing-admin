@@ -28,8 +28,12 @@ module.exports = {
 
     const options = {
       model: req.swagger.params.model.value,
-      limit: req.swagger.params.limit.value,
-      offset: req.swagger.params.offset.value
+      oVariant: req.swagger.params.oVariant.value,
+      year: req.swagger.params.year.value,
+      acquisitionCost: req.swagger.params.acquisitionCost.value,
+      status: req.swagger.params.status.value,
+      limit,
+      offset
     }
     const parsedEvents = []
     let searchResult = []

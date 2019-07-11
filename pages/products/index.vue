@@ -2,7 +2,7 @@
   <div class="products">
     <b-row style="padding: 15px 0;">
       <b-col lg="10">
-        <a-select label-in-value default-active-first-option style="width: 200px; margin-right: 8px" @change="handleSearchOptionChange">
+        <a-select label-in-value default-active-first-option style="width: 200px; margin-right: 8px" placeholder="Search Fields" @change="handleSearchOptionChange">
           <a-select-option v-for="(option, index) in searchOptions" :key="index" :value="index">
             {{ option.name }}
           </a-select-option>
@@ -11,15 +11,17 @@
           v-if="selectedSearchOption.type === 'text'"
           :id="selectedSearchOption.key"
           :value="tempFilter.value"
-          style="width: 200px; margin-right: 8px"
+          style="width: 300px; margin-right: 8px"
           :placeholder="`Please input ${selectedSearchOption.name}`"
           @change="handleSearchTextChange"
         />
         <a-select
           v-if="selectedSearchOption.type === 'select'"
+          :key="selectedSearchOption.type + selectedSearchOption.key"
           label-in-value
-          default-active-first-option
-          style="width: 200px; margin-right: 8px"
+          mode="multiple"
+          style="width: 300px; margin-right: 8px"
+          placeholder="Please select an option"
           @change="handleOptionChange"
         >
           <a-select-option v-for="(opt, sourceId) in selectedSearchOption.source" :key="sourceId" :value="sourceId">
@@ -27,9 +29,9 @@
           </a-select-option>
         </a-select>
         <a-input-group v-if="selectedSearchOption.type === 'fromTo'" compact class="from-to-group-input">
-          <a-input style=" width: 100px; text-align: center" type="number" placeholder="Minimum" :value="tempFilter.value && tempFilter.value[0]" @change="onFromChange(selectedSearchOption.key, $event)" />
+          <a-input style=" width: 130px; text-align: center" type="number" placeholder="Minimum" :value="tempFilter.value && tempFilter.value[0]" @change="onFromChange(selectedSearchOption.key, $event)" />
           <a-input style=" width: 30px; border-left: 0; pointer-events: none; backgroundColor: #fff" placeholder="~" disabled />
-          <a-input style="width: 100px; text-align: center; border-left: 0" type="number" placeholder="Maximum" :value="tempFilter.value && tempFilter.value[1]" @change="onToChange(selectedSearchOption.key, $event)" />
+          <a-input style="width: 130px; text-align: center; border-left: 0" type="number" placeholder="Maximum" :value="tempFilter.value && tempFilter.value[1]" @change="onToChange(selectedSearchOption.key, $event)" />
         </a-input-group>
         <a-button
           type="default"
@@ -38,9 +40,8 @@
           @click="addFilter"
         />
         <a-select
-          :key="multiTagsFormData.length"
           mode="multiple"
-          :default-value="multiTagsFormData"
+          :value="multiTagsFormData"
           :show-search="false"
           style="width: 100%; margin: 10px 0;"
           :open="false"
@@ -117,8 +118,7 @@
 </template>
 
 <script>
-import { isArray } from 'lodash'
-let id = 0
+import { isArray, cloneDeep, intersection } from 'lodash'
 
 export default {
   name: 'Products',
@@ -175,16 +175,6 @@ export default {
           name: 'Acquisition Cost'
         },
         {
-          key: 'scrapValues',
-          type: 'fromTo',
-          name: 'Scrap Values'
-        },
-        {
-          key: 'leasingPeriods',
-          type: 'fromTo',
-          name: 'Leasing Periods'
-        },
-        {
           key: 'status',
           type: 'select',
           name: 'Status',
@@ -221,7 +211,8 @@ export default {
       const data = response.data.results || []
       this.searchOptions = this.searchOptions.map(item => {
         if (item.key === 'model') {
-          item.source = data.map(item => ({ name: item.modelTitle, value: item.id }))
+          item.source = data.map(item => ({ name: item.modelTitle, value: item.id, brand: item.brand.id }))
+          this.modelList = item.source
         }
         return item
       })
@@ -244,9 +235,7 @@ export default {
         this.products = response.data.results
         this.totalRows = response.data.total
         this.loading = false
-        const startIndex = (this.currentPage - 1) * this.perPage + 1
-        const endIndex = this.currentPage * this.perPage > this.totalRows ? this.totalRows : this.currentPage * this.perPage
-        this.header = `List of All Products (${startIndex} - ${endIndex} / ${this.totalRows})`
+        this.header = `List of All Products`
       })
     },
     deleteProduct(productId) {
@@ -285,37 +274,20 @@ export default {
           console.error(err)
         })
     },
-    remove(k) {
-      const { form } = this
-      // can use data-binding to get
-      const keys = form.getFieldValue('keys')
-      // We need at least one passenger
-      if (keys.length === 1) {
-        return
-      }
-
-      // can use data-binding to set
-      form.setFieldsValue({
-        keys: keys.filter(key => key !== k)
-      })
-    },
-
-    add() {
-      const { form } = this
-      const keys = form.getFieldValue('keys')
-      const nextKeys = keys.concat(++id)
-      form.setFieldsValue({
-        keys: nextKeys
-      })
-    },
     handleSearchOptionChange(option) {
       this.selectedSearchOption = this.searchOptions[option.key]
     },
-    handleOptionChange(option) {
+    handleOptionChange(options) {
+      const label = []
+      const value = []
+      options.forEach(option => {
+        label.push(this.selectedSearchOption.source[option.key].name)
+        value.push(this.selectedSearchOption.source[option.key].value)
+      })
       this.tempFilter = {
         key: this.selectedSearchOption.key,
-        label: this.selectedSearchOption.source[option.key].name,
-        value: this.selectedSearchOption.source[option.key].value
+        label: label.join(', '),
+        value
       }
     },
     handleSearchTextChange(e) {
@@ -342,21 +314,65 @@ export default {
         }
         return false
       })
+      this.filterChanged()
+    },
+    filterChanged() {
       this.getMultiTagsFormData()
+      const filters = {}
+      this.filters.forEach(filter => {
+        if (filter.key === 'brand') {
+          const models = this.modelList.filter(item => filter.value.indexOf(item.brand) > -1)
+          filters.brand = models.map(item => item.value)
+        } else {
+          if (filter.key === 'year') {
+            if (!filter.value[0]) filter.value[0] = 2000
+            if (!filter.value[1]) filter.value[1] = 3000
+          }
+          if (filter.key === 'acquisitionCost') {
+            if (!filter.value[0]) filter.value[0] = 0
+            if (!filter.value[1]) filter.value[1] = 9000000000
+          }
+          filters[filter.key] = filter.value
+        }
+      })
+      if (filters.brand && filters.brand.length > 0 && filters.model && filters.model.length > 0) {
+        filters.model = intersection(filters.brand, filters.model)
+      } else if (filters.brand && filters.brand.length > 0) {
+        filters.model = filters.brand
+      }
+      this.loading = true
+      this.$axios.get('/products/', {
+        params: {
+          ...filters,
+          limit: this.perPage,
+          offset: 0
+        }
+      }).then(response => {
+        this.products = response.data.results
+        this.totalRows = response.data.total
+        this.loading = false
+        this.header = `List of All Products`
+      })
     },
     addFilter() {
       const value = this.tempFilter.value
-      if (isArray(value)) {
-        console.log('------ value for fail test', value)
+      if (this.tempFilter.key === 'fromTo') {
         if (value[1] && value[0] && value[1] < value[0]) {
           this.tempFilter = {}
-          console.log('------- failed')
+          return
+        }
+      }
+      if (this.tempFilter.key === 'select') {
+        if (value.length === 0) {
+          this.tempFilter = {}
           return
         }
       }
       if (value) {
-        this.filters.push(this.tempFilter)
-        this.getMultiTagsFormData()
+        const filters = this.filters.filter(filter => filter.key !== this.tempFilter.key)
+        filters.push(this.tempFilter)
+        this.filters = cloneDeep(filters)
+        this.filterChanged()
         this.tempFilter = {}
       }
     },
@@ -414,7 +430,10 @@ export default {
 }
 .from-to-group-input.ant-input-group {
   display: inline-block;
-  width: 240px;
+  width: 300px;
   transform: translateY(-5px);
+}
+.ant-select-search {
+  pointer-events: none;
 }
 </style>

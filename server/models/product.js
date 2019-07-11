@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     model: DataTypes.STRING,
     o_variant: DataTypes.STRING,
     variant: DataTypes.STRING,
-    year: DataTypes.STRING,
+    year: DataTypes.INTEGER,
     primary_image: DataTypes.STRING,
     thumbnail1: DataTypes.STRING,
     thumbnail2: DataTypes.STRING,
