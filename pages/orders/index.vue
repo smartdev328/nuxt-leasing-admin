@@ -1,5 +1,10 @@
 <template>
   <div class="orders" :class="{ loaded: !loading }">
+    <b-row class="justify-content-end" style="padding: 15px 0;">
+      <b-col lg="12">
+        <MultiPropsSearch :search-options="searchOptions" @filtersChanged="filterChanged" />
+      </b-col>
+    </b-row>
     <b-row>
       <b-col lg="12">
         <b-card :header="header">
@@ -65,12 +70,15 @@
 </template>
 
 <script>
-
 import moment from 'moment'
+import { MultiPropsSearch } from '~/components/'
 
 export default {
   name: 'Orders',
   middleware: 'guest',
+  components: {
+    MultiPropsSearch
+  },
   data: () => {
     return {
       orders: [],
@@ -97,8 +105,149 @@ export default {
       totalRows: 0,
       header: 'List of All Orders',
       loading: false,
-      striped: true
+      striped: true,
+      searchOptions: [
+        {
+          key: 'brand',
+          type: 'select',
+          name: 'Brand'
+        },
+        {
+          key: 'model',
+          type: 'select',
+          name: 'Model'
+        },
+        {
+          key: 'color',
+          type: 'select',
+          name: 'Color'
+        },
+        {
+          key: 'username',
+          type: 'text',
+          name: 'Username'
+        },
+        {
+          key: 'email',
+          type: 'text',
+          name: 'Email'
+        },
+        {
+          key: 'variant',
+          type: 'text',
+          name: 'Variant'
+        },
+        {
+          key: 'companyName',
+          type: 'text',
+          name: 'Company Name'
+        },
+        {
+          key: 'cvr',
+          type: 'text',
+          name: 'CVR'
+        },
+        {
+          key: 'companyIndustry',
+          type: 'select',
+          name: 'Company Industry',
+          source: [
+            {
+              name: 'business',
+              value: 'Business'
+            },
+            {
+              name: 'company',
+              value: 'Company'
+            }
+          ]
+        },
+        {
+          key: 'numberOfEmployees',
+          type: 'select',
+          name: 'Number Of Employees',
+          source: [
+            {
+              name: '1 - 5',
+              value: '1-5'
+            },
+            {
+              name: '6 - 15',
+              value: '6-15'
+            },
+            {
+              name: '16 - 30',
+              value: '16-30'
+            },
+            {
+              name: '31 - 60',
+              value: '31-60'
+            },
+            {
+              name: '61+',
+              value: '61+'
+            }
+          ]
+        },
+        {
+          key: 'status',
+          type: 'select',
+          name: 'Status',
+          source: [
+            {
+              name: 'AWAITING CONTACT',
+              value: 'AWAITING_CONTACT'
+            },
+            {
+              name: 'FINISHED',
+              value: 'FINISHED'
+            },
+            {
+              name: 'WAITING',
+              value: 'WAITING'
+            },
+            {
+              name: 'NOT INTERESTED',
+              value: 'NOT_INTERESTED'
+            }
+          ]
+        },
+        {
+          key: 'monthlyPrice',
+          type: 'fromTo',
+          name: 'Monthly Price'
+        }
+      ]
     }
+  },
+  beforeCreate() {
+    this.$axios.get(`/brands`).then(response => {
+      const data = response.data.results || []
+      this.searchOptions = this.searchOptions.map(item => {
+        if (item.key === 'brand') {
+          item.source = data.map(item => ({ name: item.name, value: item.id }))
+        }
+        return item
+      })
+    })
+    this.$axios.get(`/models`).then(response => {
+      const data = response.data.results || []
+      this.searchOptions = this.searchOptions.map(item => {
+        if (item.key === 'model') {
+          item.source = data.map(item => ({ name: item.modelTitle, value: item.id, brand: item.brand.id }))
+        }
+        return item
+      })
+    })
+    this.$axios.get(`/colors`).then(response => {
+      const data = response.data.results || []
+      this.searchOptions = this.searchOptions.map(item => {
+        if (item.key === 'color') {
+          item.source = data.map(item => ({ name: item.name, value: item.id }))
+        }
+        return item
+      })
+    })
   },
   mounted() {
     this.getOrders(1)
@@ -162,6 +311,21 @@ export default {
         .catch(err => {
           console.error(err)
         })
+    },
+    filterChanged(filters) {
+      this.loading = true
+      this.$axios.get('/orders/', {
+        params: {
+          ...filters,
+          limit: this.perPage,
+          offset: 0
+        }
+      }).then(response => {
+        this.products = response.data.results
+        this.totalRows = response.data.total
+        this.loading = false
+        this.header = `List of All Orders`
+      })
     }
   }
 }
