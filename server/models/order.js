@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     phone: DataTypes.STRING,
     companyName: DataTypes.STRING,
-    numberOfEmployees: DataTypes.INTEGER,
+    numberOfEmployees: DataTypes.STRING,
     companyIndustry: DataTypes.STRING,
     cvr: DataTypes.INTEGER,
     addressStreet: DataTypes.STRING,
@@ -43,6 +43,8 @@ module.exports = (sequelize, DataTypes) => {
     newsletter: DataTypes.BOOLEAN,
     message: DataTypes.TEXT,
     comments: DataTypes.TEXT,
+    urgency: DataTypes.STRING,
+    urgencyFlexibility: DataTypes.BOOLEAN,
     status: {
       type: DataTypes.ENUM(_.values(enums.STATUS)),
       defaultValue: enums.STATUS.TEMP_CREATED

@@ -34,7 +34,9 @@ module.exports = {
       addressZipcode: params.address.zipcode,
       addressCity: params.address.city,
       newsletter: params.newsletter,
-      message: params.message
+      message: params.message,
+      urgency: params.urgency,
+      urgencyFlexibility: params.urgencyFlexibility
     })
   },
   search: options => {
@@ -107,7 +109,9 @@ module.exports = {
         newsletter: params.newsletter,
         message: params.message,
         status: params.status,
-        comments: params.comments
+        comments: params.comments,
+        urgency: params.urgency,
+        urgencyFlexibility: params.urgencyFlexibility
       }))
   },
   fullRes: order => {
@@ -141,6 +145,8 @@ module.exports = {
       output.newsletter = order.newsletter
       output.message = order.message
       output.status = order.status
+      output.urgency = order.urgency
+      output.urgencyFlexibility = order.urgencyFlexibility
       return resolve(output)
     })
   }
