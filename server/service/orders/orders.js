@@ -27,16 +27,17 @@ module.exports = {
       email: params.email,
       phone: params.phone,
       companyName: params.companyName,
+      cvr: params.cvr,
       numberOfEmployees: params.numberOfEmployees,
       companyIndustry: params.companyIndustry,
-      cvr: params.cvr,
+      urgency: params.urgency,
+      urgencyFlexibility: params.urgencyFlexibility,
       addressStreet: params.address.street,
       addressZipcode: params.address.zipcode,
       addressCity: params.address.city,
+      addressFloor: params.address.floor,
       newsletter: params.newsletter,
-      message: params.message,
-      urgency: params.urgency,
-      urgencyFlexibility: params.urgencyFlexibility
+      message: params.message
     })
   },
   search: options => {
@@ -100,18 +101,19 @@ module.exports = {
         email: params.email,
         phone: params.phone,
         companyName: params.companyName,
+        cvr: params.cvr,
         numberOfEmployees: params.numberOfEmployees,
         companyIndustry: params.companyIndustry,
-        cvr: params.cvr,
+        urgency: params.urgency,
+        urgencyFlexibility: params.urgencyFlexibility,
         addressStreet: params.address.street,
         addressZipcode: params.address.zipcode,
         addressCity: params.address.city,
+        addressFloor: params.address.floor,
         newsletter: params.newsletter,
         message: params.message,
         status: params.status,
-        comments: params.comments,
-        urgency: params.urgency,
-        urgencyFlexibility: params.urgencyFlexibility
+        comments: params.comments
       }))
   },
   fullRes: order => {
@@ -133,7 +135,6 @@ module.exports = {
       output.lastName = order.lastName
       output.email = order.email
       output.phone = order.phone
-      output.comments = order.comments
       output.companyName = order.companyName
       output.numberOfEmployees = order.numberOfEmployees
       output.companyIndustry = order.companyIndustry
@@ -142,9 +143,11 @@ module.exports = {
       output.address.street = order.addressStreet
       output.address.zipcode = order.addressZipcode
       output.address.city = order.addressCity
+      output.address.floor = order.addressFloor
       output.newsletter = order.newsletter
       output.message = order.message
       output.status = order.status
+      output.comments = order.comments
       output.urgency = order.urgency
       output.urgencyFlexibility = order.urgencyFlexibility
       return resolve(output)
