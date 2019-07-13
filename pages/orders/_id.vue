@@ -132,7 +132,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="3">
             <b-form-group>
               <label class="col-form-label">City *</label>
               <input
@@ -151,7 +151,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="3">
             <b-form-group>
               <label class="col-form-label">Zipcode *</label>
               <input
@@ -163,6 +163,21 @@
                   'is-invalid': isValidated && !validated.addressZipcode
                 }"
                 :value="formData.addressZipcode"
+                @change="updateFormData($event)"
+              >
+              <b-form-invalid-feedback>
+                * Required Field
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </b-col>
+          <b-col lg="2">
+            <b-form-group>
+              <label class="col-form-label">Floor</label>
+              <input
+                id="addressFloor"
+                type="text"
+                class="form-control"
+                :value="formData.addressFloor"
                 @change="updateFormData($event)"
               >
               <b-form-invalid-feedback>
@@ -236,17 +251,18 @@
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label">Number of Employees *</label>
-              <input
+              <b-form-select
                 id="numberOfEmployees"
-                type="number"
+                :plain="true"
                 class="form-control"
                 :class="{
                   'is-valid': isValidated && validated.numberOfEmployees,
                   'is-invalid': isValidated && !validated.numberOfEmployees
                 }"
-                :value="formData.numberOfEmployees"
-                @change="updateFormData(parseInt($event.target.value, 10), 'numberOfEmployees')"
-              >
+                :options="employeesSelectorOptions"
+                :value="formData.numberOfEmployees || null"
+                @change="updateFormData($event, 'numberOfEmployees')"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -260,6 +276,38 @@
                 type="checkbox"
                 class="form-control"
                 :checked="formData.newsletter"
+                @change="updateCheckboxFormData($event)"
+              >
+            </b-form-group>
+          </b-col>
+          <b-col lg="4">
+            <b-form-group>
+              <label class="col-form-label">When do you want your new car delivered? *</label>
+              <b-form-select
+                id="urgency"
+                :plain="true"
+                class="form-control"
+                :class="{
+                  'is-valid': isValidated && validated.urgency,
+                  'is-invalid': isValidated && !validated.urgency
+                }"
+                :options="urgencySelectorOptions"
+                :value="formData.urgency || null"
+                @change="updateFormData($event, 'urgency')"
+              />
+              <b-form-invalid-feedback>
+                * Required Field
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </b-col>
+          <b-col lg="4">
+            <b-form-group>
+              <label class="col-form-label">Are you flexible?</label>
+              <input
+                id="urgencyFlexibility"
+                type="checkbox"
+                class="form-control"
+                :checked="formData.urgencyFlexibility"
                 @change="updateCheckboxFormData($event)"
               >
             </b-form-group>
@@ -502,10 +550,38 @@ export default {
       cvr: null,
       addressStreet: null,
       addressZipcode: null,
-      addressCity: null
+      addressCity: null,
+      urgency: null
     },
     isValidated: false,
     orderId: undefined,
+    employeesSelectorOptions: [
+      {
+        text: 'Select Employee Numbers',
+        value: null,
+        disabled: true
+      },
+      {
+        text: '1-5',
+        value: '1-5'
+      },
+      {
+        text: '6-15',
+        value: '6-15'
+      },
+      {
+        text: '16-30',
+        value: '16-30'
+      },
+      {
+        text: '31-60',
+        value: '31-60'
+      },
+      {
+        text: '61+',
+        value: '61+'
+      }
+    ],
     companyIndustryOptions: [
       {
         text: 'Select a Company Industry',
@@ -513,16 +589,47 @@ export default {
         disabled: true
       },
       {
-        text: 'Bussiness',
-        value: 'bussiness'
+        text: 'Tømrer',
+        value: 'Tømrer'
       },
       {
-        text: 'Enterprise',
-        value: 'enterprise'
+        text: 'Murer',
+        value: 'Murer'
       },
       {
-        text: 'Company',
-        value: 'company'
+        text: 'Glarmester',
+        value: 'Glarmester'
+      },
+      {
+        text: 'VVS',
+        value: 'VVS'
+      },
+      {
+        text: 'Elektriker',
+        value: 'Elektriker'
+      },
+      {
+        text: 'Andet',
+        value: 'Andet'
+      }
+    ],
+    urgencySelectorOptions: [
+      {
+        text: 'Select a Urgency option',
+        value: null,
+        disabled: true
+      },
+      {
+        text: '14 dage',
+        value: '14d'
+      },
+      {
+        text: '1 måned',
+        value: '1m'
+      },
+      {
+        text: '3 måneder',
+        value: '3m'
       }
     ],
     defaultFormData: {},
@@ -537,6 +644,7 @@ export default {
         this.formData.addressStreet = this.formData.address.street
         this.formData.addressCity = this.formData.address.city
         this.formData.addressZipcode = this.formData.address.zipcode
+        this.formData.addressFloor = this.formData.address.floor
       }
       this.defaultFormData = response.data.data
       this.loading = false
@@ -569,7 +677,9 @@ export default {
           address: this.formData.address,
           newsletter: this.formData.newsletter || false,
           message: this.formData.message || '',
-          comments: this.formData.message || ''
+          comments: this.formData.message || '',
+          urgency: this.formData.urgency,
+          urgencyFlexibility: this.formData.urgencyFlexibility
         }).then(response => {
           this.$router.push('/orders')
         })

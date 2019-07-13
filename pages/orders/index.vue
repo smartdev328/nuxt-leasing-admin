@@ -153,12 +153,28 @@ export default {
           name: 'Company Industry',
           source: [
             {
-              name: 'business',
-              value: 'Business'
+              text: 'Tømrer',
+              value: 'Tømrer'
             },
             {
-              name: 'company',
-              value: 'Company'
+              text: 'Murer',
+              value: 'Murer'
+            },
+            {
+              text: 'Glarmester',
+              value: 'Glarmester'
+            },
+            {
+              text: 'VVS',
+              value: 'VVS'
+            },
+            {
+              text: 'Elektriker',
+              value: 'Elektriker'
+            },
+            {
+              text: 'Andet',
+              value: 'Andet'
             }
           ]
         },

@@ -19,6 +19,7 @@
                       </b-input-group-prepend>
                       <b-form-input
                         id="username"
+                        autofocus
                         type="text"
                         :class="{
                           'is-valid': isValidated && validated.username,
