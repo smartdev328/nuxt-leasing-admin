@@ -1,5 +1,6 @@
 'use strict'
 
+const _ = require('lodash')
 const Promise = require('bluebird')
 const Sequelize = require('sequelize')
 const Orders = require('../../models').Order
@@ -41,10 +42,53 @@ module.exports = {
     })
   },
   search: options => {
-    const where = {
-      status: { [Op.ne]: 'TEMP_CREATED' }
-    }
+    const condition = {}
     const include = []
+
+    // Filters
+    if (options.model) {
+      Object.assign(condition, { model: { [Op.in]: options.model } })
+    }
+    if (options.color) {
+      Object.assign(condition, { color: { id: { [Op.in]: options.color } } })
+    }
+    if (options.username) {
+      const names = options.username.split(' ')
+      Object.assign(condition, { firstName: { [Op.like]: `%${names[0]}%` } })
+      if (names[1]) Object.assign(condition, { lastName: { [Op.like]: `%${names[1]}%` } })
+    }
+    if (options.email) {
+      Object.assign(condition, { email: { [Op.like]: `%${options.email}%` } })
+    }
+    if (options.variant) {
+      Object.assign(condition, { variant: { [Op.like]: `%${options.variant}%` } })
+    }
+    if (options.companyName) {
+      Object.assign(condition, { companyName: { [Op.like]: `%${options.companyName}%` } })
+    }
+    if (options.cvr) {
+      Object.assign(condition, { cvr: { [Op.like]: `%${options.cvr}%` } })
+    }
+    if (options.companyIndustry) {
+      Object.assign(condition, { companyIndustry: { [Op.in]: options.companyIndustry } })
+    }
+    if (options.numberOfEmployees) {
+      Object.assign(condition, { numberOfEmployees: { [Op.in]: options.numberOfEmployees } })
+    }
+    if (options.monthlyPrice) {
+      Object.assign(condition, { monthlyPrice: { [Op.between]: options.monthlyPrice } })
+    }
+    if (options.status) {
+      Object.assign(condition, { status: { [Op.in]: options.status } })
+    } else {
+      Object.assign(condition, { status: { [Op.ne]: 'TEMP_CREATED' } })
+    }
+    let where = {}
+    if (!_.isEmpty(condition)) {
+      where = {
+        [Op.and]: condition
+      }
+    }
 
     return Promise.props({
       count: Orders.count({
