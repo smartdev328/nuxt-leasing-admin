@@ -25,6 +25,17 @@ module.exports = {
     const offset = req.swagger.params.offset.value
 
     const options = {
+      model: req.swagger.params.model.value,
+      color: req.swagger.params.color.value,
+      username: req.swagger.params.username.value,
+      email: req.swagger.params.email.value,
+      variant: req.swagger.params.variant.value,
+      companyName: req.swagger.params.companyName.value,
+      cvr: req.swagger.params.cvr.value,
+      companyIndustry: req.swagger.params.companyIndustry.value,
+      numberOfEmployees: req.swagger.params.numberOfEmployees.value,
+      monthlyPrice: req.swagger.params.monthlyPrice.value,
+      status: req.swagger.params.status.value,
       limit: req.swagger.params.limit.value,
       offset: req.swagger.params.offset.value
     }

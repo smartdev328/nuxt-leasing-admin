@@ -50,7 +50,7 @@ module.exports = {
       Object.assign(condition, { model: { [Op.in]: options.model } })
     }
     if (options.color) {
-      Object.assign(condition, { color: { id: { [Op.in]: options.color } } })
+      Object.assign(condition, { color: { name: { [Op.any]: options.color } } })
     }
     if (options.username) {
       const names = options.username.split(' ')

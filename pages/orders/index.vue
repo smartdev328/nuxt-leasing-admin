@@ -153,27 +153,39 @@ export default {
           name: 'Company Industry',
           source: [
             {
-              text: 'Tømrer',
+              name: 'Tømrer',
               value: 'Tømrer'
             },
             {
-              text: 'Murer',
+              name: 'Murer',
               value: 'Murer'
             },
             {
-              text: 'Glarmester',
-              value: 'Glarmester'
+              name: 'Maler',
+              value: 'Maler'
             },
             {
-              text: 'VVS',
+              name: 'Snedker',
+              value: 'Snedker'
+            },
+            {
+              name: 'VVS',
               value: 'VVS'
             },
             {
-              text: 'Elektriker',
+              name: 'Elektriker',
               value: 'Elektriker'
             },
             {
-              text: 'Andet',
+              name: 'Kloak/Anlæg',
+              value: 'Kloak/Anlæg'
+            },
+            {
+              name: 'Glas',
+              value: 'Glas'
+            },
+            {
+              name: 'Andet',
               value: 'Andet'
             }
           ]
@@ -241,7 +253,7 @@ export default {
       const data = response.data.results || []
       this.searchOptions = this.searchOptions.map(item => {
         if (item.key === 'brand') {
-          item.source = data.map(item => ({ name: item.name, value: item.id }))
+          item.source = data.map(item => ({ name: item.name, value: item.name }))
         }
         return item
       })
@@ -250,7 +262,7 @@ export default {
       const data = response.data.results || []
       this.searchOptions = this.searchOptions.map(item => {
         if (item.key === 'model') {
-          item.source = data.map(item => ({ name: item.modelTitle, value: item.id, brand: item.brand.id }))
+          item.source = data.map(item => ({ name: item.modelTitle, value: item.modelTitle, brand: item.brand.name }))
         }
         return item
       })
@@ -259,7 +271,7 @@ export default {
       const data = response.data.results || []
       this.searchOptions = this.searchOptions.map(item => {
         if (item.key === 'color') {
-          item.source = data.map(item => ({ name: item.name, value: item.id }))
+          item.source = data.map(item => ({ name: item.name, value: item.name }))
         }
         return item
       })
@@ -337,7 +349,7 @@ export default {
           offset: 0
         }
       }).then(response => {
-        this.products = response.data.results
+        this.orders = response.data.results
         this.totalRows = response.data.total
         this.loading = false
         this.header = `List of All Orders`
