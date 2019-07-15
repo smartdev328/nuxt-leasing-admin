@@ -85,7 +85,7 @@
                 @change="updateFormData($event)"
               >
               <b-form-invalid-feedback>
-                * Required Field
+                * Email is invalid
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -216,7 +216,7 @@
               <label class="col-form-label">CVR *</label>
               <input
                 id="cvr"
-                type="number"
+                type="text"
                 class="form-control"
                 :class="{
                   'is-valid': isValidated && validated.cvr,
@@ -224,9 +224,10 @@
                 }"
                 :value="formData.cvr"
                 @change="updateFormData(parseInt($event.target.value, 10), 'cvr')"
+                @keypress="numberOnlyKeyChange($event, 8)"
               >
               <b-form-invalid-feedback>
-                * Required Field
+                * Should have 8 characters
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -749,6 +750,18 @@ export default {
         this.validated[key] = false
         if (this.formData[key]) {
           this.validated[key] = true
+          // Email Validation
+          if (key === 'email' && !/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.formData[key])) {
+            this.validated[key] = false
+          }
+          // Phone Number Validation
+          if (key === 'phone' && this.formData[key].length < 8) {
+            this.validated[key] = false
+          }
+          // CVR validation
+          if (key === 'cvr' && (this.formData[key].toString().length < 8)) {
+            this.validated[key] = false
+          }
         }
       })
       _.map(this.validated, (value, key) => {
