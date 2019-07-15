@@ -686,7 +686,12 @@ export default {
           numberOfEmployees: this.formData.numberOfEmployees,
           companyIndustry: this.formData.companyIndustry,
           cvr: this.formData.cvr,
-          address: this.formData.address,
+          address: {
+            city: this.formData.addressCity,
+            street: this.formData.addressStreet,
+            zipcode: this.formData.addressZipcode,
+            floor: this.formData.addressFloor
+          },
           newsletter: this.formData.newsletter || false,
           message: this.formData.message || '',
           comments: this.formData.message || '',
