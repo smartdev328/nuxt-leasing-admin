@@ -92,17 +92,19 @@
           <b-col lg="4">
             <b-form-group>
               <label class="col-form-label">Phone *</label>
-              <input
+              <b-form-input
                 id="phone"
-                type="text"
+                :value="formatPhoneNumber(formData.phone)"
+                :formatter="formatPhoneNumber"
                 class="form-control"
                 :class="{
                   'is-valid': isValidated && validated.phone,
                   'is-invalid': isValidated && !validated.phone
                 }"
-                :value="formData.phone"
-                @change="updateFormData($event)"
-              >
+                placeholder="Enter your name"
+                @change="updatePhoneFormData($event, 'phone')"
+                @keypress="numberOnlyKeyChange($event, 8)"
+              />
               <b-form-invalid-feedback>
                 * Required Field
               </b-form-invalid-feedback>
@@ -641,7 +643,8 @@ export default {
       }
     ],
     defaultFormData: {},
-    count: 0
+    count: 0,
+    formattedPhoneNumber: undefined
   }),
   mounted() {
     this.loading = true
@@ -709,6 +712,14 @@ export default {
       this.formData = _.cloneDeep(this.formData)
       this.formData[name] = value
     },
+    updatePhoneFormData(value, property) {
+      this.resetValidate()
+      this.formData = _.cloneDeep(this.formData)
+      this.formData[property] = value.replace(/ /g, '')
+    },
+    formatPhoneNumber(value, event) {
+      return value && value.replace(/ /g, '').match(/.{1,2}/g).join(' ')
+    },
     deleteOrder() {
       this.loading = true
       this.$axios.delete(`/orders/${this.orderId}`)
@@ -746,6 +757,20 @@ export default {
         }
       })
       return valid
+    },
+    numberOnlyKeyChange(evt, max) {
+      const e = (evt) || window.event
+      const charCode = (e.which) ? e.which : e.keyCode
+      const origin = e.target.value && e.target.value.replace(/ /g, '')
+      if (max <= (origin && origin.length)) {
+        e.preventDefault()
+        return false
+      }
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        e.preventDefault()
+      } else {
+        return true
+      }
     },
     showMsgBoxOne(event) {
       this.count++
