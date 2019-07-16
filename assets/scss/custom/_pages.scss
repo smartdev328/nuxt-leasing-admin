@@ -1,3 +1,20 @@
+.page {
+  padding-bottom: 50px;
+
+  .actions-group {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: auto;
+    left: 215px;
+    padding: 10px 50px 10px 30px;
+    box-shadow: grey 0px -1px 8px -5px;
+    background: white;
+  }
+}
+.sidebar-minimized .actions-group {
+  left: 65px;
+}
 .orders {
   &.loaded {
     .card {

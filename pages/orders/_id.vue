@@ -190,7 +190,7 @@
           <b-col lg="12">
             <h4>Company Info</h4>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="3">
             <b-form-group>
               <label class="col-form-label">Company Name *</label>
               <input
@@ -209,7 +209,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="3">
             <b-form-group>
               <label class="col-form-label">CVR *</label>
               <input
@@ -228,17 +228,13 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Company Industry *</label>
+              <label class="col-form-label">Company Industry</label>
               <b-form-select
                 id="companyIndustry"
                 :plain="true"
                 class="form-control"
-                :class="{
-                  'is-valid': isValidated && validated.companyIndustry,
-                  'is-invalid': isValidated && !validated.companyIndustry
-                }"
                 :options="companyIndustryOptions"
                 :value="formData.companyIndustry || null"
                 @change="updateFormData($event, 'companyIndustry')"
@@ -248,7 +244,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="3">
             <b-form-group>
               <label class="col-form-label">Number of Employees *</label>
               <b-form-select
@@ -268,7 +264,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="2">
             <b-form-group>
               <label class="col-form-label">NewsLetter</label>
               <input
@@ -280,17 +276,18 @@
               >
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+        </b-row>
+        <b-row class="form-group">
+          <b-col lg="12">
+            <h4>Delivery</h4>
+          </b-col>
+          <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">When do you want your new car delivered? *</label>
+              <label class="col-form-label">When do you want your new car delivered?</label>
               <b-form-select
                 id="urgency"
                 :plain="true"
                 class="form-control"
-                :class="{
-                  'is-valid': isValidated && validated.urgency,
-                  'is-invalid': isValidated && !validated.urgency
-                }"
                 :options="urgencySelectorOptions"
                 :value="formData.urgency || null"
                 @change="updateFormData($event, 'urgency')"
@@ -300,7 +297,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-          <b-col lg="4">
+          <b-col lg="2">
             <b-form-group>
               <label class="col-form-label">Are you flexible?</label>
               <input
@@ -350,7 +347,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Brand *</label>
+              <label class="col-form-label">Brand</label>
               <input
                 id="brand"
                 type="text"
@@ -363,7 +360,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Model *</label>
+              <label class="col-form-label">Model</label>
               <input
                 id="model"
                 type="text"
@@ -379,7 +376,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Variant *</label>
+              <label class="col-form-label">Variant</label>
               <input
                 id="variant"
                 type="text"
@@ -395,7 +392,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Leasing Period *</label>
+              <label class="col-form-label">Leasing Period</label>
               <input
                 id="leasingPeriod"
                 type="number"
@@ -411,7 +408,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Kilometers *</label>
+              <label class="col-form-label">Kilometers</label>
               <input
                 id="kilometers"
                 type="number"
@@ -427,7 +424,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Color *</label>
+              <label class="col-form-label">Color</label>
               <input
                 id="color"
                 type="text"
@@ -443,7 +440,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Profession *</label>
+              <label class="col-form-label">Profession</label>
               <input
                 id="profession"
                 type="text"
@@ -459,7 +456,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Equipment *</label>
+              <label class="col-form-label">Equipment </label>
               <input
                 id="equipment"
                 type="text"
@@ -475,7 +472,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">DownPayment *</label>
+              <label class="col-form-label">DownPayment</label>
               <input
                 id="downPayment"
                 type="number"
@@ -491,7 +488,7 @@
           </b-col>
           <b-col lg="3">
             <b-form-group>
-              <label class="col-form-label">Monthly Price *</label>
+              <label class="col-form-label">Monthly Price</label>
               <input
                 id="monthlyPrice"
                 type="number"
@@ -546,7 +543,6 @@ export default {
       phone: null,
       companyName: null,
       numberOfEmployees: null,
-      companyIndustry: null,
       cvr: null,
       addressStreet: null,
       addressZipcode: null,
@@ -597,8 +593,12 @@ export default {
         value: 'Murer'
       },
       {
-        text: 'Glarmester',
-        value: 'Glarmester'
+        text: 'Maler',
+        value: 'Maler'
+      },
+      {
+        text: 'Snedker',
+        value: 'Snedker'
       },
       {
         text: 'VVS',
@@ -607,6 +607,14 @@ export default {
       {
         text: 'Elektriker',
         value: 'Elektriker'
+      },
+      {
+        text: 'Kloak/Anlæg',
+        value: 'Kloak/Anlæg'
+      },
+      {
+        text: 'Glas',
+        value: 'Glas'
       },
       {
         text: 'Andet',
@@ -620,15 +628,15 @@ export default {
         disabled: true
       },
       {
-        text: '14 dage',
+        text: '14 days',
         value: '14d'
       },
       {
-        text: '1 måned',
+        text: '1 month',
         value: '1m'
       },
       {
-        text: '3 måneder',
+        text: '3 months',
         value: '3m'
       }
     ],
