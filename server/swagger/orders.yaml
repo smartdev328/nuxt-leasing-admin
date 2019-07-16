@@ -398,7 +398,7 @@ definitions:
         type: "string"
         description: "The Company Name of Order"
       numberOfEmployees:
-        type: "integer"
+        type: "string"
         description: "The Number of Employees"
       companyIndustry:
         type: "string"
@@ -415,4 +415,10 @@ definitions:
       message:
         type: "string"
         description: "The Order Description of Order"
+      urgency:
+        type: "string"
+        description: "The Urgency value of Order"
+      urgencyFlexibility:
+        type: "boolean"
+        description: "The urgency Flexibility of Order"
 
