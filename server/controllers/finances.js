@@ -1,3 +1,5 @@
+const Sentry = require('@sentry/node')
+
 const logger = require('../lib/logger')
 const exceptions = require('../lib/exceptions')
 const finances = require('../service').finances
@@ -17,6 +19,7 @@ module.exports = {
       .catch(SequelizeEmptyResultError, () => res.status(404).send())
       .catch(err => {
         logger.error(err)
+        Sentry.captureException(err)
         res.status(500).send()
       })
   },
@@ -35,6 +38,7 @@ module.exports = {
       .catch(SequelizeEmptyResultError, () => res.status(404).send())
       .catch(err => {
         logger.error(err)
+        Sentry.captureException(err)
         return res.status(500).send()
       })
   }
