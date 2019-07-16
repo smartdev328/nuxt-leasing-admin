@@ -3,6 +3,7 @@ const consola = require('consola')
 const async = require('async')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
+const Sentry = require('@sentry/node')
 
 const config = require('../nuxt.config.js')
 const models = require('./models')
@@ -57,17 +58,24 @@ async function start() {
       cb => {
         consola.info('Initializing express middleware')
         require('./config/express')(app, cb)
+      },
+      cb => {
+        // Sentry Init
+        Sentry.init({ dsn: 'https://d85eaa392daf41a0b2aadaa138e61b8f@sentry.io/1504082' })
+        return cb()
       }
     ],
     err => {
       if (err) {
         logger.error('Could not start app', err)
+        Sentry.captureMessage('Admin CMS Server can not start running!', 'warning')
+        Sentry.captureException(err)
         throw new Error('Could not start app')
       }
-      // Give nuxt middleware to express
       app.use(nuxt.render)
       const port = process.env.PORT || 3000
       app.listen(port)
+      Sentry.captureMessage('Admin CMS Server starts running!', 'info')
       consola.info('API listening on port', port)
     }
   )
