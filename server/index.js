@@ -72,6 +72,8 @@ async function start() {
         Sentry.captureException(err)
         throw new Error('Could not start app')
       }
+      consola.info('Initializing mailgun middleware')
+      require('./config/mailgun')(app)
       app.use(nuxt.render)
       const port = process.env.PORT || 3000
       app.listen(port)
