@@ -1,9 +1,8 @@
 const Sentry = require('@sentry/node')
 
 module.exports = (app) => {
-  const MAILGUN_API_KEY = '728d1bac14cb7fb841c8d3c5b34110e7-fd0269a6-e933ced7'
-  const MAILGUN_DOMAIN = 'sandbox2b6639593f56421896f5c5a403e90533.mailgun.org'
-  const fromWho = 'Hello@kassebil.dk'
+  const MAILGUN_API_KEY = '8cdefd30ace9853f6a2060e015e2a5da-fd0269a6-29ad8d80'
+  const MAILGUN_DOMAIN = 'sandboxeec4552a59b54a619b3e81356c372a52.mailgun.org'  const fromWho = 'Hello@kassebil.dk'
 
   app.get('/submit/:mail', function (req, res) {
     const mailgun = require('mailgun-js')({ apiKey: MAILGUN_API_KEY, domain: MAILGUN_DOMAIN })
