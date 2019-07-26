@@ -65,13 +65,18 @@ module.exports = {
       mode: 'debug',
       localStorage: ['localStorage']
     }],
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
+    '@bazzite/nuxt-netlify'
   ],
   /*
   ** Axios module configuration
   */
   axios: {
     baseURL: '/api/v1'
+  },
+
+  netlify: {
+
   },
 
   /*
