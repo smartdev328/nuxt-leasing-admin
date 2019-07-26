@@ -1,8 +1,8 @@
-const Sentry = require('@sentry/node')
 
 module.exports = (app) => {
   const MAILGUN_API_KEY = '8cdefd30ace9853f6a2060e015e2a5da-fd0269a6-29ad8d80'
-  const MAILGUN_DOMAIN = 'sandboxeec4552a59b54a619b3e81356c372a52.mailgun.org'  const fromWho = 'Hello@kassebil.dk'
+  const MAILGUN_DOMAIN = 'sandboxeec4552a59b54a619b3e81356c372a52.mailgun.org'
+  const fromWho = 'Hello@kassebil.dk'
 
   app.get('/submit/:mail', function (req, res) {
     const mailgun = require('mailgun-js')({ apiKey: MAILGUN_API_KEY, domain: MAILGUN_DOMAIN })
@@ -16,6 +16,7 @@ module.exports = (app) => {
       if (err) {
         res.status(400).json({ error: err })
         console.log('got an error: ', err)
+        const Sentry = require('@sentry/node')
         Sentry.captureMessage('Admin CMS: Email is not sending', 'error')
         Sentry.captureException(err)
       } else {
@@ -34,6 +35,7 @@ module.exports = (app) => {
     mailgun.lists('NAME@MAILINGLIST.COM').members().add({ members: members, subscribed: true }, function (err, body) {
       console.log(body)
       if (err) {
+        const Sentry = require('@sentry/node')
         Sentry.captureMessage('Admin CMS: Email Subscription is not working', 'error')
         Sentry.captureException(err)
       } else {
