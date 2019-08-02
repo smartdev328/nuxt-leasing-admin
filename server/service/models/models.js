@@ -17,7 +17,7 @@ module.exports = {
     })
       .then(createModel => createModel.setBrand(params.brand))
   },
-  search: options => {
+  search: (options, sortBy) => {
     const where = {}
     const include = []
 
@@ -35,9 +35,7 @@ module.exports = {
         include: include,
         limit: options.limit,
         offset: options.offset,
-        order: [
-          ['id', 'ASC']
-        ]
+        order: sortBy
       })
     })
   },

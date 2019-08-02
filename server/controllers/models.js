@@ -32,10 +32,22 @@ module.exports = {
       limit: req.swagger.params.limit.value,
       offset: req.swagger.params.offset.value
     }
+
+    const sortBy = []
+    const sortParams = JSON.parse(req.swagger.params.sortby.value)
+    if (sortParams.option && sortParams.direction) {
+      if (sortParams.option === 'brand') {
+        sortParams.option = 'brandId'
+      }
+      sortBy.push([ sortParams.option, sortParams.direction ])
+    } else {
+      sortBy.push(['id', 'ASC'])
+    }
+
     const parsedEvents = []
     let searchResult = []
     return models
-      .search(options)
+      .search(options, sortBy)
       .then(result => {
         searchResult = result
         const promises = []
@@ -51,7 +63,7 @@ module.exports = {
       .then(() =>
         res
           .status(200)
-          .send(searchRes(parsedEvents, searchResult.count, offset, limit))
+          .send(searchRes(parsedEvents, searchResult.count, offset, limit, sortParams))
       )
       .catch(SequelizeEmptyResultError, () => res.status(404).send())
       .catch(err => {
@@ -120,12 +132,12 @@ module.exports = {
   }
 }
 
-const searchRes = (datas, total, offset, limit) => ({
+const searchRes = (datas, total, offset, limit, sortBy) => ({
   message: total > 0 ? `Found ${total} result(s)` : 'No results found',
   total: total,
   offset: offset,
   limit: limit,
-  results: _.orderBy(datas, ['id'], ['asc'])
+  results: _.orderBy(datas, [sortBy.option], [sortBy.direction])
 })
 
 const simpleRes = (message, data) => ({

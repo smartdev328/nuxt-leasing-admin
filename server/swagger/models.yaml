@@ -31,6 +31,11 @@ paths:
         format: "int64"
         default: 0
         minimum: 0
+      - name: "sortby"
+        in: "query"
+        description: "Sort returned results"
+        type: "string"
+        default: "{}"
       responses:
         200:
           description: "Successfully Retrieved Models"

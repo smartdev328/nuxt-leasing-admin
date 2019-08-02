@@ -1,8 +1,11 @@
 <template>
   <div class="models">
     <b-row class="justify-content-end" style="padding: 15px 0;">
-      <b-col lg="10">
+      <b-col lg="6">
         <MultiPropsSearch :search-options="searchOptions" @filtersChanged="filterChanged" />
+      </b-col>
+      <b-col lg="4" class="text-right">
+        <Sort :sort-options="sortOptions" @sortChanged="sortChanged" />
       </b-col>
       <b-col lg="2" class="text-right">
         <router-link :to="`/models/new`">
@@ -60,13 +63,14 @@
 </template>
 
 <script>
-import { MultiPropsSearch } from '~/components/'
+import { MultiPropsSearch, Sort } from '~/components/'
 
 export default {
   name: 'Models',
   middleware: 'guest',
   components: {
-    MultiPropsSearch
+    MultiPropsSearch,
+    Sort
   },
   data: () => {
     return {
@@ -96,7 +100,14 @@ export default {
           type: 'text',
           name: 'Model Title'
         }
-      ]
+      ],
+      sortOptions: [
+        {
+          key: 'modelTitle',
+          name: 'Model Title'
+        }
+      ],
+      sortParam: {}
     }
   },
   beforeCreate() {
@@ -120,7 +131,8 @@ export default {
       this.$axios.get('/models/', {
         params: {
           limit: this.perPage,
-          offset: (this.currentPage - 1) * this.perPage + 0
+          offset: (this.currentPage - 1) * this.perPage + 0,
+          sortby: JSON.stringify(this.sortParam)
         }
       }).then(response => {
         this.models = response.data.results
@@ -173,7 +185,24 @@ export default {
         params: {
           ...filters,
           limit: this.perPage,
-          offset: 0
+          offset: 0,
+          sortby: JSON.stringify(this.sortParam)
+        }
+      }).then(response => {
+        this.models = response.data.results
+        this.totalRows = response.data.total
+        this.loading = false
+        this.header = `List of All Models`
+      })
+    },
+    sortChanged(sortParam) {
+      this.sortParam = sortParam
+      this.loading = true
+      this.$axios.get('/models/', {
+        params: {
+          limit: this.perPage,
+          offset: 0,
+          sortby: JSON.stringify(this.sortParam)
         }
       }).then(response => {
         this.models = response.data.results

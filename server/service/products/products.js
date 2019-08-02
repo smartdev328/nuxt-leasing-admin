@@ -71,7 +71,7 @@ module.exports = {
       })
       .then(() => newProduct)
   },
-  search: options => {
+  search: (options, sortBy) => {
     const condition = {}
     const include = []
 
@@ -108,9 +108,7 @@ module.exports = {
         include: include,
         limit: options.limit,
         offset: options.offset,
-        order: [
-          ['id', 'ASC']
-        ]
+        order: sortBy
       })
     })
   },
