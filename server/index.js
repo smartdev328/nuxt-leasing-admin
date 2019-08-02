@@ -61,7 +61,7 @@ async function start() {
       },
       cb => {
         // Sentry Init
-        Sentry.init({ dsn: 'https://d85eaa392daf41a0b2aadaa138e61b8f@sentry.io/1504082' })
+        // Sentry.init({ dsn: 'https://d85eaa392daf41a0b2aadaa138e61b8f@sentry.io/1504082' })
         return cb()
       }
     ],

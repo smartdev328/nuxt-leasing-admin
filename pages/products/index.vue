@@ -1,8 +1,11 @@
 <template>
   <div class="products">
     <b-row style="padding: 15px 0;">
-      <b-col lg="10">
+      <b-col lg="6">
         <MultiPropsSearch :search-options="searchOptions" @filtersChanged="filterChanged" />
+      </b-col>
+      <b-col lg="4" class="text-right">
+        <Sort :sort-options="sortOptions" @sortChanged="sortChanged" />
       </b-col>
       <b-col lg="2" class="text-right">
         <router-link :to="`/products/new`">
@@ -73,13 +76,14 @@
 </template>
 
 <script>
-import { MultiPropsSearch } from '~/components/'
+import { MultiPropsSearch, Sort } from '~/components/'
 
 export default {
   name: 'Products',
   middleware: 'guest',
   components: {
-    MultiPropsSearch
+    MultiPropsSearch,
+    Sort
   },
   data: () => {
     return {
@@ -144,7 +148,22 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      sortOptions: [
+        {
+          key: 'variant',
+          name: 'Variant'
+        },
+        {
+          key: 'year',
+          name: 'Year'
+        },
+        {
+          key: 'price',
+          name: 'Price'
+        }
+      ],
+      sortParam: {}
     }
   },
   beforeCreate() {
@@ -179,7 +198,8 @@ export default {
       this.$axios.get('/products/', {
         params: {
           limit: this.perPage,
-          offset: (this.currentPage - 1) * this.perPage + 0
+          offset: (this.currentPage - 1) * this.perPage + 0,
+          sortby: JSON.stringify(this.sortParam)
         }
       }).then(response => {
         this.products = response.data.results
@@ -230,7 +250,24 @@ export default {
         params: {
           ...filters,
           limit: this.perPage,
-          offset: 0
+          offset: 0,
+          sortby: JSON.stringify(this.sortParam)
+        }
+      }).then(response => {
+        this.products = response.data.results
+        this.totalRows = response.data.total
+        this.loading = false
+        this.header = `List of All Products`
+      })
+    },
+    sortChanged(sortParam) {
+      this.sortParam = sortParam
+      this.loading = true
+      this.$axios.get('/products/', {
+        params: {
+          limit: this.perPage,
+          offset: 0,
+          sortby: JSON.stringify(this.sortParam)
         }
       }).then(response => {
         this.products = response.data.results
