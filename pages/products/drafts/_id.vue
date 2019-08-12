@@ -106,7 +106,7 @@
                   'is-invalid': isValidated && !validated.year,
                 }"
                 :value="formData.year"
-                @change="updateFormData($event)"
+                @change="updateFormData(parseInt($event.target.value, 10), 'year')"
               >
               <b-form-invalid-feedback>
                 * Required Field

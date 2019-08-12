@@ -106,7 +106,7 @@
                   'is-invalid': isValidated && !validated.year,
                 }"
                 :value="formData.year"
-                @change="updateFormData($event)"
+                @change="updateFormData(parseInt($event.target.value, 10), 'year')"
               >
               <b-form-invalid-feedback>
                 * Required Field
@@ -371,7 +371,18 @@
                 <b-input-group-prepend>
                   <b-input-group-text>{{ 12 * (index + 1) }} months</b-input-group-text>
                 </b-input-group-prepend>
-                <b-form-input id="elementsPrependAppend" type="number" name="scrapValues" :value="formData.scrapValues[index]" @change="updateArrayFormData('scrapValues', $event, index)" />
+                <b-form-input
+                  id="elementsPrependAppend"
+                  type="number"
+                  class="form-control"
+                  name="scrapValues"
+                  :class="{
+                    'is-valid': isValidated && validated.scrapValues[index],
+                    'is-invalid': isValidated && !validated.scrapValues[index],
+                  }"
+                  :value="formData.scrapValues[index]"
+                  @change="updateArrayFormData('scrapValues', $event, index)"
+                />
               </b-input-group>
             </b-col>
           </template>
@@ -569,6 +580,14 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col lg="12">
+            <div v-if="loading" class="text-center text-danger my-2">
+              <b-spinner class="align-middle" />
+              <strong>Loading...</strong>
+            </div>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
     <b-row class="justify-content-between align-items-center actions-group">
@@ -672,6 +691,7 @@ export default {
       primaryImage: null,
       acquisitionCost: null,
       leasingPeriods: null,
+      scrapValues: null,
       startKilometer: null,
       endKilometer: null,
       intervalKilometer: null,
@@ -862,9 +882,25 @@ export default {
             this.validated[key] = false
           }
         }
+        if (key === 'scrapValues') {
+          this.validated[key] = []
+          this.formData.scrapValues.map((value, index) => {
+            if (!value) {
+              this.validated[key][index] = false
+              if (value === undefined) {
+                this.validated[key][index] = true
+              }
+            } else {
+              this.validated[key][index] = true
+            }
+          })
+        }
       })
       _.map(this.validated, (value, key) => {
         if (!value) {
+          valid = false
+        }
+        if (key === 'scrapValues' && this.validated[key].filter(i => i === false).length > 0) {
           valid = false
         }
       })
